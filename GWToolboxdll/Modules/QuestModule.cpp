@@ -510,7 +510,7 @@ namespace {
         const auto quest_log = GW::QuestMgr::GetQuestLog();
         if (!quest_log) return;
 
-        // Update known quest IDs snapshot
+        // Update known quest IDs snapshot (non-completed only, so completions trigger change)
         questing_mode_known_quest_ids.clear();
         for (auto& quest : *quest_log) {
             if (!quest.IsCompleted())
@@ -532,8 +532,6 @@ namespace {
                 if (quest_map_info && quest_map_info->continent != current_map_info->continent) continue;
             }
             const float dist_sq = GetSquareDistance(*pos, quest.marker);
-            Log::Log("[QuestEval] Quest %u: dist=%.0f (marker: %.0f, %.0f)\n",
-                (uint32_t)quest.quest_id, sqrtf(dist_sq), quest.marker.x, quest.marker.y);
             if (dist_sq < best_dist_sq) {
                 best_dist_sq = dist_sq;
                 best_id = quest.quest_id;
@@ -541,11 +539,8 @@ namespace {
         }
 
         if (best_id != GW::Constants::QuestID::None) {
-            Log::Log("[QuestEval] Selected quest %u (dist=%.0f)\n",
-                (uint32_t)best_id, sqrtf(best_dist_sq));
             QuestModule::EmulateQuestSelected(best_id);
             RefreshQuestPath(best_id);
-            Log::Info("Questing Mode: selected closest quest");
         }
     }
 
