@@ -42,6 +42,9 @@ namespace {
     bool questing_mode_evaluation_queued = false;
     clock_t questing_mode_evaluation_deferred_at = 0;
     constexpr clock_t QUESTING_MODE_EVAL_DEFER_MS = 3000;
+    std::set<uint32_t> questing_mode_known_quest_ids;
+    clock_t questing_mode_last_change_check = 0;
+    constexpr clock_t QUESTING_MODE_CHANGE_CHECK_MS = 1000;
 
     // Auto-navigate
     bool auto_navigate_active = false;
@@ -507,6 +510,13 @@ namespace {
         const auto quest_log = GW::QuestMgr::GetQuestLog();
         if (!quest_log) return;
 
+        // Update known quest IDs snapshot
+        questing_mode_known_quest_ids.clear();
+        for (auto& quest : *quest_log) {
+            if (!quest.IsCompleted())
+                questing_mode_known_quest_ids.insert(static_cast<uint32_t>(quest.quest_id));
+        }
+
         // Use straight-line distance for instant selection (no async pathfinding needed)
         const auto current_map_info = GW::Map::GetCurrentMapInfo();
         GW::Constants::QuestID best_id = GW::Constants::QuestID::None;
@@ -534,6 +544,7 @@ namespace {
             Log::Log("[QuestEval] Selected quest %u (dist=%.0f)\n",
                 (uint32_t)best_id, sqrtf(best_dist_sq));
             QuestModule::EmulateQuestSelected(best_id);
+            RefreshQuestPath(best_id);
             Log::Info("Questing Mode: selected closest quest");
         }
     }
@@ -652,19 +663,11 @@ namespace {
         switch (message_id) {
             case GW::UI::UIMessage::kQuestDetailsChanged:
             case GW::UI::UIMessage::kClientActiveQuestChanged:
-                RefreshQuestPath(*static_cast<GW::Constants::QuestID*>(packet));
-                break;
             case GW::UI::UIMessage::kQuestAdded:
                 RefreshQuestPath(*static_cast<GW::Constants::QuestID*>(packet));
-                if (questing_mode_enabled)
-                    questing_mode_evaluation_queued = true;
                 break;
             case GW::UI::UIMessage::kMapLoaded:
                 BlockQuestSound();
-                break;
-            case GW::UI::UIMessage::kQuestRemoved:
-                if (questing_mode_enabled)
-                    questing_mode_evaluation_queued = true;
                 break;
         }
     }
@@ -1130,7 +1133,7 @@ check_paths:
         }
     }
 
-    // Run queued evaluation (instant for hotkey/quest changes, deferred for map load)
+    // Run queued evaluation (instant for hotkey toggle, deferred for map load, or quest log change)
     if (questing_mode_evaluation_queued) {
         questing_mode_evaluation_queued = false;
         questing_mode_evaluation_deferred_at = 0;
@@ -1139,6 +1142,22 @@ check_paths:
     else if (questing_mode_evaluation_deferred_at && TIMER_DIFF(questing_mode_evaluation_deferred_at) > QUESTING_MODE_EVAL_DEFER_MS) {
         questing_mode_evaluation_deferred_at = 0;
         BeginQuestingModeEvaluation();
+    }
+    else if (questing_mode_enabled && TIMER_DIFF(questing_mode_last_change_check) > QUESTING_MODE_CHANGE_CHECK_MS) {
+        questing_mode_last_change_check = TIMER_INIT();
+        // Detect quest log changes by comparing current IDs with known set
+        const auto quest_log = GW::QuestMgr::GetQuestLog();
+        if (quest_log) {
+            std::set<uint32_t> current_ids;
+            for (auto& quest : *quest_log) {
+                if (!quest.IsCompleted())
+                    current_ids.insert(static_cast<uint32_t>(quest.quest_id));
+            }
+            if (current_ids != questing_mode_known_quest_ids) {
+                questing_mode_known_quest_ids = current_ids;
+                BeginQuestingModeEvaluation();
+            }
+        }
     }
 
 }
