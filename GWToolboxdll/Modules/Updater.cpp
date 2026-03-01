@@ -7,6 +7,9 @@
 #include <Modules/Resources.h>
 #include <Modules/Updater.h>
 
+// Defined in main.cpp; triggers graceful reload
+extern "C" void __cdecl RequestReload(const wchar_t* dll_path);
+
 namespace {
     enum class Mode : int {
         DontCheckForUpdates,
@@ -36,6 +39,17 @@ namespace {
 
     GWToolboxRelease latest_release;
     GWToolboxRelease current_release;
+
+    // Hot reload: watch for .new staging file
+    bool hot_reload_enabled = true;
+    bool show_reload_prompt = false;
+    bool reload_in_progress = false;
+    wchar_t dll_file_path[MAX_PATH] = {};
+    wchar_t dll_new_path[MAX_PATH] = {};
+    clock_t last_file_check = 0;
+    clock_t file_change_detected_at = 0;
+    constexpr clock_t HOT_RELOAD_POLL_MS = 2000;
+    constexpr clock_t HOT_RELOAD_DEBOUNCE_MS = 2000;
 
     GWToolboxRelease* GetLatestRelease(GWToolboxRelease* release)
     {
@@ -160,9 +174,51 @@ const GWToolboxRelease* Updater::GetCurrentVersionInfo(GWToolboxRelease* out)
     return out;
 }
 
+void Updater::Initialize()
+{
+    ToolboxUIElement::Initialize();
+    const HMODULE module = GWToolbox::GetDLLModule();
+    if (GetModuleFileNameW(module, dll_file_path, MAX_PATH) == 0) {
+        dll_file_path[0] = 0;
+    }
+    if (dll_file_path[0]) {
+        swprintf_s(dll_new_path, MAX_PATH, L"%s.new", dll_file_path);
+    }
+}
+
+void Updater::Update(float)
+{
+    if (!hot_reload_enabled || !dll_new_path[0] || reload_in_progress) return;
+
+    const clock_t now = clock();
+    if (now - last_file_check < HOT_RELOAD_POLL_MS) return;
+    last_file_check = now;
+
+    const DWORD attrs = GetFileAttributesW(dll_new_path);
+    if (attrs == INVALID_FILE_ATTRIBUTES) {
+        file_change_detected_at = 0;
+        return;
+    }
+
+    // .new file exists; start debounce timer
+    if (file_change_detected_at == 0) {
+        file_change_detected_at = now;
+        return;
+    }
+
+    // Wait for debounce period (Syncthing may still be writing)
+    if (now - file_change_detected_at < HOT_RELOAD_DEBOUNCE_MS) return;
+
+    if (!show_reload_prompt) {
+        show_reload_prompt = true;
+        Log::Flash("New GWToolbox build detected!");
+    }
+}
+
 void Updater::LoadSettings(ToolboxIni* ini)
 {
     ToolboxModule::LoadSettings(ini);
+    hot_reload_enabled = ini->GetBoolValue(Name(), "hot_reload_enabled", hot_reload_enabled);
 #ifdef _DEBUG
     mode = Mode::DontCheckForUpdates;
 #else
@@ -174,6 +230,7 @@ void Updater::LoadSettings(ToolboxIni* ini)
 void Updater::SaveSettings(ToolboxIni* ini)
 {
     ToolboxModule::SaveSettings(ini);
+    ini->SetBoolValue(Name(), "hot_reload_enabled", hot_reload_enabled);
 #ifdef _DEBUG
 #else
     ini->SetLongValue(Name(), "update_mode", static_cast<int>(mode));
@@ -198,6 +255,12 @@ void Updater::DrawSettingsInternal()
     ImGui::RadioButton("Check and display a message", (int*)&mode, static_cast<int>(Mode::CheckAndWarn));
     ImGui::RadioButton("Check and ask before updating", (int*)&mode, static_cast<int>(Mode::CheckAndAsk));
     ImGui::RadioButton("Check and automatically update", (int*)&mode, static_cast<int>(Mode::CheckAndAutoUpdate));
+
+    ImGui::Separator();
+    ImGui::Text("Developer:");
+    ImGui::Checkbox("Enable hot reload (watch for DLL file changes)", &hot_reload_enabled);
+    ImGui::ShowHelp("When enabled, watches for a GWToolboxdll.dll.new file next to the loaded DLL.\n"
+                    "Place a new build there and the toolbox will offer to reload.");
 }
 
 void Updater::CheckForUpdate(const bool forced)
@@ -319,5 +382,37 @@ void Updater::Draw(IDirect3DDevice9*)
             ImGui::End();
         }
         break;
+    }
+
+    // Hot reload prompt
+    if (show_reload_prompt && !reload_in_progress) {
+        ImGui::SetNextWindowSize(ImVec2(-1, -1), ImGuiCond_Appearing);
+        ImGui::SetNextWindowCenter(ImGuiCond_Appearing);
+        bool open = true;
+        ImGui::Begin("Hot Reload", &open);
+        ImGui::TextUnformatted("A new GWToolbox build has been detected.");
+        ImGui::TextUnformatted("Do you want to reload?");
+        if (ImGui::Button("No###hot_reload_no", ImVec2(100, 0))) {
+            show_reload_prompt = false;
+            file_change_detected_at = 0;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Yes###hot_reload_yes", ImVec2(100, 0))) {
+            reload_in_progress = true;
+            show_reload_prompt = false;
+
+            // Rename loaded DLL to .old, move .new to original name
+            const auto dll_old = std::wstring(dll_file_path) + L".old";
+            DeleteFileW(dll_old.c_str());
+            MoveFileW(dll_file_path, dll_old.c_str());
+            MoveFileW(dll_new_path, dll_file_path);
+
+            RequestReload(dll_file_path);
+        }
+        ImGui::End();
+        if (!open) {
+            show_reload_prompt = false;
+            file_change_detected_at = 0;
+        }
     }
 }
