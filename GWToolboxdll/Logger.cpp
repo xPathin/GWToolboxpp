@@ -235,6 +235,7 @@ void Log::Log(const char* msg, ...)
     if (msg[strlen(msg) - 1] != '\n') {
         fprintf(logfile, "\n");
     }
+    fflush(logfile);
 }
 
 void Log::LogW(const wchar_t* msg, ...)

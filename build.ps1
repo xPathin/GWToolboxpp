@@ -38,6 +38,15 @@ if (-not $env:VCPKG_ROOT -or -not (Test-Path "$env:VCPKG_ROOT\vcpkg.exe")) {
 
 Set-Location $repoRoot
 
+# Touch only git-modified files to fix Syncthing preserving old timestamps
+$dirty = git diff --name-only HEAD
+if ($dirty) {
+    $dirty | ForEach-Object {
+        $f = Join-Path $repoRoot $_
+        if (Test-Path $f) { (Get-Item $f).LastWriteTime = Get-Date }
+    }
+}
+
 # Generate version string
 $short = git rev-parse --short HEAD
 $version = "$(Get-Date -UFormat '%Y%m%d')-$short"

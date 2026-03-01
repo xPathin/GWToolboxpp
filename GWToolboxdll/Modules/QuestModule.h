@@ -60,6 +60,7 @@ public:
     void Terminate() override;
     void SignalTerminate() override;
     void Update(float) override;
+    bool WndProc(UINT, WPARAM, LPARAM) override;
     bool CanTerminate() override;
     static void FetchMissingQuestInfo();
 
