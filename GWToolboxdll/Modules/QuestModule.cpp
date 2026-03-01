@@ -39,25 +39,21 @@ namespace {
 
     // Questing Mode: auto-select closest quest
     bool questing_mode_enabled = false;
-    bool questing_mode_evaluation_pending = false;
     bool questing_mode_evaluation_queued = false;
-    clock_t questing_mode_evaluation_started = 0;
-
-    struct QuestingModeCandidate {
-        GW::Constants::QuestID quest_id;
-        float path_distance = FLT_MAX;
-        bool calculated = false;
-    };
-    std::vector<QuestingModeCandidate> questing_mode_candidates;
+    clock_t questing_mode_evaluation_deferred_at = 0;
+    constexpr clock_t QUESTING_MODE_EVAL_DEFER_MS = 3000;
 
     // Auto-navigate
     bool auto_navigate_active = false;
-    GW::GamePos auto_navigate_last_pos = {};
     clock_t auto_navigate_last_move_time = 0;
-    clock_t auto_navigate_stuck_timer = 0;
-    constexpr float AUTO_NAV_STUCK_THRESHOLD_SQ = 10.f * 10.f;
-    constexpr clock_t AUTO_NAV_STUCK_TIMEOUT_MS = 3000;
-    constexpr clock_t AUTO_NAV_MOVE_INTERVAL_MS = 250;
+    clock_t auto_navigate_started = 0;
+    constexpr clock_t AUTO_NAV_MOVE_INTERVAL_MS = 500;
+    constexpr clock_t AUTO_NAV_GRACE_PERIOD_MS = 5000;
+    constexpr float AUTO_NAV_LOOK_AHEAD = 250.f;
+    constexpr float AUTO_NAV_ARRIVAL_DIST_SQ = 200.f * 200.f;
+    bool rbutton_down_for_nav = false;
+    POINT rbutton_down_pos = {};
+    constexpr LONG CLICK_DISTANCE_THRESHOLD_SQ = 25;  // 5px squared
 
     // Configurable hotkeys (modifier flags: 1=Ctrl, 2=Shift, 4=Alt)
     DWORD questing_mode_hotkey_modifiers = 1;
@@ -425,64 +421,82 @@ namespace {
         }
     }
 
-    // --- Questing Mode helpers ---
+    // --- Auto-navigate helpers ---
 
-    float ComputePathDistance(const std::vector<GW::GamePos>& waypoints)
+    // Find a point on the path `distance` units ahead of the player's closest position.
+    // Used for smooth look-ahead navigation.
+    GW::GamePos GetLookAheadTarget(const std::vector<GW::GamePos>& waypoints,
+                                    const GW::GamePos& player_pos, float distance)
     {
-        float total = 0.f;
-        for (size_t i = 1; i < waypoints.size(); i++) {
-            const float dx = waypoints[i].x - waypoints[i - 1].x;
-            const float dy = waypoints[i].y - waypoints[i - 1].y;
-            total += std::sqrt(dx * dx + dy * dy);
+        if (waypoints.empty()) return player_pos;
+
+        // Find closest segment and project player onto it
+        size_t best_seg = 0;
+        float best_dist_sq = FLT_MAX;
+        float best_t = 0.f;
+
+        for (size_t i = 0; i + 1 < waypoints.size(); i++) {
+            const float sx = waypoints[i + 1].x - waypoints[i].x;
+            const float sy = waypoints[i + 1].y - waypoints[i].y;
+            const float seg_len_sq = sx * sx + sy * sy;
+            float t = 0.f;
+            if (seg_len_sq > 0.01f) {
+                t = ((player_pos.x - waypoints[i].x) * sx +
+                     (player_pos.y - waypoints[i].y) * sy) / seg_len_sq;
+                if (t < 0.f) t = 0.f;
+                if (t > 1.f) t = 1.f;
+            }
+            const float px = waypoints[i].x + t * sx;
+            const float py = waypoints[i].y + t * sy;
+            const float dx = player_pos.x - px;
+            const float dy = player_pos.y - py;
+            const float d = dx * dx + dy * dy;
+            if (d < best_dist_sq) {
+                best_dist_sq = d;
+                best_seg = i;
+                best_t = t;
+            }
         }
-        return total;
+
+        // Walk forward from projection point by `distance`
+        const float sx = waypoints[best_seg + 1].x - waypoints[best_seg].x;
+        const float sy = waypoints[best_seg + 1].y - waypoints[best_seg].y;
+        const float seg_len = sqrtf(sx * sx + sy * sy);
+        float remaining = distance;
+        const float left_on_seg = (1.f - best_t) * seg_len;
+        if (remaining <= left_on_seg && seg_len > 0.01f) {
+            const float frac = best_t + (remaining / seg_len);
+            return GW::GamePos(
+                waypoints[best_seg].x + frac * sx,
+                waypoints[best_seg].y + frac * sy);
+        }
+        remaining -= left_on_seg;
+
+        for (size_t i = best_seg + 1; i + 1 < waypoints.size(); i++) {
+            const float dx = waypoints[i + 1].x - waypoints[i].x;
+            const float dy = waypoints[i + 1].y - waypoints[i].y;
+            const float len = sqrtf(dx * dx + dy * dy);
+            if (len > 0.01f && remaining <= len) {
+                const float frac = remaining / len;
+                return GW::GamePos(
+                    waypoints[i].x + frac * dx,
+                    waypoints[i].y + frac * dy);
+            }
+            remaining -= len;
+        }
+
+        return waypoints.back();
     }
 
     void StopAutoNavigate(const char* reason)
     {
         if (!auto_navigate_active) return;
         auto_navigate_active = false;
-        Log::Info("Auto-navigate stopped: %s", reason);
+        Log::Warning("Auto-navigate stopped: %s", reason);
         // Redraw minimap lines to revert color
         const auto active_id = GW::QuestMgr::GetActiveQuestId();
         auto* cqp = GetCalculatedQuestPath(active_id, false);
         if (cqp) cqp->DrawMinimapLines();
-    }
-
-    void TryFinalizeQuestingModeEvaluation()
-    {
-        for (const auto& c : questing_mode_candidates) {
-            if (!c.calculated) return;
-        }
-        questing_mode_evaluation_pending = false;
-
-        GW::Constants::QuestID best_id = GW::Constants::QuestID::None;
-        float best_distance = FLT_MAX;
-        for (const auto& c : questing_mode_candidates) {
-            if (c.path_distance < best_distance) {
-                best_distance = c.path_distance;
-                best_id = c.quest_id;
-            }
-        }
-        questing_mode_candidates.clear();
-
-        if (best_id != GW::Constants::QuestID::None) {
-            QuestModule::EmulateQuestSelected(best_id);
-            Log::Info("Questing Mode: selected closest quest");
-        }
-    }
-
-    void OnQuestingModePathCalculated(std::vector<GW::GamePos>& waypoints, void* args)
-    {
-        const auto quest_id = *reinterpret_cast<GW::Constants::QuestID*>(&args);
-        for (auto& c : questing_mode_candidates) {
-            if (c.quest_id == quest_id) {
-                c.path_distance = waypoints.empty() ? FLT_MAX : ComputePathDistance(waypoints);
-                c.calculated = true;
-                break;
-            }
-        }
-        TryFinalizeQuestingModeEvaluation();
     }
 
     void BeginQuestingModeEvaluation()
@@ -493,23 +507,34 @@ namespace {
         const auto quest_log = GW::QuestMgr::GetQuestLog();
         if (!quest_log) return;
 
-        questing_mode_candidates.clear();
+        // Use straight-line distance for instant selection (no async pathfinding needed)
+        const auto current_map_info = GW::Map::GetCurrentMapInfo();
+        GW::Constants::QuestID best_id = GW::Constants::QuestID::None;
+        float best_dist_sq = FLT_MAX;
+
         for (auto& quest : *quest_log) {
             if (quest.quest_id == custom_quest_id) continue;
             if (quest.IsCompleted()) continue;
             if (quest.marker.x == INFINITY) continue;
-            questing_mode_candidates.push_back({quest.quest_id, FLT_MAX, false});
+            // Skip quests on a different continent
+            if (current_map_info) {
+                const auto quest_map_info = GW::Map::GetMapInfo(quest.map_to);
+                if (quest_map_info && quest_map_info->continent != current_map_info->continent) continue;
+            }
+            const float dist_sq = GetSquareDistance(*pos, quest.marker);
+            Log::Log("[QuestEval] Quest %u: dist=%.0f (marker: %.0f, %.0f)\n",
+                (uint32_t)quest.quest_id, sqrtf(dist_sq), quest.marker.x, quest.marker.y);
+            if (dist_sq < best_dist_sq) {
+                best_dist_sq = dist_sq;
+                best_id = quest.quest_id;
+            }
         }
 
-        if (questing_mode_candidates.empty()) return;
-
-        questing_mode_evaluation_pending = true;
-        questing_mode_evaluation_started = TIMER_INIT();
-
-        for (const auto& c : questing_mode_candidates) {
-            const auto quest = GW::QuestMgr::GetQuest(c.quest_id);
-            if (!quest) continue;
-            PathfindingWindow::CalculatePath(*pos, quest->marker, OnQuestingModePathCalculated, (void*)c.quest_id);
+        if (best_id != GW::Constants::QuestID::None) {
+            Log::Log("[QuestEval] Selected quest %u (dist=%.0f)\n",
+                (uint32_t)best_id, sqrtf(best_dist_sq));
+            QuestModule::EmulateQuestSelected(best_id);
+            Log::Info("Questing Mode: selected closest quest");
         }
     }
 
@@ -626,9 +651,13 @@ namespace {
             return;
         switch (message_id) {
             case GW::UI::UIMessage::kQuestDetailsChanged:
-            case GW::UI::UIMessage::kQuestAdded:
             case GW::UI::UIMessage::kClientActiveQuestChanged:
                 RefreshQuestPath(*static_cast<GW::Constants::QuestID*>(packet));
+                break;
+            case GW::UI::UIMessage::kQuestAdded:
+                RefreshQuestPath(*static_cast<GW::Constants::QuestID*>(packet));
+                if (questing_mode_enabled)
+                    questing_mode_evaluation_queued = true;
                 break;
             case GW::UI::UIMessage::kMapLoaded:
                 BlockQuestSound();
@@ -654,8 +683,6 @@ namespace {
         }
         RefreshAllQuestPaths();
         StopAutoNavigate("zone change");
-        if (questing_mode_enabled)
-            questing_mode_evaluation_queued = true;
     }
 
     bool refresh_all_quest_paths_queued = 0;
@@ -970,9 +997,7 @@ bool QuestModule::WndProc(UINT Message, WPARAM wParam, LPARAM)
         if (wParam == auto_navigate_hotkey_key && ModifiersMatch(auto_navigate_hotkey_modifiers)) {
             auto_navigate_active = !auto_navigate_active;
             if (auto_navigate_active) {
-                auto_navigate_stuck_timer = TIMER_INIT();
-                const auto pos = GetPlayerPos();
-                if (pos) auto_navigate_last_pos = *pos;
+                auto_navigate_started = TIMER_INIT();
                 auto_navigate_last_move_time = 0;
             }
             Log::Flash("Auto-navigate %s", auto_navigate_active ? "enabled" : "disabled");
@@ -987,7 +1012,19 @@ bool QuestModule::WndProc(UINT Message, WPARAM wParam, LPARAM)
     // Cancel auto-navigate on manual movement
     if (auto_navigate_active) {
         if (Message == WM_RBUTTONDOWN) {
-            StopAutoNavigate("manual movement");
+            rbutton_down_for_nav = true;
+            GetCursorPos(&rbutton_down_pos);
+        }
+        if (Message == WM_RBUTTONUP && rbutton_down_for_nav) {
+            rbutton_down_for_nav = false;
+            POINT cur;
+            GetCursorPos(&cur);
+            const LONG dx = cur.x - rbutton_down_pos.x;
+            const LONG dy = cur.y - rbutton_down_pos.y;
+            const LONG dist_sq = dx * dx + dy * dy;
+            if (dist_sq < CLICK_DISTANCE_THRESHOLD_SQ) {
+                StopAutoNavigate("manual movement (right-click)");
+            }
         }
         if (Message == WM_KEYDOWN) {
             switch (wParam) {
@@ -1043,6 +1080,8 @@ void QuestModule::Update(float)
                 GW::QuestMgr::RequestQuestInfoId(quest.quest_id, true);
             }
             GW::QuestMgr::SetActiveQuestId(active_quest);
+            if (questing_mode_enabled)
+                questing_mode_evaluation_deferred_at = TIMER_INIT();
         });
     }
 
@@ -1066,52 +1105,42 @@ check_paths:
         const auto active_id = GW::QuestMgr::GetActiveQuestId();
         auto* cqp = GetCalculatedQuestPath(active_id, false);
         if (!cqp || cqp->waypoints.empty()) {
-            StopAutoNavigate("no path available");
+            // Path genuinely not available; trigger calculation if needed
+            if (!cqp) {
+                RefreshQuestPath(active_id);
+            }
+            if (TIMER_DIFF(auto_navigate_started) > AUTO_NAV_GRACE_PERIOD_MS) {
+                StopAutoNavigate("no path available");
+            }
         }
-        else if (!cqp->IsCalculating()) {
-            const auto* target = cqp->NextWaypoint();
-            if (!target) target = cqp->CurrentWaypoint();
+        else {
+            // Path available (possibly recalculating, but old waypoints are usable)
+            auto_navigate_started = TIMER_INIT();
 
             if (!auto_navigate_last_move_time || TIMER_DIFF(auto_navigate_last_move_time) > AUTO_NAV_MOVE_INTERVAL_MS) {
-                GW::Agents::Move(*target);
-                auto_navigate_last_move_time = TIMER_INIT();
-            }
-
-            // Stuck detection
-            if (GetSquareDistance(*pos, auto_navigate_last_pos) > AUTO_NAV_STUCK_THRESHOLD_SQ) {
-                auto_navigate_last_pos = *pos;
-                auto_navigate_stuck_timer = TIMER_INIT();
-            }
-            else if (auto_navigate_stuck_timer && TIMER_DIFF(auto_navigate_stuck_timer) > AUTO_NAV_STUCK_TIMEOUT_MS) {
-                // Move perpendicular to unstick
-                const float dx = target->x - pos->x;
-                const float dy = target->y - pos->y;
-                GW::GamePos unstuck_pos(pos->x + dy * 0.3f, pos->y - dx * 0.3f);
-                GW::Agents::Move(unstuck_pos);
-                auto_navigate_stuck_timer = TIMER_INIT();
+                const auto target = GetLookAheadTarget(cqp->waypoints, *pos, AUTO_NAV_LOOK_AHEAD);
+                GW::Agents::Move(target);
                 auto_navigate_last_move_time = TIMER_INIT();
             }
 
             // Check if arrived at destination
-            if (cqp->current_waypoint >= cqp->waypoints.size() - 1) {
-                if (GetSquareDistance(*pos, cqp->waypoints.back()) < 150.f * 150.f)
-                    StopAutoNavigate("arrived at destination");
-            }
+            const float dist_sq = GetSquareDistance(*pos, cqp->waypoints.back());
+            if (dist_sq < AUTO_NAV_ARRIVAL_DIST_SQ)
+                StopAutoNavigate("arrived at destination");
         }
     }
 
-    // Retry queued evaluation once pathing is ready
-    if (questing_mode_evaluation_queued && PathfindingWindow::ReadyForPathing()) {
+    // Run queued evaluation (instant for hotkey/quest changes, deferred for map load)
+    if (questing_mode_evaluation_queued) {
         questing_mode_evaluation_queued = false;
+        questing_mode_evaluation_deferred_at = 0;
+        BeginQuestingModeEvaluation();
+    }
+    else if (questing_mode_evaluation_deferred_at && TIMER_DIFF(questing_mode_evaluation_deferred_at) > QUESTING_MODE_EVAL_DEFER_MS) {
+        questing_mode_evaluation_deferred_at = 0;
         BeginQuestingModeEvaluation();
     }
 
-    // Timeout questing mode evaluation
-    if (questing_mode_evaluation_pending && TIMER_DIFF(questing_mode_evaluation_started) > 10000) {
-        questing_mode_evaluation_pending = false;
-        questing_mode_candidates.clear();
-        Log::Warning("Questing Mode: evaluation timed out");
-    }
 }
 
 bool QuestModule::CanTerminate()
