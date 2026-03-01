@@ -37,6 +37,35 @@ namespace {
     bool show_paths_to_all_quests = false;
     bool keep_current_quest_when_new_quest_added = false;
 
+    // Questing Mode: auto-select closest quest
+    bool questing_mode_enabled = false;
+    bool questing_mode_evaluation_pending = false;
+    clock_t questing_mode_evaluation_started = 0;
+
+    struct QuestingModeCandidate {
+        GW::Constants::QuestID quest_id;
+        float path_distance = FLT_MAX;
+        bool calculated = false;
+    };
+    std::vector<QuestingModeCandidate> questing_mode_candidates;
+
+    // Auto-navigate
+    bool auto_navigate_active = false;
+    GW::GamePos auto_navigate_last_pos = {};
+    clock_t auto_navigate_last_move_time = 0;
+    clock_t auto_navigate_stuck_timer = 0;
+    constexpr float AUTO_NAV_STUCK_THRESHOLD_SQ = 10.f * 10.f;
+    constexpr clock_t AUTO_NAV_STUCK_TIMEOUT_MS = 3000;
+    constexpr clock_t AUTO_NAV_MOVE_INTERVAL_MS = 250;
+
+    // Configurable hotkeys (modifier flags: 1=Ctrl, 2=Shift, 4=Alt)
+    DWORD questing_mode_hotkey_modifiers = 1;
+    DWORD questing_mode_hotkey_key = 'Q';
+    DWORD auto_navigate_hotkey_modifiers = 1;
+    DWORD auto_navigate_hotkey_key = 'R';
+    bool capturing_questing_mode_hotkey = false;
+    bool capturing_auto_navigate_hotkey = false;
+
     bool fetch_missing_quest_info_queued = false;
 
     GW::HookEntry pre_ui_message_entry;
@@ -395,6 +424,141 @@ namespace {
         }
     }
 
+    // --- Questing Mode helpers ---
+
+    float ComputePathDistance(const std::vector<GW::GamePos>& waypoints)
+    {
+        float total = 0.f;
+        for (size_t i = 1; i < waypoints.size(); i++) {
+            const float dx = waypoints[i].x - waypoints[i - 1].x;
+            const float dy = waypoints[i].y - waypoints[i - 1].y;
+            total += std::sqrt(dx * dx + dy * dy);
+        }
+        return total;
+    }
+
+    void StopAutoNavigate(const char* reason)
+    {
+        if (!auto_navigate_active) return;
+        auto_navigate_active = false;
+        Log::Info("Auto-navigate stopped: %s", reason);
+    }
+
+    void TryFinalizeQuestingModeEvaluation()
+    {
+        for (const auto& c : questing_mode_candidates) {
+            if (!c.calculated) return;
+        }
+        questing_mode_evaluation_pending = false;
+
+        GW::Constants::QuestID best_id = GW::Constants::QuestID::None;
+        float best_distance = FLT_MAX;
+        for (const auto& c : questing_mode_candidates) {
+            if (c.path_distance < best_distance) {
+                best_distance = c.path_distance;
+                best_id = c.quest_id;
+            }
+        }
+        questing_mode_candidates.clear();
+
+        if (best_id != GW::Constants::QuestID::None) {
+            QuestModule::EmulateQuestSelected(best_id);
+            Log::Info("Questing Mode: selected closest quest");
+        }
+    }
+
+    void OnQuestingModePathCalculated(std::vector<GW::GamePos>& waypoints, void* args)
+    {
+        const auto quest_id = *reinterpret_cast<GW::Constants::QuestID*>(&args);
+        for (auto& c : questing_mode_candidates) {
+            if (c.quest_id == quest_id) {
+                c.path_distance = waypoints.empty() ? FLT_MAX : ComputePathDistance(waypoints);
+                c.calculated = true;
+                break;
+            }
+        }
+        TryFinalizeQuestingModeEvaluation();
+    }
+
+    void BeginQuestingModeEvaluation()
+    {
+        if (!questing_mode_enabled) return;
+        const auto pos = GetPlayerPos();
+        if (!pos) return;
+        const auto quest_log = GW::QuestMgr::GetQuestLog();
+        if (!quest_log) return;
+
+        questing_mode_candidates.clear();
+        for (const auto& quest : *quest_log) {
+            if (quest.quest_id == custom_quest_id) continue;
+            if (quest.IsCompleted()) continue;
+            if (quest.marker.x == INFINITY) continue;
+            questing_mode_candidates.push_back({quest.quest_id, FLT_MAX, false});
+        }
+
+        if (questing_mode_candidates.empty()) return;
+
+        questing_mode_evaluation_pending = true;
+        questing_mode_evaluation_started = TIMER_INIT();
+
+        for (const auto& c : questing_mode_candidates) {
+            const auto quest = GW::QuestMgr::GetQuest(c.quest_id);
+            if (!quest) continue;
+            PathfindingWindow::CalculatePath(*pos, quest->marker, OnQuestingModePathCalculated, (void*)c.quest_id);
+        }
+    }
+
+    // --- Hotkey UI helpers ---
+
+    bool ModifiersMatch(DWORD required_modifiers)
+    {
+        const bool ctrl_held = (GetKeyState(VK_CONTROL) & 0x8000) != 0;
+        const bool shift_held = (GetKeyState(VK_SHIFT) & 0x8000) != 0;
+        const bool alt_held = (GetKeyState(VK_MENU) & 0x8000) != 0;
+        const bool ctrl_required = (required_modifiers & 1) != 0;
+        const bool shift_required = (required_modifiers & 2) != 0;
+        const bool alt_required = (required_modifiers & 4) != 0;
+        return ctrl_held == ctrl_required && shift_held == shift_required && alt_held == alt_required;
+    }
+
+    const char* GetHotkeyName(DWORD modifiers, DWORD key)
+    {
+        static char buf[64];
+        buf[0] = 0;
+        if (modifiers & 1) strcat(buf, "Ctrl+");
+        if (modifiers & 2) strcat(buf, "Shift+");
+        if (modifiers & 4) strcat(buf, "Alt+");
+        char key_name[32];
+        const UINT scancode = MapVirtualKey(key, MAPVK_VK_TO_VSC);
+        if (GetKeyNameTextA(scancode << 16, key_name, sizeof(key_name)))
+            strcat(buf, key_name);
+        else
+            snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf), "0x%X", key);
+        return buf;
+    }
+
+    void DrawHotkeySelector(const char* label, DWORD* modifiers, DWORD* key, bool* capturing)
+    {
+        if (*capturing) {
+            ImGui::Text("%s:", label);
+            ImGui::SameLine();
+            ImGui::TextColored(ImVec4(1, 1, 0, 1), "Press key combo...");
+            ImGui::SameLine();
+            if (ImGui::SmallButton("Cancel")) {
+                *capturing = false;
+            }
+        }
+        else {
+            ImGui::Text("%s: %s", label, GetHotkeyName(*modifiers, *key));
+            ImGui::SameLine();
+            char btn_id[64];
+            snprintf(btn_id, sizeof(btn_id), "Set##%s", label);
+            if (ImGui::SmallButton(btn_id)) {
+                *capturing = true;
+            }
+        }
+    }
+
     void OnPreUIMessage(GW::HookStatus* status, GW::UI::UIMessage message_id, void* wparam, void*)
     {
         switch (message_id) {
@@ -464,6 +628,10 @@ namespace {
             case GW::UI::UIMessage::kMapLoaded:
                 BlockQuestSound();
                 break;
+            case GW::UI::UIMessage::kQuestRemoved:
+                if (questing_mode_enabled)
+                    BeginQuestingModeEvaluation();
+                break;
         }
     }
     bool was_loading = true;
@@ -480,6 +648,9 @@ namespace {
             if (quest_id_before_map_load == custom_quest_marker.quest_id) GW::QuestMgr::SetActiveQuestId(quest_id_before_map_load);
         }
         RefreshAllQuestPaths();
+        StopAutoNavigate("zone change");
+        if (questing_mode_enabled)
+            BeginQuestingModeEvaluation();
     }
 
     bool refresh_all_quest_paths_queued = 0;
@@ -611,6 +782,10 @@ ImU32& QuestModule::GetQuestColor(GW::Constants::QuestID quest_id)
 
 ImU32& QuestModule::GetQuestLineColor(GW::Constants::QuestID quest_id)
 {
+    if (auto_navigate_active && GW::QuestMgr::GetActiveQuestId() == quest_id) {
+        static ImU32 auto_nav_color = IM_COL32(0, 255, 200, 255);
+        return auto_nav_color;
+    }
     if (GW::QuestMgr::GetActiveQuestId() == quest_id) {
         return Minimap::Instance().symbols_renderer.color_quest_line;
     }
@@ -634,6 +809,13 @@ void QuestModule::DrawSettingsInternal()
 #endif
     if(recalc_quest_paths)
         RefreshAllQuestPaths();
+
+    ImGui::Separator();
+    ImGui::Text("Questing Mode");
+    ImGui::Checkbox("Auto-select closest quest on zone change##questingmode", &questing_mode_enabled);
+    ImGui::ShowHelp("Automatically selects the quest with the shortest path after zone change or quest completion.");
+    DrawHotkeySelector("Toggle Questing Mode", &questing_mode_hotkey_modifiers, &questing_mode_hotkey_key, &capturing_questing_mode_hotkey);
+    DrawHotkeySelector("Toggle Auto-Navigate", &auto_navigate_hotkey_modifiers, &auto_navigate_hotkey_key, &capturing_auto_navigate_hotkey);
 }
 
 void QuestModule::LoadSettings(ToolboxIni* ini)
@@ -654,6 +836,11 @@ void QuestModule::LoadSettings(ToolboxIni* ini)
         SetCustomQuestMarker(custom_quest_marker_world_pos);
     });
     LOAD_BOOL(keep_current_quest_when_new_quest_added);
+    LOAD_BOOL(questing_mode_enabled);
+    LOAD_UINT(questing_mode_hotkey_modifiers);
+    LOAD_UINT(questing_mode_hotkey_key);
+    LOAD_UINT(auto_navigate_hotkey_modifiers);
+    LOAD_UINT(auto_navigate_hotkey_key);
 }
 
 void QuestModule::SaveSettings(ToolboxIni* ini)
@@ -670,6 +857,11 @@ void QuestModule::SaveSettings(ToolboxIni* ini)
     SAVE_FLOAT(custom_quest_marker_world_pos_y);
     SAVE_BOOL(double_click_to_travel_to_quest);
     SAVE_BOOL(keep_current_quest_when_new_quest_added);
+    SAVE_BOOL(questing_mode_enabled);
+    SAVE_UINT(questing_mode_hotkey_modifiers);
+    SAVE_UINT(questing_mode_hotkey_key);
+    SAVE_UINT(auto_navigate_hotkey_modifiers);
+    SAVE_UINT(auto_navigate_hotkey_key);
 }
 
 void QuestModule::Initialize()
@@ -695,7 +887,8 @@ void QuestModule::Initialize()
         GW::UI::UIMessage::kOnScreenMessage,
         GW::UI::UIMessage::kSendSetActiveQuest,
         GW::UI::UIMessage::kSendAbandonQuest,
-        GW::UI::UIMessage::kStartMapLoad
+        GW::UI::UIMessage::kStartMapLoad,
+        GW::UI::UIMessage::kQuestRemoved
     };
     for (const auto ui_message : ui_messages) {
         // Post callbacks, non blocking
@@ -735,6 +928,68 @@ void QuestModule::EmulateQuestSelected(GW::Constants::QuestID quest_id)
     GW::UI::SendUIMessage(GW::UI::UIMessage::kClientActiveQuestChanged, &packet);
     GW::GetWorldContext()->active_quest_id = quest->quest_id;
     GW::UI::SendUIMessage(GW::UI::UIMessage::kServerActiveQuestChanged, &packet);
+}
+
+bool QuestModule::WndProc(UINT Message, WPARAM wParam, LPARAM)
+{
+    // Hotkey capture mode (settings UI)
+    if (Message == WM_KEYDOWN && (capturing_questing_mode_hotkey || capturing_auto_navigate_hotkey)) {
+        if (wParam != VK_CONTROL && wParam != VK_SHIFT && wParam != VK_MENU) {
+            DWORD mods = 0;
+            if (GetKeyState(VK_CONTROL) & 0x8000) mods |= 1;
+            if (GetKeyState(VK_SHIFT) & 0x8000) mods |= 2;
+            if (GetKeyState(VK_MENU) & 0x8000) mods |= 4;
+            if (capturing_questing_mode_hotkey) {
+                questing_mode_hotkey_modifiers = mods;
+                questing_mode_hotkey_key = static_cast<DWORD>(wParam);
+                capturing_questing_mode_hotkey = false;
+            }
+            else {
+                auto_navigate_hotkey_modifiers = mods;
+                auto_navigate_hotkey_key = static_cast<DWORD>(wParam);
+                capturing_auto_navigate_hotkey = false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    if (Message == WM_KEYDOWN) {
+        if (wParam == questing_mode_hotkey_key && ModifiersMatch(questing_mode_hotkey_modifiers)) {
+            questing_mode_enabled = !questing_mode_enabled;
+            Log::Flash("Questing Mode %s", questing_mode_enabled ? "enabled" : "disabled");
+            if (questing_mode_enabled)
+                BeginQuestingModeEvaluation();
+            return true;
+        }
+        if (wParam == auto_navigate_hotkey_key && ModifiersMatch(auto_navigate_hotkey_modifiers)) {
+            auto_navigate_active = !auto_navigate_active;
+            if (auto_navigate_active) {
+                auto_navigate_stuck_timer = TIMER_INIT();
+                const auto pos = GetPlayerPos();
+                if (pos) auto_navigate_last_pos = *pos;
+                auto_navigate_last_move_time = 0;
+            }
+            Log::Flash("Auto-navigate %s", auto_navigate_active ? "enabled" : "disabled");
+            return true;
+        }
+    }
+
+    // Cancel auto-navigate on manual movement
+    if (auto_navigate_active) {
+        if (Message == WM_RBUTTONDOWN) {
+            StopAutoNavigate("manual movement");
+        }
+        if (Message == WM_KEYDOWN) {
+            switch (wParam) {
+                case 'W': case 'A': case 'S': case 'D':
+                case VK_UP: case VK_DOWN: case VK_LEFT: case VK_RIGHT:
+                    StopAutoNavigate("manual movement");
+                    break;
+            }
+        }
+    }
+    return false;
 }
 
 void QuestModule::SignalTerminate()
@@ -795,6 +1050,52 @@ check_paths:
             ASSERT(size != calculated_quest_paths.size());
             goto check_paths;
         }
+    }
+
+    // Auto-navigate: follow waypoints to active quest marker
+    if (auto_navigate_active) {
+        const auto active_id = GW::QuestMgr::GetActiveQuestId();
+        auto* cqp = GetCalculatedQuestPath(active_id, false);
+        if (!cqp || cqp->waypoints.empty() || cqp->IsCalculating()) {
+            StopAutoNavigate("no path available");
+        }
+        else {
+            const auto* target = cqp->NextWaypoint();
+            if (!target) target = cqp->CurrentWaypoint();
+
+            if (!auto_navigate_last_move_time || TIMER_DIFF(auto_navigate_last_move_time) > AUTO_NAV_MOVE_INTERVAL_MS) {
+                GW::Agents::Move(*target);
+                auto_navigate_last_move_time = TIMER_INIT();
+            }
+
+            // Stuck detection
+            if (GetSquareDistance(*pos, auto_navigate_last_pos) > AUTO_NAV_STUCK_THRESHOLD_SQ) {
+                auto_navigate_last_pos = *pos;
+                auto_navigate_stuck_timer = TIMER_INIT();
+            }
+            else if (auto_navigate_stuck_timer && TIMER_DIFF(auto_navigate_stuck_timer) > AUTO_NAV_STUCK_TIMEOUT_MS) {
+                // Move perpendicular to unstick
+                const float dx = target->x - pos->x;
+                const float dy = target->y - pos->y;
+                GW::GamePos unstuck_pos(pos->x + dy * 0.3f, pos->y - dx * 0.3f);
+                GW::Agents::Move(unstuck_pos);
+                auto_navigate_stuck_timer = TIMER_INIT();
+                auto_navigate_last_move_time = TIMER_INIT();
+            }
+
+            // Check if arrived at destination
+            if (cqp->current_waypoint >= cqp->waypoints.size() - 1) {
+                if (GetSquareDistance(*pos, cqp->waypoints.back()) < 150.f * 150.f)
+                    StopAutoNavigate("arrived at destination");
+            }
+        }
+    }
+
+    // Timeout questing mode evaluation
+    if (questing_mode_evaluation_pending && TIMER_DIFF(questing_mode_evaluation_started) > 10000) {
+        questing_mode_evaluation_pending = false;
+        questing_mode_candidates.clear();
+        Log::Warning("Questing Mode: evaluation timed out");
     }
 }
 
