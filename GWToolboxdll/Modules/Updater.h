@@ -34,6 +34,8 @@ public:
 
     static const GWToolboxRelease* GetCurrentVersionInfo(GWToolboxRelease* out);
 
+    void Initialize() override;
+    void Update(float) override;
     void Draw(IDirect3DDevice9* device) override;
 
     void LoadSettings(ToolboxIni* ini) override;
