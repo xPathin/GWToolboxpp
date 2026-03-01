@@ -40,6 +40,7 @@ namespace {
     // Questing Mode: auto-select closest quest
     bool questing_mode_enabled = false;
     bool questing_mode_evaluation_pending = false;
+    bool questing_mode_evaluation_queued = false;
     clock_t questing_mode_evaluation_started = 0;
 
     struct QuestingModeCandidate {
@@ -442,6 +443,10 @@ namespace {
         if (!auto_navigate_active) return;
         auto_navigate_active = false;
         Log::Info("Auto-navigate stopped: %s", reason);
+        // Redraw minimap lines to revert color
+        const auto active_id = GW::QuestMgr::GetActiveQuestId();
+        auto* cqp = GetCalculatedQuestPath(active_id, false);
+        if (cqp) cqp->DrawMinimapLines();
     }
 
     void TryFinalizeQuestingModeEvaluation()
@@ -630,7 +635,7 @@ namespace {
                 break;
             case GW::UI::UIMessage::kQuestRemoved:
                 if (questing_mode_enabled)
-                    BeginQuestingModeEvaluation();
+                    questing_mode_evaluation_queued = true;
                 break;
         }
     }
@@ -650,7 +655,7 @@ namespace {
         RefreshAllQuestPaths();
         StopAutoNavigate("zone change");
         if (questing_mode_enabled)
-            BeginQuestingModeEvaluation();
+            questing_mode_evaluation_queued = true;
     }
 
     bool refresh_all_quest_paths_queued = 0;
@@ -959,7 +964,7 @@ bool QuestModule::WndProc(UINT Message, WPARAM wParam, LPARAM)
             questing_mode_enabled = !questing_mode_enabled;
             Log::Flash("Questing Mode %s", questing_mode_enabled ? "enabled" : "disabled");
             if (questing_mode_enabled)
-                BeginQuestingModeEvaluation();
+                questing_mode_evaluation_queued = true;
             return true;
         }
         if (wParam == auto_navigate_hotkey_key && ModifiersMatch(auto_navigate_hotkey_modifiers)) {
@@ -971,6 +976,10 @@ bool QuestModule::WndProc(UINT Message, WPARAM wParam, LPARAM)
                 auto_navigate_last_move_time = 0;
             }
             Log::Flash("Auto-navigate %s", auto_navigate_active ? "enabled" : "disabled");
+            // Redraw minimap lines to update color
+            const auto active_id = GW::QuestMgr::GetActiveQuestId();
+            auto* cqp = GetCalculatedQuestPath(active_id, false);
+            if (cqp) cqp->DrawMinimapLines();
             return true;
         }
     }
@@ -1056,10 +1065,10 @@ check_paths:
     if (auto_navigate_active) {
         const auto active_id = GW::QuestMgr::GetActiveQuestId();
         auto* cqp = GetCalculatedQuestPath(active_id, false);
-        if (!cqp || cqp->waypoints.empty() || cqp->IsCalculating()) {
+        if (!cqp || cqp->waypoints.empty()) {
             StopAutoNavigate("no path available");
         }
-        else {
+        else if (!cqp->IsCalculating()) {
             const auto* target = cqp->NextWaypoint();
             if (!target) target = cqp->CurrentWaypoint();
 
@@ -1089,6 +1098,12 @@ check_paths:
                     StopAutoNavigate("arrived at destination");
             }
         }
+    }
+
+    // Retry queued evaluation once pathing is ready
+    if (questing_mode_evaluation_queued && PathfindingWindow::ReadyForPathing()) {
+        questing_mode_evaluation_queued = false;
+        BeginQuestingModeEvaluation();
     }
 
     // Timeout questing mode evaluation
