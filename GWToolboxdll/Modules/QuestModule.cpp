@@ -489,7 +489,7 @@ namespace {
         if (!quest_log) return;
 
         questing_mode_candidates.clear();
-        for (const auto& quest : *quest_log) {
+        for (auto& quest : *quest_log) {
             if (quest.quest_id == custom_quest_id) continue;
             if (quest.IsCompleted()) continue;
             if (quest.marker.x == INFINITY) continue;
