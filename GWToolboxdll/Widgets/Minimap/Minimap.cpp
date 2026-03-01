@@ -1165,7 +1165,7 @@ void Minimap::DrawSettingsInternal()
 void Minimap::LoadSettings(ToolboxIni* ini)
 {
     ToolboxWidget::LoadSettings(ini);
-    Resources::EnsureFileExists(Resources::GetPath(L"Markers.ini"), "https://raw.githubusercontent.com/gwdevhub/GWToolboxpp/master/resources/Markers.ini", [](const bool success, const std::wstring& error) {
+    Resources::EnsureFileExists(Resources::GetPath(L"Markers.ini"), "https://raw.githubusercontent.com/xPathin/GWToolboxpp/main/resources/Markers.ini", [](const bool success, const std::wstring& error) {
         if (success) {
             Instance().custom_renderer.LoadMarkers();
         }

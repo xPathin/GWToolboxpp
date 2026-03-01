@@ -73,3 +73,5 @@ build/
 # VSCode stuff
 .vscode/
 .aider*
+
+.claude/*

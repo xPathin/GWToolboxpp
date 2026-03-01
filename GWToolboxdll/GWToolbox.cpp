@@ -166,7 +166,7 @@ namespace {
 
         Resources::EnsureFileExists(
             Resources::GetPath(L"Font.ttf"),
-            "https://raw.githubusercontent.com/gwdevhub/GWToolboxpp/master/resources/Font.ttf",
+            "https://raw.githubusercontent.com/xPathin/GWToolboxpp/main/resources/Font.ttf",
             [](const bool success, const std::wstring& error) {
                 FontLoader::LoadFonts();
                 if (!success) {

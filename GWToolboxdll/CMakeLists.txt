@@ -32,8 +32,7 @@ target_compile_definitions(GWToolboxdll PRIVATE
     )
       
 target_compile_options(GWToolboxdll PRIVATE /W4 /WX /Gy /utf-8)
-target_compile_options(GWToolboxdll PRIVATE $<$<CONFIG:Debug>:/ZI /Od>)
-target_compile_options(GWToolboxdll PRIVATE $<$<CONFIG:RelWithDebInfo>:/Zi>)
+target_compile_options(GWToolboxdll PRIVATE $<$<CONFIG:Debug>:/Od>)
 
 set_target_properties(GWToolboxdll PROPERTIES
     VS_GLOBAL_RunCodeAnalysis false

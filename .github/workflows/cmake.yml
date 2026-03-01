@@ -1,6 +1,10 @@
-name: CMake
+name: Build
 
-on: [push]
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   build:
@@ -9,108 +13,85 @@ jobs:
     permissions:
       contents: write
 
-    steps:
-    - name: Setup Windows 10 SDK Action
-      uses: GuillaumeFalourd/setup-windows10-sdk-action@v2
-      with:
-        sdk-version: 22621
+    env:
+      VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg-cache
+      SCCACHE_GHA_ENABLED: "true"
 
+    steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0
+        submodules: recursive
 
-    - name: Checkout submodules
-      shell: bash
-      run: git submodule update --init --recursive
-      
-    - name: Install vcpkg
-      run: |
-        git clone https://github.com/microsoft/vcpkg.git
-        .\vcpkg\bootstrap-vcpkg.bat
-        
-    - name: Set VCPKG_ROOT
-      run: |
-        echo "VCPKG_ROOT=$(Get-Location)\vcpkg" >> $env:GITHUB_ENV
-      shell: powershell
-      
-    - name: Export GitHub Actions cache environment variables
-      uses: actions/github-script@v7
+    - name: Set up MSVC x86 environment
+      uses: ilammy/msvc-dev-cmd@v1
       with:
-        script: |
-          core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
-          core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+        arch: x86
 
-    - name: Create Build Environment
-      # Some projects don't allow in-source building, so create a separate build directory
-      # We'll use this as our working directory for all subsequent commands
-      run: cmake -E make_directory ${{runner.workspace}}/GWToolboxpp/build
+    - name: Set up sccache
+      uses: mozilla-actions/sccache-action@v0.0.9
+
+    - name: Set VCPKG_ROOT
+      shell: bash
+      run: echo "VCPKG_ROOT=$VCPKG_INSTALLATION_ROOT" >> $GITHUB_ENV
+
+    - name: Generate version
+      id: version
+      shell: bash
+      run: |
+        VERSION="$(date -u +%Y%m%d)-$(git rev-parse --short HEAD)"
+        MODULE_VERSION="$(date -u +%Y),$(date -u +%-m),$(date -u +%-d),0"
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "module_version=$MODULE_VERSION" >> $GITHUB_OUTPUT
+        echo "Version: $VERSION"
+
+    - name: Create vcpkg binary cache directory
+      shell: bash
+      run: mkdir -p "${{ github.workspace }}/vcpkg-cache"
+
+    - name: Restore vcpkg binary cache
+      uses: actions/cache@v4
+      with:
+        path: ${{ github.workspace }}/vcpkg-cache
+        key: vcpkg-${{ hashFiles('vcpkg.json', 'vcpkg-overlays/**') }}
+        restore-keys: vcpkg-
 
     - name: Configure CMake
-      # Use a bash shell so we can use the same syntax for environment variable
-      # access regardless of the host operating system
       shell: bash
-      working-directory: ${{runner.workspace}}/GWToolboxpp/build
-      run: cmake $GITHUB_WORKSPACE --preset=vcpkg
-      env:
-        VCPKG_ROOT: ${{ env.VCPKG_ROOT }}
-        VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
+      run: |
+        cmake $GITHUB_WORKSPACE --preset=vcpkg-ci \
+          -DGWTOOLBOXDLL_VERSION="${{ steps.version.outputs.version }}" \
+          -DGWTOOLBOX_MODULE_VERSION="${{ steps.version.outputs.module_version }}" \
+          -DCMAKE_C_COMPILER_LAUNCHER=sccache \
+          -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
 
     - name: Build
-      working-directory: ${{runner.workspace}}/GWToolboxpp/build
       shell: bash
-      # Execute the build.  You can specify a specific target with "--target <NAME>"
-      run: cmake --build . --config RelWithDebInfo
+      run: cmake --build build --target GWToolboxdll
+
+    - name: Show sccache stats
+      shell: bash
+      run: sccache --show-stats
 
     - name: Save output
       uses: actions/upload-artifact@v4
       with:
-        path: ${{runner.workspace}}/GWToolboxpp/bin/RelWithDebInfo/
+        name: GWToolbox-${{ steps.version.outputs.version }}
+        path: ${{ github.workspace }}/bin/
 
-    - name: Check version and create release
-      if: github.ref == 'refs/heads/master'
+    - name: Create release
+      if: github.ref == 'refs/heads/main'
       shell: bash
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        VERSION=$(sed -n 's/.*set(GWTOOLBOXDLL_VERSION "\(.*\)").*/\1/p' CMakeLists.txt | tr -d '\r')
-        BETA=$(sed -n 's/.*set(GWTOOLBOXDLL_VERSION_BETA "\(.*\)").*/\1/p' CMakeLists.txt | tr -d '\r')
-        
-        if [ -z "$VERSION" ]; then
-          echo "Could not find version in CMakeLists.txt"
-          exit 1
-        fi
-        
-        if [ -z "$BETA" ]; then
-          TAG_NAME="${VERSION}_Release"
-        else
-          TAG_NAME="${VERSION}_${BETA}"
-        fi
-        
-        echo "Detected version: $VERSION"
-        echo "Detected beta: $BETA"
-        echo "Target tag: $TAG_NAME"
-        
-        # Check if tag exists
-        if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
-          echo "Tag $TAG_NAME already exists. Skipping release."
-          exit 0
-        fi
-        
-        echo "Tag $TAG_NAME does not exist. Creating release."
-          
-        # Create tag
-        git config user.name "GitHub Actions"
-        git config user.email "actions@github.com"
-        git tag "$TAG_NAME"
-        git push origin "$TAG_NAME"
-        
-        # Prepare artifacts
-        BIN_DIR="${{runner.workspace}}/GWToolboxpp/bin/RelWithDebInfo"
+        VERSION="${{ steps.version.outputs.version }}"
+        BIN_DIR="${{ github.workspace }}/bin"
+
         cp "$BIN_DIR/GWToolboxdll.dll" .
         gzip -c "$BIN_DIR/GWToolboxdll.pdb" > GWToolboxdll.pdb.gz
-        
-        # Create release
-        gh release create "$TAG_NAME" \
-          --title "$TAG_NAME" \
+
+        gh release create "$VERSION" \
+          --title "$VERSION" \
+          --notes "Build from $(git rev-parse --short HEAD)" \
           GWToolboxdll.dll GWToolboxdll.pdb.gz

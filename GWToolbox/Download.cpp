@@ -178,7 +178,7 @@ bool DownloadWindow::DownloadAllFiles(std::wstring& error)
     dllpath = dllpath.parent_path() / "GWToolboxdll.dll";
 
     std::string content;
-    if (!Download(content, "https://api.github.com/repos/gwdevhub/GWToolboxpp/releases/latest")) {
+    if (!Download(content, "https://api.github.com/repos/xPathin/GWToolboxpp/releases/latest")) {
         // @Remark:
         // We may not be able to grep Github api. (For instance, if we spam it)
         return error = L"Couldn't download the latest release of GWToolboxpp", true;
@@ -201,16 +201,7 @@ bool DownloadWindow::DownloadAllFiles(std::wstring& error)
     if (std::filesystem::exists(dllpath)) {
         const auto current_filesize = std::filesystem::file_size(dllpath);
         if (current_filesize == release_dll_asset->size) {
-            const auto current_version = GetDllRelease(dllpath);
-            const auto available_version = std::regex_replace(release.tag_name, std::regex(R"([^0-9.])"), "");
-            if (current_version == available_version
-                && current_filesize == release_dll_asset->size) {
-                return true;
-            }
-            if (current_version.starts_with(available_version)) {
-                // NB: This allows 8.6 Beta1, 8.6 Beta123 etc
-                return true;
-            }
+            return true;
         }
     }
 
