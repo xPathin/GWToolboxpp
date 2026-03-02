@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <GWCA/stdafx.h>
 
 #include <GWCA/Utilities/Debug.h>
 #include <GWCA/Utilities/Export.h>
@@ -59,7 +59,7 @@ namespace {
 
 
     bool __cdecl StoCHandler_Func(Packet::StoC::PacketBase *pak) {
-        GW::HookBase::EnterHook();
+        GW::Hook::EnterHook();
         HookStatus status;
         auto it = packet_entries[pak->header].begin();
         // Pre callbacks
@@ -81,7 +81,7 @@ namespace {
             it++;
         }
 
-        GW::HookBase::LeaveHook();
+        GW::Hook::LeaveHook();
         return true;
     }
 

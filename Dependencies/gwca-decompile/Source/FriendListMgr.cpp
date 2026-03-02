@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <GWCA/stdafx.h>
 
 #include <GWCA/Utilities/Debug.h>
 #include <GWCA/Utilities/Hooker.h>
@@ -31,7 +31,7 @@ namespace {
 
     void __cdecl OnFriendEventHandler(void* unk, EventData* event_info)
     {
-        HookBase::EnterHook();
+        Hook::EnterHook();
         uint8_t* uuid = 0;
         const wchar_t* alias = 0;
         switch (event_info->event_id) {
@@ -49,7 +49,7 @@ namespace {
         }
         if (!uuid && !alias) {
             FriendEventHandler_Ret(unk, event_info);
-            HookBase::LeaveHook();
+            Hook::LeaveHook();
             return;
         }
         Friend* current_state = 0;
@@ -94,7 +94,7 @@ namespace {
         if (old_state)
             free(old_state);
 
-        HookBase::LeaveHook();
+        Hook::LeaveHook();
     }
 
     typedef void(__cdecl *SetOnlineStatus_pt)(FriendStatus status);
@@ -141,21 +141,21 @@ namespace {
         GWCA_ASSERT(RemoveFriend_Func);
 #endif
 
-        HookBase::CreateHook(FriendEventHandler_Func, OnFriendEventHandler, (void**)&FriendEventHandler_Ret);
+        Hook::CreateHook(FriendEventHandler_Func, OnFriendEventHandler, (void**)&FriendEventHandler_Ret);
     }
 
     void EnableHooks() {
         if (FriendEventHandler_Func)
-            HookBase::EnableHooks(FriendEventHandler_Func);
+            Hook::EnableHooks(FriendEventHandler_Func);
     }
 
     void DisableHooks() {
         if(FriendEventHandler_Func)
-            HookBase::DisableHooks(FriendEventHandler_Func);
+            Hook::DisableHooks(FriendEventHandler_Func);
     }
 
     void Exit() {
-        HookBase::RemoveHook(FriendEventHandler_Func);
+        Hook::RemoveHook(FriendEventHandler_Func);
     }
 }
 

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <GWCA/stdafx.h>
 
 #include <GWCA/Utilities/Debug.h>
 #include <GWCA/Utilities/Hooker.h>
@@ -69,7 +69,7 @@ namespace {
 
     bool __cdecl OnGwEndScene(gwdx* ctx, void* unk)
     {
-        HookBase::EnterHook();
+        Hook::EnterHook();
         EnterCriticalSection(&mutex);
         in_render_loop = true;
         gwdx_ptr = ctx;
@@ -78,30 +78,30 @@ namespace {
         bool retval = RetGwEndScene(ctx, unk);
         in_render_loop = false;
         LeaveCriticalSection(&mutex);
-        HookBase::LeaveHook();
+        Hook::LeaveHook();
         return retval;
     }
 
     bool __cdecl OnGwReset(gwdx* ctx)
     {
-        HookBase::EnterHook();
+        Hook::EnterHook();
         gwdx_ptr = ctx;
         if (reset_callback)
             reset_callback(ctx->device);
         bool retval = RetGwReset(ctx);
-        HookBase::LeaveHook();
+        Hook::LeaveHook();
         return retval;
     }
 
     bool __cdecl OnScreenCapture(gwdx* ctx, void* unk)
     {
-        HookBase::EnterHook();
+        Hook::EnterHook();
         // @Enhancement: This should probably be an option.
         if (!GW::UI::GetIsShiftScreenShot() && render_callback) {
             render_callback(ctx->device);
         }
         bool retval = RetScreenCapture(ctx, unk);
-        HookBase::LeaveHook();
+        Hook::LeaveHook();
         return retval;
     }
 
@@ -126,36 +126,36 @@ namespace {
         GWCA_ASSERT(ScreenCapture_Func);
 #endif
 
-        HookBase::CreateHook(GwEndScene_Func, OnGwEndScene, (void**)&RetGwEndScene);
-        HookBase::CreateHook(ScreenCapture_Func, OnScreenCapture, (void**)&RetScreenCapture);
-        HookBase::CreateHook(GwReset_Func, OnGwReset, (void**)&RetGwReset);
+        Hook::CreateHook(GwEndScene_Func, OnGwEndScene, (void**)&RetGwEndScene);
+        Hook::CreateHook(ScreenCapture_Func, OnScreenCapture, (void**)&RetScreenCapture);
+        Hook::CreateHook(GwReset_Func, OnGwReset, (void**)&RetGwReset);
     }
 
     void EnableHooks()
     {
         if (GwEndScene_Func)
-            HookBase::EnableHooks(GwEndScene_Func);
+            Hook::EnableHooks(GwEndScene_Func);
         if (ScreenCapture_Func)
-            HookBase::EnableHooks(ScreenCapture_Func);
+            Hook::EnableHooks(ScreenCapture_Func);
         if (GwReset_Func)
-            HookBase::EnableHooks(GwReset_Func);
+            Hook::EnableHooks(GwReset_Func);
     }
 
     void DisableHooks()
     {
         if (GwEndScene_Func)
-            HookBase::DisableHooks(GwEndScene_Func);
+            Hook::DisableHooks(GwEndScene_Func);
         if (ScreenCapture_Func)
-            HookBase::DisableHooks(ScreenCapture_Func);
+            Hook::DisableHooks(ScreenCapture_Func);
         if (GwReset_Func)
-            HookBase::DisableHooks(GwReset_Func);
+            Hook::DisableHooks(GwReset_Func);
     }
 
     void Exit()
     {
-        HookBase::RemoveHook(GwEndScene_Func);
-        HookBase::RemoveHook(ScreenCapture_Func);
-        HookBase::RemoveHook(GwReset_Func);
+        Hook::RemoveHook(GwEndScene_Func);
+        Hook::RemoveHook(ScreenCapture_Func);
+        Hook::RemoveHook(GwReset_Func);
         DeleteCriticalSection(&mutex);
     }
 }

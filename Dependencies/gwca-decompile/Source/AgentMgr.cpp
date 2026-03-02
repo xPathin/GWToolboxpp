@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <GWCA/stdafx.h>
 
 #include <GWCA/Context/GameContext.h>
 #include <GWCA/Context/AgentContext.h>
@@ -158,10 +158,10 @@ namespace {
             // NB: What is UI message 0x100001a0 ?
             InteractGadget_Func = (InteractCallableAgent_pt)Scanner::FunctionFromNearCall(address + 0x120);
         }
-        HookBase::CreateHook(CallTarget_Func, OnCallTarget, (void**)&CallTarget_Ret);
-        HookBase::CreateHook(InteractNPC_Func, OnInteractNPC, (void**)&InteractNPC_Ret);
-        HookBase::CreateHook(SendDialog_Func, OnSendDialog, (void**)&RetSendDialog);
-        HookBase::CreateHook(SendSignpostDialog_Func, OnSendDialog, (void**)&RetSendSignpostDialog);
+        Hook::CreateHook(CallTarget_Func, OnCallTarget, (void**)&CallTarget_Ret);
+        Hook::CreateHook(InteractNPC_Func, OnInteractNPC, (void**)&InteractNPC_Ret);
+        Hook::CreateHook(SendDialog_Func, OnSendDialog, (void**)&RetSendDialog);
+        Hook::CreateHook(SendSignpostDialog_Func, OnSendDialog, (void**)&RetSendSignpostDialog);
         UI::RegisterUIMessageCallback(&OnSendDialog_HookEntry, UI::UIMessage::kDialogBody, OnDialogBody_UIMessage, 0x1);
         UI::RegisterUIMessageCallback(&OnSendDialog_HookEntry, UI::UIMessage::kSendDialog, OnSendDialog_UIMessage, 0x1);
 
@@ -202,29 +202,29 @@ namespace {
     }
     void EnableHooks() {
         if (SendDialog_Func)
-            HookBase::EnableHooks(SendDialog_Func);
+            Hook::EnableHooks(SendDialog_Func);
         if (SendSignpostDialog_Func)
-            HookBase::EnableHooks(SendSignpostDialog_Func);
+            Hook::EnableHooks(SendSignpostDialog_Func);
         if (CallTarget_Func)
-            HookBase::EnableHooks(CallTarget_Func);
+            Hook::EnableHooks(CallTarget_Func);
         if (InteractNPC_Func)
-            HookBase::EnableHooks(InteractNPC_Func);
+            Hook::EnableHooks(InteractNPC_Func);
     }
     void DisableHooks() {
         if(SendDialog_Func)
-            HookBase::DisableHooks(SendDialog_Func);
+            Hook::DisableHooks(SendDialog_Func);
         if(SendSignpostDialog_Func)
-            HookBase::DisableHooks(SendSignpostDialog_Func);
+            Hook::DisableHooks(SendSignpostDialog_Func);
         if(CallTarget_Func)
-            HookBase::DisableHooks(CallTarget_Func);
+            Hook::DisableHooks(CallTarget_Func);
         if(InteractNPC_Func)
-            HookBase::DisableHooks(InteractNPC_Func);
+            Hook::DisableHooks(InteractNPC_Func);
     }
     void Exit() {
-        HookBase::RemoveHook(SendDialog_Func);
-        HookBase::RemoveHook(SendSignpostDialog_Func);
-        HookBase::RemoveHook(CallTarget_Func);
-        HookBase::RemoveHook(InteractNPC_Func);
+        Hook::RemoveHook(SendDialog_Func);
+        Hook::RemoveHook(SendSignpostDialog_Func);
+        Hook::RemoveHook(CallTarget_Func);
+        Hook::RemoveHook(InteractNPC_Func);
     }
 }
 

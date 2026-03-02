@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <GWCA/stdafx.h>
 
 #include <GWCA/Utilities/Debug.h>
 #include <GWCA/Utilities/Hooker.h>
@@ -28,12 +28,12 @@ namespace {
     
     uint32_t __cdecl OnSendEventMessage(void *event_context,uint32_t unk1,EventMgr::EventID event_id,void* data_buffer,uint32_t data_length)
     {
-        HookBase::EnterHook();
+        Hook::EnterHook();
         HookStatus status;
         uint32_t ret = 1;
         auto found = Event_callbacks.find(event_id);
         if (found == Event_callbacks.end()) {
-            HookBase::LeaveHook();
+            Hook::LeaveHook();
             return SendEventMessage_Ret(event_context, unk1, event_id, data_buffer, data_length);
         }
 
@@ -58,7 +58,7 @@ namespace {
             it++;
         }
 
-        HookBase::LeaveHook();
+        Hook::LeaveHook();
         return ret;
     }
 
@@ -67,7 +67,7 @@ namespace {
 
         uintptr_t address = Scanner::Find("\x68\x08\x08\x00\x00\x8d\x85\xf4\xf7\xff\xff", "xxxxxxxxxxx", 0x16);
         SendEventMessage_Func = (SendEventMessage_pt)Scanner::FunctionFromNearCall(address);
-        HookBase::CreateHook(SendEventMessage_Func, OnSendEventMessage, (void**)&SendEventMessage_Ret);
+        Hook::CreateHook(SendEventMessage_Func, OnSendEventMessage, (void**)&SendEventMessage_Ret);
 
         GWCA_INFO("[SCAN] SendEventMessage_Func = %p", SendEventMessage_Func);
 
@@ -78,16 +78,16 @@ namespace {
 
     void EnableHooks() {
         if (SendEventMessage_Func)
-            HookBase::EnableHooks(SendEventMessage_Func);
+            Hook::EnableHooks(SendEventMessage_Func);
     }
 
     void DisableHooks() {
         if(SendEventMessage_Func)
-            HookBase::DisableHooks(SendEventMessage_Func);
+            Hook::DisableHooks(SendEventMessage_Func);
     }
 
     void Exit() {
-        HookBase::RemoveHook(SendEventMessage_Func);
+        Hook::RemoveHook(SendEventMessage_Func);
     }
 }
 

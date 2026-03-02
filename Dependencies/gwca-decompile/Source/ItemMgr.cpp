@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <GWCA/stdafx.h>
 
 #include <GWCA/Constants/Constants.h>
 #include <GWCA/Constants/ItemIDs.h>
@@ -138,10 +138,10 @@ namespace {
 
     std::unordered_map<HookEntry *, ItemClickCallback> ItemClick_callbacks;
     void __fastcall OnItemClick(uint32_t* bag_id, void *edx, ItemClickParam *param) {
-        HookBase::EnterHook();
+        Hook::EnterHook();
         if (!(bag_id && param)) {
             RetItemClick(bag_id, edx, param);
-            HookBase::LeaveHook();
+            Hook::LeaveHook();
             return;
         }
 
@@ -156,7 +156,7 @@ namespace {
         }
         if (!status.blocked)
             RetItemClick(bag_id, edx, param);
-        HookBase::LeaveHook();
+        Hook::LeaveHook();
     }
 
     void Init() {
@@ -176,14 +176,14 @@ namespace {
         EquipItem_Func = (EquipItem_pt)Scanner::FunctionFromNearCall(address + 0x1e);
         MoveItem_Func = (MoveItem_pt)Scanner::FunctionFromNearCall(address + 0x6e);
 
-        address = Scanner::FindAssertion("p:\\code\\gw\\ui\\game\\gmview.cpp", "param.notifyData");
+        address = Scanner::FindAssertion("p:\\code\\gw\\ui\\game\\gmview.cpp", "param.notifyData", 0, 0);
         DropGold_Func = (DoAction_pt)Scanner::FunctionFromNearCall(address + 0x13);
 
         SalvageSessionCancel_Func = (Void_pt)Scanner::FunctionFromNearCall(address - 0x22);
         SalvageSessionComplete_Func = (Void_pt)Scanner::FunctionFromNearCall(address - 0x37);
         SalvageMaterials_Func = (Void_pt)Scanner::FunctionFromNearCall(address - 0x4b);
 
-        address = Scanner::Find("\x6a\x00\x50\x68\x00\x01\x00\x10", "xxxxxxxx");
+        address = Scanner::Find("\x6a\x00\x50\x68\x00\x01\x00\x10", "xxxxxxxx", 0, 0);
         SalvageStart_Func = (SalvageStart_pt)Scanner::FunctionFromNearCall(address + 0x22);
 
         IdentifyItem_Func = (IdentifyItem_pt)Scanner::FunctionFromNearCall(address + 0x4a);
@@ -200,22 +200,22 @@ namespace {
         address = Scanner::Find("\x83\xc9\x01\x89\x4b\x24", "xxxxxx", 0x28);
         OpenLockedChest_Func = (DoAction_pt)Scanner::FunctionFromNearCall(address);
 
-        address = Scanner::FindAssertion("p:\\code\\gw\\ui\\game\\gmweaponbar.cpp", "slotIndex < ITEM_PLAYER_EQUIP_SETS", 0x128);
+        address = Scanner::FindAssertion("p:\\code\\gw\\ui\\game\\gmweaponbar.cpp", "slotIndex < ITEM_PLAYER_EQUIP_SETS", 0, 0x128);
         PingWeaponSet_Func = (PingWeaponSet_pt)Scanner::FunctionFromNearCall(address);
 
-        address = GW::Scanner::FindAssertion("p:\\code\\gw\\const\\constitempvp.cpp", "unlockIndex < ITEM_PVP_UNLOCK_COUNT");
+        address = GW::Scanner::FindAssertion("p:\\code\\gw\\const\\constitempvp.cpp", "unlockIndex < ITEM_PVP_UNLOCK_COUNT", 0, 0);
         if (address) {
             unlocked_pvp_item_upgrade_array.m_buffer = *(PvPItemUpgradeInfo**)(address + 0x15);
             unlocked_pvp_item_upgrade_array.m_size = *(size_t*)(address - 0xb);
         }
 
-        address = GW::Scanner::FindAssertion("p:\\code\\gw\\const\\constitempvp.cpp", "index < ITEM_PVP_ITEM_COUNT");
+        address = GW::Scanner::FindAssertion("p:\\code\\gw\\const\\constitempvp.cpp", "index < ITEM_PVP_ITEM_COUNT", 0, 0);
         if (address) {
             pvp_item_array.m_buffer = *(PvPItemInfo**)(address + 0x15);
             pvp_item_array.m_size = *(size_t*)(address - 0xb);
         }
 
-        address = GW::Scanner::FindAssertion("p:\\code\\gw\\composite\\data\\cpsdata.cpp", "id < s_items.Count()",-0xb);
+        address = GW::Scanner::FindAssertion("p:\\code\\gw\\composite\\data\\cpsdata.cpp", "id < s_items.Count()", 0, -0xb);
         if (address) {
             address = (*(uintptr_t*)address) - 8;
             composite_model_info_array = (Array<CompositeModelInfo>*)address;
@@ -263,48 +263,48 @@ namespace {
         GWCA_ASSERT(unlocked_pvp_item_upgrade_array.m_size);
         GWCA_ASSERT(GetPvPItemUpgradeInfoName_Func);
 #endif
-        HookBase::CreateHook(ItemClick_Func, OnItemClick, (void**)&RetItemClick);
+        Hook::CreateHook(ItemClick_Func, OnItemClick, (void**)&RetItemClick);
         if (PingWeaponSet_Func) {
-            HookBase::CreateHook(PingWeaponSet_Func, OnPingWeaponSet, (void**)&PingWeaponSet_Ret);
+            Hook::CreateHook(PingWeaponSet_Func, OnPingWeaponSet, (void**)&PingWeaponSet_Ret);
             UI::RegisterUIMessageCallback(&OnPingWeaponSet_Entry, UI::UIMessage::kSendPingWeaponSet, OnPingWeaponSet_UIMessage, 0x1);
         }
         if (MoveItem_Func) {
-            HookBase::CreateHook(MoveItem_Func, OnMoveItem, (void**)&MoveItem_Ret);
+            Hook::CreateHook(MoveItem_Func, OnMoveItem, (void**)&MoveItem_Ret);
             UI::RegisterUIMessageCallback(&OnMoveItem_Entry, UI::UIMessage::kSendMoveItem, OnMoveItem_UIMessage, 0x1);
         }
         if (UseItem_Func) {
-            HookBase::CreateHook(UseItem_Func, OnUseItem, (void**)&UseItem_Ret);
+            Hook::CreateHook(UseItem_Func, OnUseItem, (void**)&UseItem_Ret);
             UI::RegisterUIMessageCallback(&OnUseItem_Entry, UI::UIMessage::kSendUseItem, OnUseItem_UIMessage, 0x1);
         }
     }
 
     void EnableHooks() {
         if (ItemClick_Func)
-            HookBase::EnableHooks(ItemClick_Func);
+            Hook::EnableHooks(ItemClick_Func);
         if (PingWeaponSet_Func)
-            HookBase::EnableHooks(PingWeaponSet_Func);
+            Hook::EnableHooks(PingWeaponSet_Func);
         if (MoveItem_Func)
-            HookBase::EnableHooks(MoveItem_Func);
+            Hook::EnableHooks(MoveItem_Func);
         if (UseItem_Func)
-            HookBase::EnableHooks(UseItem_Func);
+            Hook::EnableHooks(UseItem_Func);
     }
 
     void DisableHooks() {
         if (ItemClick_Func)
-            HookBase::DisableHooks(ItemClick_Func);
+            Hook::DisableHooks(ItemClick_Func);
         if (PingWeaponSet_Func)
-            HookBase::DisableHooks(PingWeaponSet_Func);
+            Hook::DisableHooks(PingWeaponSet_Func);
         if (MoveItem_Func)
-            HookBase::DisableHooks(MoveItem_Func);
+            Hook::DisableHooks(MoveItem_Func);
         if (UseItem_Func)
-            HookBase::DisableHooks(UseItem_Func);
+            Hook::DisableHooks(UseItem_Func);
     }
 
     void Exit() {
-        HookBase::RemoveHook(ItemClick_Func);
-        HookBase::RemoveHook(PingWeaponSet_Func);
-        HookBase::RemoveHook(MoveItem_Func);
-        HookBase::RemoveHook(UseItem_Func);
+        Hook::RemoveHook(ItemClick_Func);
+        Hook::RemoveHook(PingWeaponSet_Func);
+        Hook::RemoveHook(MoveItem_Func);
+        Hook::RemoveHook(UseItem_Func);
     }
 }
 

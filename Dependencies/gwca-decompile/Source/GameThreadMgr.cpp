@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <GWCA/stdafx.h>
 
 #include <GWCA/Utilities/Debug.h>
 #include <GWCA/Utilities/Scanner.h>
@@ -56,7 +56,7 @@ namespace {
     {
         InitializeCriticalSection(&mutex);
 
-        uintptr_t address = Scanner::FindAssertion("p:\\code\\engine\\frame\\frapi.cpp", "!s_bufferBits", 0x5f);
+        uintptr_t address = Scanner::FindAssertion("p:\\code\\engine\\frame\\frapi.cpp", "!s_bufferBits", 0, 0x5f);
         LeaveGameThread_Func = *(Render_t*)address;
 
 
@@ -64,9 +64,9 @@ namespace {
         GWCA_ASSERT(LeaveGameThread_Func);
 #endif
 
-        GW::HookBase::CreateHook(LeaveGameThread_Func, OnLeaveGameThread, (void **)&LeaveGameThread_Ret);
+        GW::Hook::CreateHook(LeaveGameThread_Func, OnLeaveGameThread, (void **)&LeaveGameThread_Ret);
         /*
-                uintptr_t address = Scanner::Find("\x2B\xCE\x8B\x15\x00\x00\x00\x00\xF7\xD9\x1B\xC9", "xxxx????xxxx", +4);
+                uintptr_t address = Scanner::Find("\x2B\xCE\x8B\x15\x00\x00\x00\x00\xF7\xD9\x1B\xC9", "xxxx????xxxx", 0, +4);
         GWCA_INFO("[SCAN] BasePointerLocation = %p", (void *)address);
 
 #if _DEBUG
@@ -93,7 +93,7 @@ namespace {
         if (!initialised)
             return;
         EnterCriticalSection(&mutex);
-        HookBase::EnableHooks(LeaveGameThread_Func);
+        Hook::EnableHooks(LeaveGameThread_Func);
         LeaveCriticalSection(&mutex);
     }
 
@@ -102,7 +102,7 @@ namespace {
         if (!initialised)
             return;
         EnterCriticalSection(&mutex);
-        HookBase::DisableHooks(LeaveGameThread_Func);
+        Hook::DisableHooks(LeaveGameThread_Func);
         LeaveCriticalSection(&mutex);
     }
     void Exit()
@@ -111,7 +111,7 @@ namespace {
             return;
         DisableHooks();
         GameThread::ClearCalls();
-        HookBase::RemoveHook(LeaveGameThread_Func);
+        Hook::RemoveHook(LeaveGameThread_Func);
         DeleteCriticalSection(&mutex);
     }
 }

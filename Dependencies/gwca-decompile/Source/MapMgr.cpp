@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <GWCA/stdafx.h>
 
 #include <GWCA/Constants/Constants.h>
 #include <GWCA/Constants/Maps.h>
@@ -107,7 +107,7 @@ namespace {
             region_id_addr = *(int**)(address);
 
         address = Scanner::Find("\x6B\xC6\x7C\x5E\x05", "xxxxx", 5);
-        if (address && Scanner::IsValidPtr(*(uintptr_t*)address,Scanner::Section::RDATA))
+        if (address && Scanner::IsValidPtr(*(uintptr_t*)address, Section_RDATA))
             area_info_addr = *(AreaInfo**)(address);
 
         address = Scanner::Find("\x6A\x2C\x50\xE8\x00\x00\x00\x00\x83\xC4\x08\xC7", "xxxx????xxxx", +0xd);
@@ -122,7 +122,7 @@ namespace {
         CancelEnterChallengeMission_Func = (Void_pt)Scanner::FunctionFromNearCall(address + 0x19);
         EnterChallengeMission_Func = (DoAction_pt)Scanner::FunctionFromNearCall(address + 0x51);
         if (EnterChallengeMission_Func) {
-            GW::HookBase::CreateHook(EnterChallengeMission_Func, OnEnterChallengeMission_Hook, (void**)&EnterChallengeMission_Ret);
+            GW::Hook::CreateHook(EnterChallengeMission_Func, OnEnterChallengeMission_Hook, (void**)&EnterChallengeMission_Ret);
             UI::RegisterUIMessageCallback(&EnterChallengeMission_Entry, UI::UIMessage::kSendEnterMission, OnEnterChallengeMission_UIMessage, 0x1);
         }
 
@@ -152,14 +152,14 @@ namespace {
     }
     void EnableHooks() {
         if (EnterChallengeMission_Func)
-            HookBase::EnableHooks(EnterChallengeMission_Func);
+            Hook::EnableHooks(EnterChallengeMission_Func);
     }
     void DisableHooks() {
         if (EnterChallengeMission_Func)
-            HookBase::DisableHooks(EnterChallengeMission_Func);
+            Hook::DisableHooks(EnterChallengeMission_Func);
     }
     void Exit() {
-        HookBase::RemoveHook(EnterChallengeMission_Func);
+        Hook::RemoveHook(EnterChallengeMission_Func);
     }
 }
 

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <GWCA/stdafx.h>
 
 #include <GWCA/Utilities/Debug.h>
 #include <GWCA/Utilities/MemoryPatcher.h>
@@ -9,7 +9,7 @@ namespace GW {
     }
 
     void MemoryPatcher::Reset() {
-        if (GetIsEnable())
+        if (GetIsActive())
             TogglePatch(false);
 
         if (m_patch) {
@@ -23,7 +23,7 @@ namespace GW {
 
         m_addr = nullptr;
         m_size = 0;
-        m_enable = false;
+        m_active = false;
     }
 
     void MemoryPatcher::SetPatch(uintptr_t addr, const char *patch, size_t size) {
@@ -31,7 +31,7 @@ namespace GW {
 
         m_addr = reinterpret_cast<void *>(addr);
         m_size = size;
-        m_enable = false;
+        m_active = false;
 
         m_patch = new uint8_t[size];
         m_backup = new uint8_t[size];
@@ -71,7 +71,7 @@ namespace GW {
     bool MemoryPatcher::TogglePatch(bool flag) {
         GWCA_ASSERT(m_addr != nullptr);
 
-        if (m_enable == flag)
+        if (m_active == flag)
             return flag;
 
         DWORD old_prot;
@@ -83,7 +83,7 @@ namespace GW {
         }
         VirtualProtect(m_addr, m_size, old_prot, &old_prot);
 
-        m_enable = flag;
+        m_active = flag;
         return flag;
     }
 }

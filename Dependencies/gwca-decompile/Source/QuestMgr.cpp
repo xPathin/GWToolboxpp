@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <GWCA/stdafx.h>
 
 #include <GWCA/Constants/Constants.h>
 
@@ -56,17 +56,17 @@ namespace {
     void Init() {
         DWORD address = 0;
 
-        address = Scanner::FindAssertion("p:\\code\\gw\\ui\\game\\quest\\questlog.cpp", "MISSION_MAP_OUTPOST == MissionCliGetMap()", -0x128); // UI Callback for quest log window
+        address = Scanner::FindAssertion("p:\\code\\gw\\ui\\game\\quest\\questlog.cpp", "MISSION_MAP_OUTPOST == MissionCliGetMap()", 0, -0x128); // UI Callback for quest log window
 
         AbandonQuest_Func = (DoAction_pt)Scanner::FunctionFromNearCall(address + 0x100);
         if (AbandonQuest_Func) {
-            HookBase::CreateHook(AbandonQuest_Func, OnAbandonQuest, (void**)&AbandonQuest_Ret);
+            Hook::CreateHook(AbandonQuest_Func, OnAbandonQuest, (void**)&AbandonQuest_Ret);
             UI::RegisterUIMessageCallback(&AbandonQuest_HookEntry, UI::UIMessage::kSendAbandonQuest, OnAbandonQuest_UIMessage, 0x1);
         }
             
         SetActiveQuest_Func = (DoAction_pt)Scanner::FunctionFromNearCall(address + 0x96);
         if (SetActiveQuest_Func) {
-            HookBase::CreateHook(SetActiveQuest_Func, OnSetActiveQuest, (void**)&SetActiveQuest_Ret);
+            Hook::CreateHook(SetActiveQuest_Func, OnSetActiveQuest, (void**)&SetActiveQuest_Ret);
             UI::RegisterUIMessageCallback(&SetActiveQuest_HookEntry, UI::UIMessage::kSendSetActiveQuest, OnSetActiveQuest_UIMessage, 0x1);
         }
 
@@ -84,21 +84,21 @@ namespace {
     }
     void EnableHooks() {
         if (AbandonQuest_Func)
-            HookBase::EnableHooks(AbandonQuest_Func);
+            Hook::EnableHooks(AbandonQuest_Func);
         if (SetActiveQuest_Func)
-            HookBase::EnableHooks(SetActiveQuest_Func);
+            Hook::EnableHooks(SetActiveQuest_Func);
     }
 
     void DisableHooks() {
         if (AbandonQuest_Func)
-            HookBase::DisableHooks(AbandonQuest_Func);
+            Hook::DisableHooks(AbandonQuest_Func);
         if (SetActiveQuest_Func)
-            HookBase::DisableHooks(SetActiveQuest_Func);
+            Hook::DisableHooks(SetActiveQuest_Func);
     }
 
     void Exit() {
-        HookBase::RemoveHook(AbandonQuest_Func);
-        HookBase::RemoveHook(SetActiveQuest_Func);
+        Hook::RemoveHook(AbandonQuest_Func);
+        Hook::RemoveHook(SetActiveQuest_Func);
     }
 }
 

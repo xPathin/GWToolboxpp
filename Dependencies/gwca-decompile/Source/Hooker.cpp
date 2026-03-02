@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <GWCA/stdafx.h>
 
 #include <MinHook.h>
 #include <GWCA/Utilities/Hooker.h>
@@ -6,34 +6,34 @@
 static std::atomic<int> init_count;
 static std::atomic<int> in_hook_count;
 
-void GW::HookBase::Initialize()
+void GW::Hook::Initialize()
 {
     ++init_count;
     MH_Initialize();
 }
 
-void GW::HookBase::Deinitialize()
+void GW::Hook::Deinitialize()
 {
     if (--init_count == 0)
         MH_Uninitialize();
 }
 
-void GW::HookBase::EnterHook()
+void GW::Hook::EnterHook()
 {
     ++in_hook_count;
 }
 
-void GW::HookBase::LeaveHook()
+void GW::Hook::LeaveHook()
 {
     --in_hook_count;
 }
 
-int GW::HookBase::GetInHookCount()
+int GW::Hook::GetInHookCount()
 {
     return in_hook_count;
 }
 
-void GW::HookBase::EnableHooks(void *target)
+void GW::Hook::EnableHooks(void *target)
 {
     if (target) {
         MH_EnableHook(target);
@@ -42,7 +42,7 @@ void GW::HookBase::EnableHooks(void *target)
     }
 }
 
-void GW::HookBase::DisableHooks(void *target)
+void GW::Hook::DisableHooks(void *target)
 {
     if (target) {
         MH_DisableHook(target);
@@ -51,12 +51,14 @@ void GW::HookBase::DisableHooks(void *target)
     }
 }
 
-int GW::HookBase::CreateHook(void *target, void *detour, void **trampoline)
+int GW::Hook::CreateHook(void **target, void *detour, void **trampoline)
 {
-    return target ? MH_CreateHook(target, detour, trampoline) : -1;
+    if (!target || !*target)
+        return -1;
+    return MH_CreateHook(*target, detour, trampoline);
 }
 
-void GW::HookBase::RemoveHook(void *target)
+void GW::Hook::RemoveHook(void *target)
 {
     if(target)
         MH_RemoveHook(target);

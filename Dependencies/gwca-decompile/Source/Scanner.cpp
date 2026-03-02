@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <GWCA/stdafx.h>
 
 #include <Psapi.h>
 
@@ -8,13 +8,9 @@
 #pragma comment( lib, "dbghelp.lib" )
 
 namespace {
-    struct SectionOffset {
-        uintptr_t start = 0;
-        uintptr_t end = 0;
-    };
-    SectionOffset sections[3] = { 0 };
+    GW::ScannerSectionOffset sections[GW::Section_Count] = {};
 }
-uintptr_t GW::Scanner::FindAssertion(const char* assertion_file, const char* assertion_msg, int offset) {
+uintptr_t GW::Scanner::FindAssertion(const char* assertion_file, const char* assertion_msg, uint32_t line_number, int offset) {
 #pragma warning( push )
 #pragma warning( disable : 4838 )
 #pragma warning( disable : 4242 )
@@ -30,7 +26,7 @@ if (assertion_msg && assertion_msg[0]) {
     }
     mask[i++] = 'x'; // Include terminating char
     mask[i] = 0;
-    uint32_t rdata_addr = Find(assertion_msg, mask, 0, Section::RDATA);
+    uint32_t rdata_addr = Find(assertion_msg, mask, 0, Section_RDATA);
     if (!rdata_addr)
         return 0;
 
@@ -47,7 +43,7 @@ if (assertion_file) {
     }
     mask[i++] = 'x'; // Include terminating char
     mask[i] = 0;
-    uint32_t rdata_addr = Find(assertion_file, mask, 0, Section::RDATA);
+    uint32_t rdata_addr = Find(assertion_file, mask, 0, Section_RDATA);
     if (!rdata_addr)
         return 0;
     assertion_bytes[1] = rdata_addr;
@@ -101,14 +97,14 @@ uintptr_t GW::Scanner::FindInRange(const char* pattern, const char* mask, int of
     }
     return NULL;
 }
-uintptr_t GW::Scanner::Find(const char* pattern, const char* mask, int offset, Section section) {
+uintptr_t GW::Scanner::Find(const char* pattern, const char* mask, int offset, ScannerSection section) {
     return FindInRange(pattern, mask, offset, sections[section].start, sections[section].end);
 }
-bool GW::Scanner::IsValidPtr(uintptr_t address, Section section) {
+bool GW::Scanner::IsValidPtr(uintptr_t address, ScannerSection section) {
     return address && address > sections[section].start && address < sections[section].end;
 }
 
-uintptr_t GW::Scanner::FunctionFromNearCall(uintptr_t call_instruction_address) {
+uintptr_t GW::Scanner::FunctionFromNearCall(uintptr_t call_instruction_address, bool check_valid_ptr) {
     if (!call_instruction_address)
         return 0;
     if (((*(uintptr_t*)call_instruction_address) & 0x000000e8) != 0x000000e8
@@ -116,7 +112,7 @@ uintptr_t GW::Scanner::FunctionFromNearCall(uintptr_t call_instruction_address) 
         return 0; // Not a near call instruction
     uintptr_t near_address = *(uintptr_t*)(call_instruction_address + 1);
     uintptr_t function_address = (near_address)+(call_instruction_address + 5);
-    if (!IsValidPtr(function_address, Section::TEXT))
+    if (!IsValidPtr(function_address, Section_TEXT))
         return 0;
     // Check to see if there are any nested JMP's etc
     uintptr_t nested_call = function_address;
@@ -136,18 +132,18 @@ void GW::Scanner::Initialize(HMODULE hModule) {
         char* name = (char*)pSectionHdr->Name;
         uint8_t section = 0x8;
         if (memcmp(name, ".text", 5) == 0)
-            section = Section::TEXT;
+            section = Section_TEXT;
         else if (memcmp(name, ".rdata", 6) == 0)
-            section = Section::RDATA;
+            section = Section_RDATA;
         else if (memcmp(name, ".data", 5) == 0)
-            section = Section::DATA;
+            section = Section_DATA;
         if (section != 0x8) {
             sections[section].start = dllImageBase + pSectionHdr->VirtualAddress;
             sections[section].end = sections[section].start + pSectionHdr->Misc.VirtualSize;
         }
         pSectionHdr++;
     }
-    if (!(sections[Section::TEXT].start && sections[Section::TEXT].end))
+    if (!(sections[Section_TEXT].start && sections[Section_TEXT].end))
         throw 1;
 }
 
@@ -155,7 +151,3 @@ void GW::Scanner::Initialize(const char* moduleName) {
     return Initialize(GetModuleHandleA(moduleName));
 }
 
-void GW::Scanner::Initialize(uintptr_t start, size_t size) {
-    sections[Section::TEXT].start = start;
-    sections[Section::TEXT].end = start + size;
-}

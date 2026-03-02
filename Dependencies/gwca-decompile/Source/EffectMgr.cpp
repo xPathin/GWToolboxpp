@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <GWCA/stdafx.h>
 
 #include <GWCA/Constants/Skills.h>
 
@@ -29,10 +29,10 @@ namespace {
     DropBuff_pt DropBuff_Func = 0;
 
     void __cdecl OnPostProcessEffect(uint32_t intensity, uint32_t tint) {
-        HookBase::EnterHook();
+        Hook::EnterHook();
         alcohol_level = intensity;
         RetPostProcessEffect(intensity, tint);
-        HookBase::LeaveHook();
+        Hook::LeaveHook();
     }
 
 
@@ -50,20 +50,20 @@ namespace {
         GWCA_ASSERT(DropBuff_Func);
 #endif
 
-        HookBase::CreateHook(PostProcessEffect_Func, OnPostProcessEffect, (void**)&RetPostProcessEffect);
+        Hook::CreateHook(PostProcessEffect_Func, OnPostProcessEffect, (void**)&RetPostProcessEffect);
     }
 
     void DisableHooks() {
         if (PostProcessEffect_Func)
-            HookBase::DisableHooks(PostProcessEffect_Func);
+            Hook::DisableHooks(PostProcessEffect_Func);
     }
     void EnableHooks() {
         if (PostProcessEffect_Func)
-            HookBase::EnableHooks(PostProcessEffect_Func);
+            Hook::EnableHooks(PostProcessEffect_Func);
     }
 
     void Exit() {
-        HookBase::RemoveHook(PostProcessEffect_Func);
+        Hook::RemoveHook(PostProcessEffect_Func);
     }
 
 }

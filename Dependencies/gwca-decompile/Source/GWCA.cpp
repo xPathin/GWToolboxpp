@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <GWCA/stdafx.h>
 
 #include <GWCA/GWCA.h>
 
@@ -22,7 +22,6 @@
 #include <GWCA/Managers/UIMgr.h>
 #include <GWCA/Managers/MapMgr.h>
 #include <GWCA/Managers/ChatMgr.h>
-#include <GWCA/Managers/CtoSMgr.h>
 #include <GWCA/Managers/ItemMgr.h>
 #include <GWCA/Managers/StoCMgr.h>
 #include <GWCA/Managers/AgentMgr.h>
@@ -55,7 +54,6 @@ namespace GW
         modules.push_back(&UIModule);
         modules.push_back(&MapModule);
         modules.push_back(&ChatModule);
-        modules.push_back(&CtoSModule);
         modules.push_back(&ItemModule);
         modules.push_back(&StoCModule);
         modules.push_back(&AgentModule);
@@ -82,9 +80,9 @@ namespace GW
             base_ptr = *(uintptr_t *)address;
         GWCA_INFO("[SCAN] base_ptr = %p, %p", (void *)base_ptr);
 
-        HookBase::Initialize();
+        Hook::Initialize();
 
-        address = Scanner::FindAssertion("p:\\code\\gw\\ui\\uipregame.cpp", "!s_scene", 0x34);
+        address = Scanner::FindAssertion("p:\\code\\gw\\ui\\uipregame.cpp", "!s_scene", 0, 0x34);
         if (Verify(address))
             PreGameContext_addr = *(uintptr_t*)address;
         GWCA_INFO("[SCAN] PreGameContext_addr = %p", PreGameContext_addr);
@@ -95,7 +93,7 @@ namespace GW
                 module->init_module();
         }
 
-        HookBase::EnableHooks();
+        Hook::EnableHooks();
         for (const Module* module : modules) {
             if (module->enable_hooks)
                 module->enable_hooks();
@@ -108,7 +106,7 @@ namespace GW
     void DisableHooks()
     {
         if (!_initialized) return;
-        HookBase::DisableHooks();
+        Hook::DisableHooks();
         for (const Module* module : modules) {
             if (module->disable_hooks)
                 module->disable_hooks();
@@ -124,7 +122,7 @@ namespace GW
                 module->exit_module();
         }
 
-        HookBase::Deinitialize();
+        Hook::Deinitialize();
         _initialized = false;
     }
 

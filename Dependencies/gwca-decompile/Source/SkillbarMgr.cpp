@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <GWCA/stdafx.h>
 
 #include <GWCA/Constants/Constants.h>
 #include <GWCA/Constants/Skills.h>
@@ -129,7 +129,7 @@ namespace {
     std::unordered_map<HookEntry*, UseSkillCallback> OnUseSkill_Callbacks;
     void __cdecl OnUseSkill(uint32_t agent_id, uint32_t slot, uint32_t target, uint32_t call_target)
     {
-        HookBase::EnterHook();
+        Hook::EnterHook();
         HookStatus status;
         for (auto& it : OnUseSkill_Callbacks) {
             it.second(&status, agent_id, slot, target, call_target);
@@ -137,7 +137,7 @@ namespace {
         }
         if (!status.blocked)
             RetUseSkill(agent_id, slot, target, call_target);
-        HookBase::LeaveHook();
+        Hook::LeaveHook();
     }
 
     void Init() {
@@ -154,17 +154,17 @@ namespace {
 
         UseSkill_Func = (UseSkill_pt)GW::Scanner::Find( "\x85\xF6\x74\x5B\x83\xFE\x11\x74", "xxxxxxxx", -0x126);
 
-        address = Scanner::FindAssertion("p:\\code\\gw\\ui\\game\\templates\\templateshelpers.cpp", "targetPrimaryProf == templateData.profPrimary");
+        address = Scanner::FindAssertion("p:\\code\\gw\\ui\\game\\templates\\templateshelpers.cpp", "targetPrimaryProf == templateData.profPrimary", 0, 0);
         ChangeSecondary_Func = (ChangeSecondary_pt)Scanner::FunctionFromNearCall(address + 0x20);
         LoadAttributes_Func = (LoadAttributes_pt)Scanner::FunctionFromNearCall(address + 0x34);
         LoadSkills_Func = (LoadSkills_pt)Scanner::FunctionFromNearCall(address + 0x40);
 
         if (LoadSkills_Func) {
-            HookBase::CreateHook(LoadSkills_Func, OnLoadSkillbar, (void**)&RetLoadSkills);
+            Hook::CreateHook(LoadSkills_Func, OnLoadSkillbar, (void**)&RetLoadSkills);
             UI::RegisterUIMessageCallback(&OnLoadSkillbar_HookEntry, UI::UIMessage::kSendLoadSkillbar, OnLoadSkillbar_UIMessage, 0x1);
         }
 
-        HookBase::CreateHook(UseSkill_Func, OnUseSkill, (void**)&RetUseSkill);
+        Hook::CreateHook(UseSkill_Func, OnUseSkill, (void**)&RetUseSkill);
 
         GWCA_INFO("[SCAN] SkillArray = %p", skill_array_addr);
         GWCA_INFO("[SCAN] AttributeArray = %p", attribute_array_addr);
@@ -185,21 +185,21 @@ namespace {
 
     void EnableHooks() {
         if(UseSkill_Func)
-            HookBase::EnableHooks(UseSkill_Func);
+            Hook::EnableHooks(UseSkill_Func);
         if(LoadSkills_Func)
-            HookBase::EnableHooks(LoadSkills_Func);
+            Hook::EnableHooks(LoadSkills_Func);
     }
 
     void DisableHooks() {
         if (UseSkill_Func)
-            HookBase::DisableHooks(UseSkill_Func);
+            Hook::DisableHooks(UseSkill_Func);
         if (LoadSkills_Func)
-            HookBase::DisableHooks(LoadSkills_Func);
+            Hook::DisableHooks(LoadSkills_Func);
     }
 
     void Exit() {
-        HookBase::RemoveHook(UseSkill_Func);
-        HookBase::RemoveHook(LoadSkills_Func);
+        Hook::RemoveHook(UseSkill_Func);
+        Hook::RemoveHook(LoadSkills_Func);
     }
 
     // Gets current/available professions for a party member.

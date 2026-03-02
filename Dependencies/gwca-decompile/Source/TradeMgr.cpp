@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <GWCA/stdafx.h>
 
 #include <GWCA/Utilities/Hooker.h>
 #include <GWCA/Utilities/Scanner.h>
@@ -7,7 +7,6 @@
 
 #include <GWCA/Managers/ItemMgr.h>
 #include <GWCA/Managers/Module.h>
-#include <GWCA/Managers/CtoSMgr.h>
 #include <GWCA/Managers/TradeMgr.h>
 #include <GWCA/Managers/UIMgr.h>
 
@@ -54,7 +53,7 @@ namespace {
         RetUpdateTradeCart(eax, a1, a2);
     }
     static void __fastcall OnOfferTradeItem(void* ecx, void* edx, uint32_t item_id, uint32_t quantity, uint32_t always_one) {
-        HookBase::EnterHook();
+        Hook::EnterHook();
         HookStatus status;
         for (auto& it : OnOfferItem_callbacks) {
             it.second(&status, item_id, quantity);
@@ -62,7 +61,7 @@ namespace {
         }
         if (!status.blocked)
             RetOfferTradeItem(ecx, edx, item_id, quantity, always_one);
-        HookBase::LeaveHook();
+        Hook::LeaveHook();
     }
 
     void Init() {
@@ -86,7 +85,7 @@ namespace {
         address = Scanner::Find("\x8b\x46\x14\x8b\x00\x85\xc0", "xxxxxxx", 0xa);
         TradeRemoveItem_Func = (DoAction_pt)Scanner::FunctionFromNearCall(address);
 
-        address = Scanner::FindAssertion("p:\\code\\gw\\ui\\game\\gmtrade.cpp", "breakClose", 0x1e);
+        address = Scanner::FindAssertion("p:\\code\\gw\\ui\\game\\gmtrade.cpp", "breakClose", 0, 0x1e);
         TradeCancel_Func = (Void_pt)Scanner::FunctionFromNearCall(address);
 
         GWCA_INFO("[SCAN] OfferTradeItem_Func = %p", OfferTradeItem_Func);
@@ -107,24 +106,24 @@ namespace {
         GWCA_ASSERT(TradeCancel_Func);
 #endif
 
-        HookBase::CreateHook(OfferTradeItem_Func, OnOfferTradeItem, (void**)&RetOfferTradeItem);
-        HookBase::CreateHook(UpdateTradeCart_Func, OnUpdateTradeWindow, (void**)&RetUpdateTradeCart);
+        Hook::CreateHook(OfferTradeItem_Func, OnOfferTradeItem, (void**)&RetOfferTradeItem);
+        Hook::CreateHook(UpdateTradeCart_Func, OnUpdateTradeWindow, (void**)&RetUpdateTradeCart);
     }
     void EnableHooks() {
         if(OfferTradeItem_Func)
-            HookBase::EnableHooks(OfferTradeItem_Func);
+            Hook::EnableHooks(OfferTradeItem_Func);
         if(UpdateTradeCart_Func)
-            HookBase::EnableHooks(UpdateTradeCart_Func);
+            Hook::EnableHooks(UpdateTradeCart_Func);
     }
     void DisableHooks() {
         if (OfferTradeItem_Func)
-            HookBase::DisableHooks(OfferTradeItem_Func);
+            Hook::DisableHooks(OfferTradeItem_Func);
         if (UpdateTradeCart_Func)
-            HookBase::DisableHooks(UpdateTradeCart_Func);
+            Hook::DisableHooks(UpdateTradeCart_Func);
     }
     void Exit() {
-        HookBase::RemoveHook(OfferTradeItem_Func);
-        HookBase::RemoveHook(UpdateTradeCart_Func);
+        Hook::RemoveHook(OfferTradeItem_Func);
+        Hook::RemoveHook(UpdateTradeCart_Func);
     }
 }
 namespace GW {

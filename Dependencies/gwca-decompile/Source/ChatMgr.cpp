@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <GWCA/stdafx.h>
 
 #include <GWCA/Utilities/Debug.h>
 #include <GWCA/Utilities/Hooker.h>
@@ -63,7 +63,7 @@ namespace {
     GetChannelColor_pt RetGetSenderColor;
     GetChannelColor_pt GetSenderColor_Func;
     Chat::Color* __cdecl OnGetSenderColor(Chat::Color *color, Chat::Channel chan) {
-        HookBase::EnterHook();
+        Hook::EnterHook();
         const auto it = ChatSenderColor.find(chan);
         if (it != ChatSenderColor.end()) {
             *color = it->second;
@@ -71,7 +71,7 @@ namespace {
         else {
             RetGetSenderColor(color, chan);
         }
-        HookBase::LeaveHook();
+        Hook::LeaveHook();
         return color;
     };
 
@@ -79,7 +79,7 @@ namespace {
     GetChannelColor_pt RetGetMessageColor;
     GetChannelColor_pt GetMessageColor_Func;
     Chat::Color* __cdecl OnGetMessageColor(Chat::Color *color, Chat::Channel chan) {
-        HookBase::EnterHook();
+        Hook::EnterHook();
         const auto it = ChatMessageColor.find(chan);
         if (it != ChatMessageColor.end()) {
             *color = it->second;
@@ -87,7 +87,7 @@ namespace {
         else {
             RetGetMessageColor(color, chan);
         }
-        HookBase::LeaveHook();
+        Hook::LeaveHook();
         return color;
     };
 
@@ -95,7 +95,7 @@ namespace {
     LocalMessage_pt LocalMessage_Func;
     LocalMessage_pt RetLocalMessage;
     void __cdecl OnLocalMessage(int channel, wchar_t *message) {
-        HookBase::EnterHook();
+        Hook::EnterHook();
         HookStatus status;
         for (auto& it : LocalMessage_callbacks) {
             it.second(&status, channel, message);
@@ -103,14 +103,14 @@ namespace {
         }
         if (!status.blocked)
             RetLocalMessage(channel, message);
-        HookBase::LeaveHook();
+        Hook::LeaveHook();
     }
 
     typedef void(__cdecl *SendChat_pt)(wchar_t *message, uint32_t agent_id);
     SendChat_pt SendChat_Func;
     SendChat_pt RetSendChat;
     void __cdecl OnSendChat(wchar_t *message, uint32_t agent_id) {
-        HookBase::EnterHook();
+        Hook::EnterHook();
         if (*message == '/') {
             int argc;
             wchar_t** argv = CommandLineToArgvW(message + 1, &argc);
@@ -124,7 +124,7 @@ namespace {
                     RetSendChat(message, agent_id);
                 }
                 LocalFree(argv);
-                HookBase::LeaveHook();
+                Hook::LeaveHook();
                 return;
             }
             LocalFree(argv);
@@ -137,14 +137,14 @@ namespace {
         }
         if (!status.blocked)
             RetSendChat(message, agent_id);
-        HookBase::LeaveHook();
+        Hook::LeaveHook();
     }
 
     typedef void(__cdecl *WriteWhisper_pt)(uint32_t, wchar_t *, wchar_t *);
     WriteWhisper_pt RetWriteWhisper;
     WriteWhisper_pt WriteWhisper_Func;
     void __cdecl OnWriteWhisper(uint32_t unk, wchar_t *from, wchar_t *msg) {
-        HookBase::EnterHook();
+        Hook::EnterHook();
         HookStatus status;
         for (auto& it : Whisper_callbacks) {
             it.second(&status, from, msg);
@@ -152,14 +152,14 @@ namespace {
         }
         if (!status.blocked)
             RetWriteWhisper(unk, from, msg);
-        HookBase::LeaveHook();
+        Hook::LeaveHook();
     }
 
     typedef void(__fastcall* StartWhisper_pt)(void* ctx, uint32_t edx, wchar_t* name);
     StartWhisper_pt StartWhisper_Func;
     StartWhisper_pt RetStartWhisper;
     void __fastcall OnStartWhisper(void* ctx, uint32_t edx, wchar_t* name) {
-        GW::HookBase::EnterHook();
+        GW::Hook::EnterHook();
         HookStatus status;
         for (auto& it : StartWhisper_callbacks) {
             it.second(&status, name);
@@ -167,7 +167,7 @@ namespace {
         }
         if (!status.blocked)
             RetStartWhisper(ctx, edx, name);
-        GW::HookBase::LeaveHook();
+        GW::Hook::LeaveHook();
     }
 
     bool add_next_message_to_chat_log = true;
@@ -176,7 +176,7 @@ namespace {
     AddToChatLog_pt AddToChatLog_Func;
     AddToChatLog_pt RetAddToChatLog;
     void OnAddToChatLog(wchar_t* message, uint32_t channel) {
-        GW::HookBase::EnterHook();
+        GW::Hook::EnterHook();
         HookStatus status;
         auto it = ChatLog_callbacks.begin();
 
@@ -206,7 +206,7 @@ namespace {
             ++status.altitude;
             it++;
         }
-        GW::HookBase::LeaveHook();
+        GW::Hook::LeaveHook();
     }
 
 
@@ -220,11 +220,11 @@ namespace {
     void __fastcall OnPrintChat(void *ctx, uint32_t edx,
         Chat::Channel channel, wchar_t *str, FILETIME timestamp, int reprint)
     {
-        HookBase::EnterHook();
+        Hook::EnterHook();
         GWCA_ASSERT(ChatBuffer_Addr && 0 <= channel && channel < Chat::Channel::CHANNEL_COUNT);
         PrintChat_Context = ctx;
         if (channel == Chat::Channel::CHANNEL_GWCA1 && wcscmp(str, PrintChat_Context_Sample_String) == 0) {
-            HookBase::LeaveHook();
+            Hook::LeaveHook();
             return; // Spoof packet from GetChatWindowContext();
         }
         HookStatus status;
@@ -235,13 +235,13 @@ namespace {
         }
         if (status.blocked) {
             //RetPrintChat(ctx, edx, channel, str, timestamp, reprint);
-            HookBase::LeaveHook();
+            Hook::LeaveHook();
             return;
         }
 
         if (!ShowTimestamps) {
             RetPrintChat(ctx, edx, channel, *str_p, timestamp, reprint);
-            HookBase::LeaveHook();
+            Hook::LeaveHook();
             return;
         }
 
@@ -279,7 +279,7 @@ namespace {
             swprintf(message_buffer, buf_len, L"\x108\x107%s \x01\x02%s", time_buffer, *str_p);
         }
         RetPrintChat(ctx, edx, channel, message_buffer, timestamp, reprint);
-        HookBase::LeaveHook();
+        Hook::LeaveHook();
         delete[] message_buffer;
     }
 
@@ -288,13 +288,13 @@ namespace {
     UI::UIInteractionCallback UICallback_AssignEditableText_Ret = nullptr;
     // When a control is terminated ( message 0xB ) it doesn't clear the IsTyping_FrameId that we're using. Clear it manually.
     void OnUICallback_AssignEditableText(UI::InteractionMessage* message, void* wParam, void* lParam) {
-        HookBase::EnterHook();
+        Hook::EnterHook();
         if (message->message_id == 0xb && IsTyping_FrameId && *IsTyping_FrameId == message->action_type) {
             *IsTyping_FrameId = 0;
             //GWCA_INFO("IsTyping_FrameId manually cleared");
         }
         UICallback_AssignEditableText_Ret(message, wParam, lParam);
-        HookBase::LeaveHook();
+        Hook::LeaveHook();
     }
 
     void Init() {
@@ -313,11 +313,11 @@ namespace {
 
 
 
-        uintptr_t address = Scanner::FindAssertion("p:\\code\\engine\\controls\\ctledit.cpp","charCount >= 1",0x37);
+        uintptr_t address = Scanner::FindAssertion("p:\\code\\engine\\controls\\ctledit.cpp","charCount >= 1", 0,0x37);
         if (address && Scanner::IsValidPtr(*(uintptr_t*) address))
             IsTyping_FrameId = *(uint32_t **)address;
 
-        address = Scanner::Find("\x6a\x06\x68\x00\x03\x80\x00","xxxxxxx",-0x4);
+        address = Scanner::Find("\x6a\x06\x68\x00\x03\x80\x00","xxxxxxx", 0, -0x4);
         if (address && Scanner::IsValidPtr(*(uintptr_t*)address, Scanner::TEXT))
             UICallback_AssignEditableText_Func = *(UI::UIInteractionCallback*)address;
 
@@ -347,68 +347,68 @@ namespace {
         GWCA_ASSERT(UICallback_AssignEditableText_Func);
 #endif
 
-        HookBase::CreateHook(StartWhisper_Func, OnStartWhisper, (void**)& RetStartWhisper);
-        HookBase::CreateHook(GetSenderColor_Func, OnGetSenderColor, (void **)&RetGetSenderColor);
-        HookBase::CreateHook(GetMessageColor_Func, OnGetMessageColor, (void **)&RetGetMessageColor);
-        HookBase::CreateHook(LocalMessage_Func, OnLocalMessage, (void **)&RetLocalMessage);
-        HookBase::CreateHook(SendChat_Func, OnSendChat, (void **)&RetSendChat);
-        HookBase::CreateHook(WriteWhisper_Func, OnWriteWhisper, (void **)&RetWriteWhisper);
-        HookBase::CreateHook(PrintChat_Func, OnPrintChat, (void **)&RetPrintChat);
-        HookBase::CreateHook(AddToChatLog_Func, OnAddToChatLog, (void**)&RetAddToChatLog);
-        HookBase::CreateHook(UICallback_AssignEditableText_Func, OnUICallback_AssignEditableText, (void**)& UICallback_AssignEditableText_Ret);
+        Hook::CreateHook(StartWhisper_Func, OnStartWhisper, (void**)& RetStartWhisper);
+        Hook::CreateHook(GetSenderColor_Func, OnGetSenderColor, (void **)&RetGetSenderColor);
+        Hook::CreateHook(GetMessageColor_Func, OnGetMessageColor, (void **)&RetGetMessageColor);
+        Hook::CreateHook(LocalMessage_Func, OnLocalMessage, (void **)&RetLocalMessage);
+        Hook::CreateHook(SendChat_Func, OnSendChat, (void **)&RetSendChat);
+        Hook::CreateHook(WriteWhisper_Func, OnWriteWhisper, (void **)&RetWriteWhisper);
+        Hook::CreateHook(PrintChat_Func, OnPrintChat, (void **)&RetPrintChat);
+        Hook::CreateHook(AddToChatLog_Func, OnAddToChatLog, (void**)&RetAddToChatLog);
+        Hook::CreateHook(UICallback_AssignEditableText_Func, OnUICallback_AssignEditableText, (void**)& UICallback_AssignEditableText_Ret);
     }
 
     void EnableHooks() {
         if (StartWhisper_Func)
-            HookBase::EnableHooks(StartWhisper_Func);
+            Hook::EnableHooks(StartWhisper_Func);
         if (GetSenderColor_Func)
-            HookBase::EnableHooks(GetSenderColor_Func);
+            Hook::EnableHooks(GetSenderColor_Func);
         if (GetMessageColor_Func)
-            HookBase::EnableHooks(GetMessageColor_Func);
+            Hook::EnableHooks(GetMessageColor_Func);
         if (LocalMessage_Func)
-            HookBase::EnableHooks(LocalMessage_Func);
+            Hook::EnableHooks(LocalMessage_Func);
         if (SendChat_Func)
-            HookBase::EnableHooks(SendChat_Func);
+            Hook::EnableHooks(SendChat_Func);
         if (WriteWhisper_Func)
-            HookBase::EnableHooks(WriteWhisper_Func);
+            Hook::EnableHooks(WriteWhisper_Func);
         if (PrintChat_Func)
-            HookBase::EnableHooks(PrintChat_Func);
+            Hook::EnableHooks(PrintChat_Func);
         if (AddToChatLog_Func)
-            HookBase::EnableHooks(AddToChatLog_Func);
+            Hook::EnableHooks(AddToChatLog_Func);
         if (UICallback_AssignEditableText_Func)
-            HookBase::EnableHooks(UICallback_AssignEditableText_Func);
+            Hook::EnableHooks(UICallback_AssignEditableText_Func);
     }
     void DisableHooks() {
         if (StartWhisper_Func)
-            HookBase::DisableHooks(StartWhisper_Func);
+            Hook::DisableHooks(StartWhisper_Func);
         if (GetSenderColor_Func)
-            HookBase::DisableHooks(GetSenderColor_Func);
+            Hook::DisableHooks(GetSenderColor_Func);
         if (GetMessageColor_Func)
-            HookBase::DisableHooks(GetMessageColor_Func);
+            Hook::DisableHooks(GetMessageColor_Func);
         if (LocalMessage_Func)
-            HookBase::DisableHooks(LocalMessage_Func);
+            Hook::DisableHooks(LocalMessage_Func);
         if (SendChat_Func)
-            HookBase::DisableHooks(SendChat_Func);
+            Hook::DisableHooks(SendChat_Func);
         if (WriteWhisper_Func)
-            HookBase::DisableHooks(WriteWhisper_Func);
+            Hook::DisableHooks(WriteWhisper_Func);
         if (PrintChat_Func)
-            HookBase::DisableHooks(PrintChat_Func);
+            Hook::DisableHooks(PrintChat_Func);
         if (AddToChatLog_Func)
-            HookBase::DisableHooks(AddToChatLog_Func);
+            Hook::DisableHooks(AddToChatLog_Func);
         if(UICallback_AssignEditableText_Func)
-            HookBase::DisableHooks(UICallback_AssignEditableText_Func);
+            Hook::DisableHooks(UICallback_AssignEditableText_Func);
     }
 
     void Exit() {
-        HookBase::RemoveHook(StartWhisper_Func);
-        HookBase::RemoveHook(GetSenderColor_Func);
-        HookBase::RemoveHook(GetMessageColor_Func);
-        HookBase::RemoveHook(LocalMessage_Func);
-        HookBase::RemoveHook(SendChat_Func);
-        HookBase::RemoveHook(WriteWhisper_Func);
-        HookBase::RemoveHook(PrintChat_Func);
-        HookBase::RemoveHook(AddToChatLog_Func);
-        HookBase::RemoveHook(UICallback_AssignEditableText_Func);
+        Hook::RemoveHook(StartWhisper_Func);
+        Hook::RemoveHook(GetSenderColor_Func);
+        Hook::RemoveHook(GetMessageColor_Func);
+        Hook::RemoveHook(LocalMessage_Func);
+        Hook::RemoveHook(SendChat_Func);
+        Hook::RemoveHook(WriteWhisper_Func);
+        Hook::RemoveHook(PrintChat_Func);
+        Hook::RemoveHook(AddToChatLog_Func);
+        Hook::RemoveHook(UICallback_AssignEditableText_Func);
     }
 }
 

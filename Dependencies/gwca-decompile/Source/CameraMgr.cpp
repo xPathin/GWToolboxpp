@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <GWCA/stdafx.h>
 
 #include <GWCA/Utilities/Debug.h>
 #include <GWCA/Utilities/Macros.h>
@@ -118,7 +118,7 @@ namespace GW {
 
     bool CameraMgr::GetCameraUnlock() {
         if (patch_cam_update_addr) {
-            return patch_cam_update.GetIsEnable();
+            return patch_cam_update.GetIsActive();
         } else {
             return false;
         }
