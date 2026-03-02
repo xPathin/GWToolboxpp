@@ -1,0 +1,7337 @@
+{
+  "pe_info": {
+    "image_base": 268435456,
+    "section_alignment": 4096,
+    "file_alignment": 512,
+    "entry_point": 183746,
+    "linker_version": "14.44",
+    "os_version": "6.0",
+    "subsystem": 3,
+    "dll_characteristics": 320,
+    "sections": [
+      {
+        "name": ".text",
+        "virtual_address": 4096,
+        "virtual_size": 306490,
+        "raw_size": 306688,
+        "raw_offset": 1024,
+        "characteristics": 1610612768
+      },
+      {
+        "name": ".rdata",
+        "virtual_address": 311296,
+        "virtual_size": 251580,
+        "raw_size": 251904,
+        "raw_offset": 307712,
+        "characteristics": 1073741888
+      },
+      {
+        "name": ".data",
+        "virtual_address": 565248,
+        "virtual_size": 12940,
+        "raw_size": 8704,
+        "raw_offset": 559616,
+        "characteristics": 3221225536
+      },
+      {
+        "name": ".fptable",
+        "virtual_address": 581632,
+        "virtual_size": 128,
+        "raw_size": 512,
+        "raw_offset": 568320,
+        "characteristics": 3221225536
+      },
+      {
+        "name": ".rsrc",
+        "virtual_address": 585728,
+        "virtual_size": 1224,
+        "raw_size": 1536,
+        "raw_offset": 568832,
+        "characteristics": 1073741888
+      },
+      {
+        "name": ".reloc",
+        "virtual_address": 589824,
+        "virtual_size": 15416,
+        "raw_size": 15872,
+        "raw_offset": 570368,
+        "characteristics": 1107296320
+      }
+    ]
+  },
+  "exports": [
+    {
+      "name": "?AbandonQuest@QuestMgr@GW@@YA_NPAUQuest@2@@Z",
+      "ordinal": 1,
+      "rva": 134176,
+      "forwarder": null
+    },
+    {
+      "name": "?AbandonQuestId@QuestMgr@GW@@YA_NW4QuestID@Constants@2@@Z",
+      "ordinal": 2,
+      "rva": 134240,
+      "forwarder": null
+    },
+    {
+      "name": "?AcceptTrade@Trade@GW@@YA_NXZ",
+      "ordinal": 3,
+      "rva": 151072,
+      "forwarder": null
+    },
+    {
+      "name": "?AddFrameUIInteractionCallback@UI@GW@@YA_NPAUFrame@12@P6AXPAUInteractionMessage@12@PAX2@Z2@Z",
+      "ordinal": 4,
+      "rva": 154592,
+      "forwarder": null
+    },
+    {
+      "name": "?AddFriend@FriendListMgr@GW@@YA_NPB_W0@Z",
+      "ordinal": 5,
+      "rva": 98624,
+      "forwarder": null
+    },
+    {
+      "name": "?AddHenchman@PartyMgr@GW@@YA_NI@Z",
+      "ordinal": 6,
+      "rva": 127408,
+      "forwarder": null
+    },
+    {
+      "name": "?AddHero@PartyMgr@GW@@YA_NW4HeroID@Constants@2@@Z",
+      "ordinal": 7,
+      "rva": 127504,
+      "forwarder": null
+    },
+    {
+      "name": "?AddIgnore@FriendListMgr@GW@@YA_NPB_W0@Z",
+      "ordinal": 8,
+      "rva": 98800,
+      "forwarder": null
+    },
+    {
+      "name": "?AddItem@ScrollableFrame@GW@@QAE_NIIP6AXPAUInteractionMessage@UI@2@PAX1@Z@Z",
+      "ordinal": 9,
+      "rva": 91552,
+      "forwarder": null
+    },
+    {
+      "name": "?AddOption@DropdownFrame@GW@@QAE_NPB_WI@Z",
+      "ordinal": 10,
+      "rva": 91616,
+      "forwarder": null
+    },
+    {
+      "name": "?AddTab@TabsFrame@GW@@QAEPAUFrame@UI@2@PB_WIIP6AXPAUInteractionMessage@42@PAX2@Z2@Z",
+      "ordinal": 11,
+      "rva": 91696,
+      "forwarder": null
+    },
+    {
+      "name": "?AddToChatLog@Chat@GW@@YA_NPA_WI@Z",
+      "ordinal": 12,
+      "rva": 17296,
+      "forwarder": null
+    },
+    {
+      "name": "?AsyncDecodeStr@UI@GW@@YAXPB_WP6AXPAX0@Z1W4Language@Constants@2@@Z",
+      "ordinal": 13,
+      "rva": 155136,
+      "forwarder": null
+    },
+    {
+      "name": "?AsyncDecodeStr@UI@GW@@YAXPB_WPA_WI@Z",
+      "ordinal": 14,
+      "rva": 155648,
+      "forwarder": null
+    },
+    {
+      "name": "?ButtonClick@UI@GW@@YA_NPAUFrame@12@@Z",
+      "ordinal": 15,
+      "rva": 155696,
+      "forwarder": null
+    },
+    {
+      "name": "?CanAccessXunlaiChest@Items@GW@@YA_NXZ",
+      "ordinal": 16,
+      "rva": 111568,
+      "forwarder": null
+    },
+    {
+      "name": "?CanInteractWithItem@Items@GW@@YA_NPBUItem@2@@Z",
+      "ordinal": 17,
+      "rva": 111632,
+      "forwarder": null
+    },
+    {
+      "name": "?CancelEnterChallenge@Map@GW@@YA_NXZ",
+      "ordinal": 18,
+      "rva": 119536,
+      "forwarder": null
+    },
+    {
+      "name": "?CancelTrade@Trade@GW@@YA_NXZ",
+      "ordinal": 19,
+      "rva": 151104,
+      "forwarder": null
+    },
+    {
+      "name": "?ChangeFriendType@FriendListMgr@GW@@YA_NPAUFriend@2@W4FriendType@2@@Z",
+      "ordinal": 20,
+      "rva": 98976,
+      "forwarder": null
+    },
+    {
+      "name": "?ChangeOffer@Trade@GW@@YA_NXZ",
+      "ordinal": 21,
+      "rva": 151168,
+      "forwarder": null
+    },
+    {
+      "name": "?ChangeSecondProfession@PlayerMgr@GW@@YA_NW4Profession@Constants@2@I@Z",
+      "ordinal": 22,
+      "rva": 132496,
+      "forwarder": null
+    },
+    {
+      "name": "?ChangeSecondProfession@SkillbarMgr@GW@@YA_NIW4Profession@Constants@2@@Z",
+      "ordinal": 23,
+      "rva": 141088,
+      "forwarder": null
+    },
+    {
+      "name": "?ChangeTarget@Agents@GW@@YA_NI@Z",
+      "ordinal": 24,
+      "rva": 7760,
+      "forwarder": null
+    },
+    {
+      "name": "?ChangeTarget@Agents@GW@@YA_NPBUAgent@2@@Z",
+      "ordinal": 25,
+      "rva": 7808,
+      "forwarder": null
+    },
+    {
+      "name": "?ChooseTab@TabsFrame@GW@@QAE_NI@Z",
+      "ordinal": 26,
+      "rva": 91776,
+      "forwarder": null
+    },
+    {
+      "name": "?ChooseTab@TabsFrame@GW@@QAE_NPAUFrame@UI@2@@Z",
+      "ordinal": 27,
+      "rva": 91856,
+      "forwarder": null
+    },
+    {
+      "name": "?ClearCalls@GameThread@GW@@YAXXZ",
+      "ordinal": 28,
+      "rva": 106400,
+      "forwarder": null
+    },
+    {
+      "name": "?ClearItems@ScrollableFrame@GW@@QAE_NXZ",
+      "ordinal": 29,
+      "rva": 91952,
+      "forwarder": null
+    },
+    {
+      "name": "?Click@ButtonFrame@GW@@QAE_NXZ",
+      "ordinal": 30,
+      "rva": 91968,
+      "forwarder": null
+    },
+    {
+      "name": "?ComputeCamPos@CameraMgr@GW@@YA?AUVec3f@2@M@Z",
+      "ordinal": 31,
+      "rva": 13232,
+      "forwarder": null
+    },
+    {
+      "name": "?CountAllegianceInRange@Agents@GW@@YAIW4Allegiance@Constants@2@M@Z",
+      "ordinal": 32,
+      "rva": 7872,
+      "forwarder": null
+    },
+    {
+      "name": "?CountItemByModelId@Items@GW@@YAIIHH@Z",
+      "ordinal": 33,
+      "rva": 111728,
+      "forwarder": null
+    },
+    {
+      "name": "?Create@ButtonFrame@GW@@SAPAU12@IIIPB_W0@Z",
+      "ordinal": 34,
+      "rva": 92016,
+      "forwarder": null
+    },
+    {
+      "name": "?Create@CheckboxFrame@GW@@SAPAU12@IIIPB_W0@Z",
+      "ordinal": 35,
+      "rva": 92144,
+      "forwarder": null
+    },
+    {
+      "name": "?Create@ScrollableFrame@GW@@SAPAU12@IIIPAUScrollablePageContext@12@PB_W@Z",
+      "ordinal": 36,
+      "rva": 92192,
+      "forwarder": null
+    },
+    {
+      "name": "?Create@TextLabelFrame@GW@@SAPAU12@IIIPB_W0@Z",
+      "ordinal": 37,
+      "rva": 92384,
+      "forwarder": null
+    },
+    {
+      "name": "?CreateCommand@Chat@GW@@YAXPAUHookEntry@2@PB_WP6AXPAUHookStatus@2@1HPBQA_W@Z@Z",
+      "ordinal": 38,
+      "rva": 17376,
+      "forwarder": null
+    },
+    {
+      "name": "?CreateHook@Hook@GW@@YAHPAPAXPAX0@Z",
+      "ordinal": 39,
+      "rva": 109008,
+      "forwarder": null
+    },
+    {
+      "name": "?CreateMapContext@Map@GW@@YAPAUMapContext@2@I@Z",
+      "ordinal": 40,
+      "rva": 119584,
+      "forwarder": null
+    },
+    {
+      "name": "?CreateUIComponent@UI@GW@@YAIIIIP6AXPAUInteractionMessage@12@PAX1@Z1PB_W@Z",
+      "ordinal": 41,
+      "rva": 155728,
+      "forwarder": null
+    },
+    {
+      "name": "?DecodeSkillTemplate@SkillbarMgr@GW@@YA_NAAUSkillTemplate@12@PBD@Z",
+      "ordinal": 42,
+      "rva": 141264,
+      "forwarder": null
+    },
+    {
+      "name": "?Default_UICallback@UI@GW@@YA_NPAUInteractionMessage@12@PAX1@Z",
+      "ordinal": 43,
+      "rva": 155760,
+      "forwarder": null
+    },
+    {
+      "name": "?Deinitialize@Hook@GW@@YAXXZ",
+      "ordinal": 44,
+      "rva": 109072,
+      "forwarder": null
+    },
+    {
+      "name": "?DeleteCommand@Chat@GW@@YAXPAUHookEntry@2@PB_W@Z",
+      "ordinal": 45,
+      "rva": 17856,
+      "forwarder": null
+    },
+    {
+      "name": "?DepositGold@Items@GW@@YAII@Z",
+      "ordinal": 46,
+      "rva": 111856,
+      "forwarder": null
+    },
+    {
+      "name": "?DestroyItem@Items@GW@@YA_NI@Z",
+      "ordinal": 47,
+      "rva": 112112,
+      "forwarder": null
+    },
+    {
+      "name": "?DestroyMapContext@Map@GW@@YA_NPAUMapContext@2@@Z",
+      "ordinal": 48,
+      "rva": 119696,
+      "forwarder": null
+    },
+    {
+      "name": "?DestroyUIComponent@UI@GW@@YA_NPAUFrame@12@@Z",
+      "ordinal": 49,
+      "rva": 155808,
+      "forwarder": null
+    },
+    {
+      "name": "?DisableHooks@GW@@YAXXZ",
+      "ordinal": 50,
+      "rva": 102112,
+      "forwarder": null
+    },
+    {
+      "name": "?DisableHooks@Hook@GW@@YAXPAX@Z",
+      "ordinal": 51,
+      "rva": 109104,
+      "forwarder": null
+    },
+    {
+      "name": "?DisableHooks@MemoryPatcher@GW@@SAXXZ",
+      "ordinal": 52,
+      "rva": 124176,
+      "forwarder": null
+    },
+    {
+      "name": "?DisableTab@TabsFrame@GW@@QAE_NI@Z",
+      "ordinal": 53,
+      "rva": 92512,
+      "forwarder": null
+    },
+    {
+      "name": "?DoubleClick@ButtonFrame@GW@@QAE_NXZ",
+      "ordinal": 54,
+      "rva": 92544,
+      "forwarder": null
+    },
+    {
+      "name": "?DrawOnCompass@UI@GW@@YA_NIIPAUCompassPoint@12@@Z",
+      "ordinal": 55,
+      "rva": 155856,
+      "forwarder": null
+    },
+    {
+      "name": "?DropBuff@Effects@GW@@YA_NI@Z",
+      "ordinal": 56,
+      "rva": 22928,
+      "forwarder": null
+    },
+    {
+      "name": "?DropGold@Items@GW@@YA_NI@Z",
+      "ordinal": 57,
+      "rva": 112304,
+      "forwarder": null
+    },
+    {
+      "name": "?DropItem@Items@GW@@YA_NPBUItem@2@I@Z",
+      "ordinal": 58,
+      "rva": 112416,
+      "forwarder": null
+    },
+    {
+      "name": "?EmulatePacket@StoC@GW@@YA_NPAUPacketBase@1Packet@2@@Z",
+      "ordinal": 59,
+      "rva": 148768,
+      "forwarder": null
+    },
+    {
+      "name": "?EnableHooks@GW@@YAXXZ",
+      "ordinal": 60,
+      "rva": 102176,
+      "forwarder": null
+    },
+    {
+      "name": "?EnableHooks@GameThread@GW@@YAXXZ",
+      "ordinal": 61,
+      "rva": 104864,
+      "forwarder": null
+    },
+    {
+      "name": "?EnableHooks@Hook@GW@@YAXPAX@Z",
+      "ordinal": 62,
+      "rva": 109120,
+      "forwarder": null
+    },
+    {
+      "name": "?EnableHooks@MemoryPatcher@GW@@SAXXZ",
+      "ordinal": 63,
+      "rva": 124304,
+      "forwarder": null
+    },
+    {
+      "name": "?EnableHooks@Render@GW@@YAXXZ",
+      "ordinal": 64,
+      "rva": 135680,
+      "forwarder": null
+    },
+    {
+      "name": "?EnableTab@TabsFrame@GW@@QAE_NI@Z",
+      "ordinal": 65,
+      "rva": 92560,
+      "forwarder": null
+    },
+    {
+      "name": "?EncStrToUInt32@UI@GW@@YAIPB_W@Z",
+      "ordinal": 66,
+      "rva": 155904,
+      "forwarder": null
+    },
+    {
+      "name": "?EncodeSkillTemplate@SkillbarMgr@GW@@YA_NABUSkillTemplate@12@PADI@Z",
+      "ordinal": 67,
+      "rva": 142480,
+      "forwarder": null
+    },
+    {
+      "name": "?Enqueue@GameThread@GW@@YAXV?$function@$$A6AXXZ@std@@_N@Z",
+      "ordinal": 68,
+      "rva": 106560,
+      "forwarder": null
+    },
+    {
+      "name": "?EnterChallenge@Map@GW@@YA_NXZ",
+      "ordinal": 69,
+      "rva": 119728,
+      "forwarder": null
+    },
+    {
+      "name": "?EnterHook@Hook@GW@@YAXXZ",
+      "ordinal": 70,
+      "rva": 109136,
+      "forwarder": null
+    },
+    {
+      "name": "?EquipItem@Items@GW@@YA_NPBUItem@2@I@Z",
+      "ordinal": 71,
+      "rva": 112736,
+      "forwarder": null
+    },
+    {
+      "name": "?FatalAssert@GW@@YAXPBD0I0@Z",
+      "ordinal": 72,
+      "rva": 22640,
+      "forwarder": null
+    },
+    {
+      "name": "?Find@Scanner@GW@@YAIPBD0HW4ScannerSection@2@@Z",
+      "ordinal": 73,
+      "rva": 138512,
+      "forwarder": null
+    },
+    {
+      "name": "?FindAssertion@Scanner@GW@@YAIPBD0IH@Z",
+      "ordinal": 74,
+      "rva": 138592,
+      "forwarder": null
+    },
+    {
+      "name": "?FindInRange@Scanner@GW@@YAIPBD0HKK@Z",
+      "ordinal": 75,
+      "rva": 138640,
+      "forwarder": null
+    },
+    {
+      "name": "?FindNthUseOfString@Scanner@GW@@YAIPBDIHW4ScannerSection@2@@Z",
+      "ordinal": 76,
+      "rva": 138704,
+      "forwarder": null
+    },
+    {
+      "name": "?FindNthUseOfString@Scanner@GW@@YAIPB_WIHW4ScannerSection@2@@Z",
+      "ordinal": 77,
+      "rva": 139120,
+      "forwarder": null
+    },
+    {
+      "name": "?FindUseOfString@Scanner@GW@@YAIPBDHW4ScannerSection@2@@Z",
+      "ordinal": 78,
+      "rva": 139552,
+      "forwarder": null
+    },
+    {
+      "name": "?FindUseOfString@Scanner@GW@@YAIPB_WHW4ScannerSection@2@@Z",
+      "ordinal": 79,
+      "rva": 139584,
+      "forwarder": null
+    },
+    {
+      "name": "?FlagAll@PartyMgr@GW@@YA_NUGamePos@2@@Z",
+      "ordinal": 80,
+      "rva": 127600,
+      "forwarder": null
+    },
+    {
+      "name": "?FlagHero@PartyMgr@GW@@YA_NIUGamePos@2@@Z",
+      "ordinal": 81,
+      "rva": 127712,
+      "forwarder": null
+    },
+    {
+      "name": "?FunctionFromNearCall@Scanner@GW@@YAII_N@Z",
+      "ordinal": 82,
+      "rva": 139616,
+      "forwarder": null
+    },
+    {
+      "name": "?GetAccountContext@GW@@YAPAUAccountContext@1@XZ",
+      "ordinal": 83,
+      "rva": 102240,
+      "forwarder": null
+    },
+    {
+      "name": "?GetActiveQuest@QuestMgr@GW@@YAPAUQuest@2@XZ",
+      "ordinal": 84,
+      "rva": 134288,
+      "forwarder": null
+    },
+    {
+      "name": "?GetActiveQuestId@QuestMgr@GW@@YA?AW4QuestID@Constants@2@XZ",
+      "ordinal": 85,
+      "rva": 134368,
+      "forwarder": null
+    },
+    {
+      "name": "?GetActiveTitle@PlayerMgr@GW@@YAPAUTitle@2@XZ",
+      "ordinal": 86,
+      "rva": 132528,
+      "forwarder": null
+    },
+    {
+      "name": "?GetActiveTitleId@PlayerMgr@GW@@YA?AW4TitleID@Constants@2@XZ",
+      "ordinal": 87,
+      "rva": 132592,
+      "forwarder": null
+    },
+    {
+      "name": "?GetAgentArray@Agents@GW@@YAPAV?$Array@PAUAgent@GW@@@2@XZ",
+      "ordinal": 88,
+      "rva": 8016,
+      "forwarder": null
+    },
+    {
+      "name": "?GetAgentAttributes@PartyMgr@GW@@YAPAUAttribute@2@I@Z",
+      "ordinal": 89,
+      "rva": 128016,
+      "forwarder": null
+    },
+    {
+      "name": "?GetAgentBuffs@Effects@GW@@YAPAV?$Array@UBuff@GW@@@2@I@Z",
+      "ordinal": 90,
+      "rva": 23152,
+      "forwarder": null
+    },
+    {
+      "name": "?GetAgentByID@Agents@GW@@YAPAUAgent@2@I@Z",
+      "ordinal": 91,
+      "rva": 8048,
+      "forwarder": null
+    },
+    {
+      "name": "?GetAgentContext@GW@@YAPAUAgentContext@1@XZ",
+      "ordinal": 92,
+      "rva": 102272,
+      "forwarder": null
+    },
+    {
+      "name": "?GetAgentEffects@Effects@GW@@YAPAV?$Array@UEffect@GW@@@2@I@Z",
+      "ordinal": 93,
+      "rva": 23232,
+      "forwarder": null
+    },
+    {
+      "name": "?GetAgentEffectsArray@Effects@GW@@YAPAUAgentEffects@2@I@Z",
+      "ordinal": 94,
+      "rva": 23312,
+      "forwarder": null
+    },
+    {
+      "name": "?GetAgentEncName@Agents@GW@@YAPA_WI@Z",
+      "ordinal": 95,
+      "rva": 8144,
+      "forwarder": null
+    },
+    {
+      "name": "?GetAgentEncName@Agents@GW@@YAPA_WPBUAgent@2@@Z",
+      "ordinal": 96,
+      "rva": 8288,
+      "forwarder": null
+    },
+    {
+      "name": "?GetAgentIdByLoginNumber@Agents@GW@@YAII@Z",
+      "ordinal": 97,
+      "rva": 8720,
+      "forwarder": null
+    },
+    {
+      "name": "?GetAlcoholLevel@Effects@GW@@YAIXZ",
+      "ordinal": 98,
+      "rva": 23376,
+      "forwarder": null
+    },
+    {
+      "name": "?GetAmountOfPlayersInInstance@Agents@GW@@YAIXZ",
+      "ordinal": 99,
+      "rva": 8752,
+      "forwarder": null
+    },
+    {
+      "name": "?GetAmountOfPlayersInInstance@PlayerMgr@GW@@YAIXZ",
+      "ordinal": 100,
+      "rva": 132800,
+      "forwarder": null
+    },
+    {
+      "name": "?GetAttributeConstantData@SkillbarMgr@GW@@YAPAUAttributeInfo@2@W4Attribute@Constants@2@@Z",
+      "ordinal": 101,
+      "rva": 143952,
+      "forwarder": null
+    },
+    {
+      "name": "?GetAvailableChars@GW@@YAPAV?$Array@UCharacterInformation@GW@@@1@XZ",
+      "ordinal": 102,
+      "rva": 102304,
+      "forwarder": null
+    },
+    {
+      "name": "?GetBag@Items@GW@@YAPAUBag@2@W43Constants@2@@Z",
+      "ordinal": 103,
+      "rva": 112896,
+      "forwarder": null
+    },
+    {
+      "name": "?GetBagArray@Items@GW@@YAPAPAUBag@2@XZ",
+      "ordinal": 104,
+      "rva": 112944,
+      "forwarder": null
+    },
+    {
+      "name": "?GetBagByIndex@Items@GW@@YAPAUBag@2@I@Z",
+      "ordinal": 105,
+      "rva": 112976,
+      "forwarder": null
+    },
+    {
+      "name": "?GetBottomRightOnScreen@FramePosition@UI@GW@@QBE?AUVec2f@3@PBUFrame@23@@Z",
+      "ordinal": 106,
+      "rva": 156496,
+      "forwarder": null
+    },
+    {
+      "name": "?GetCamera@CameraMgr@GW@@YAPAUCamera@2@XZ",
+      "ordinal": 107,
+      "rva": 13536,
+      "forwarder": null
+    },
+    {
+      "name": "?GetCameraUnlock@CameraMgr@GW@@YA_NXZ",
+      "ordinal": 108,
+      "rva": 13552,
+      "forwarder": null
+    },
+    {
+      "name": "?GetChannel@Chat@GW@@YA?AW4Channel@12@D@Z",
+      "ordinal": 109,
+      "rva": 18096,
+      "forwarder": null
+    },
+    {
+      "name": "?GetChannel@Chat@GW@@YA?AW4Channel@12@_W@Z",
+      "ordinal": 110,
+      "rva": 18240,
+      "forwarder": null
+    },
+    {
+      "name": "?GetChannelColors@Chat@GW@@YAXW4Channel@12@PAI1@Z",
+      "ordinal": 111,
+      "rva": 18256,
+      "forwarder": null
+    },
+    {
+      "name": "?GetCharContext@GW@@YAPAUCharContext@1@XZ",
+      "ordinal": 112,
+      "rva": 102320,
+      "forwarder": null
+    },
+    {
+      "name": "?GetChatLog@Chat@GW@@YAPAUChatBuffer@12@XZ",
+      "ordinal": 113,
+      "rva": 18320,
+      "forwarder": null
+    },
+    {
+      "name": "?GetChildFrame@UI@GW@@YAPAUFrame@12@PAU312@I@Z",
+      "ordinal": 114,
+      "rva": 156656,
+      "forwarder": null
+    },
+    {
+      "name": "?GetCommandLinePref@UI@GW@@YA_NPB_WPAI@Z",
+      "ordinal": 115,
+      "rva": 156704,
+      "forwarder": null
+    },
+    {
+      "name": "?GetCommandLinePref@UI@GW@@YA_NPB_WPAPA_W@Z",
+      "ordinal": 116,
+      "rva": 156768,
+      "forwarder": null
+    },
+    {
+      "name": "?GetCompositeModelInfo@Items@GW@@YAPBUCompositeModelInfo@2@I@Z",
+      "ordinal": 117,
+      "rva": 113024,
+      "forwarder": null
+    },
+    {
+      "name": "?GetCompositeModelInfoArray@Items@GW@@YAABV?$BaseArray@UCompositeModelInfo@GW@@@2@XZ",
+      "ordinal": 118,
+      "rva": 113104,
+      "forwarder": null
+    },
+    {
+      "name": "?GetContentBottomRight@FramePosition@UI@GW@@QBE?AUVec2f@3@PBUFrame@23@@Z",
+      "ordinal": 119,
+      "rva": 157088,
+      "forwarder": null
+    },
+    {
+      "name": "?GetContentTopLeft@FramePosition@UI@GW@@QBE?AUVec2f@3@PBUFrame@23@@Z",
+      "ordinal": 120,
+      "rva": 157248,
+      "forwarder": null
+    },
+    {
+      "name": "?GetControlledCharacter@Agents@GW@@YAPAUAgentLiving@2@XZ",
+      "ordinal": 121,
+      "rva": 8784,
+      "forwarder": null
+    },
+    {
+      "name": "?GetControlledCharacterId@Agents@GW@@YAIXZ",
+      "ordinal": 122,
+      "rva": 8912,
+      "forwarder": null
+    },
+    {
+      "name": "?GetCount@DropdownFrame@GW@@QAE_NPAI@Z",
+      "ordinal": 123,
+      "rva": 92592,
+      "forwarder": null
+    },
+    {
+      "name": "?GetCount@ScrollableFrame@GW@@QAE_NPAI@Z",
+      "ordinal": 124,
+      "rva": 92640,
+      "forwarder": null
+    },
+    {
+      "name": "?GetCurrentGH@GuildMgr@GW@@YAPAUGuild@2@XZ",
+      "ordinal": 125,
+      "rva": 108016,
+      "forwarder": null
+    },
+    {
+      "name": "?GetCurrentTab@TabsFrame@GW@@QAEPAUFrame@UI@2@XZ",
+      "ordinal": 126,
+      "rva": 92672,
+      "forwarder": null
+    },
+    {
+      "name": "?GetCurrentTabIndex@TabsFrame@GW@@QAE_NPAI@Z",
+      "ordinal": 127,
+      "rva": 92768,
+      "forwarder": null
+    },
+    {
+      "name": "?GetCurrentTooltip@UI@GW@@YAPAUTooltipInfo@12@XZ",
+      "ordinal": 128,
+      "rva": 157408,
+      "forwarder": null
+    },
+    {
+      "name": "?GetDecodedLabel@MultiLineTextLabelFrame@GW@@QAEPB_WXZ",
+      "ordinal": 129,
+      "rva": 92800,
+      "forwarder": null
+    },
+    {
+      "name": "?GetDecodedLabel@TextLabelFrame@GW@@QAEPB_WXZ",
+      "ordinal": 130,
+      "rva": 92864,
+      "forwarder": null
+    },
+    {
+      "name": "?GetDefaultColors@Chat@GW@@YAXW4Channel@12@PAI1@Z",
+      "ordinal": 131,
+      "rva": 18336,
+      "forwarder": null
+    },
+    {
+      "name": "?GetDevice@Render@GW@@YAPAUIDirect3DDevice9@@XZ",
+      "ordinal": 132,
+      "rva": 135904,
+      "forwarder": null
+    },
+    {
+      "name": "?GetDistance@GW@@YAMABUVec2f@1@0@Z",
+      "ordinal": 133,
+      "rva": 104304,
+      "forwarder": null
+    },
+    {
+      "name": "?GetDistance@GW@@YAMUVec3f@1@0@Z",
+      "ordinal": 134,
+      "rva": 104416,
+      "forwarder": null
+    },
+    {
+      "name": "?GetDistrict@Map@GW@@YAHXZ",
+      "ordinal": 135,
+      "rva": 119776,
+      "forwarder": null
+    },
+    {
+      "name": "?GetDrunkAf@Effects@GW@@YAXMI@Z",
+      "ordinal": 136,
+      "rva": 23440,
+      "forwarder": null
+    },
+    {
+      "name": "?GetEncodedLabel@MultiLineTextLabelFrame@GW@@QAEPB_WXZ",
+      "ordinal": 137,
+      "rva": 92928,
+      "forwarder": null
+    },
+    {
+      "name": "?GetEncodedLabel@TextLabelFrame@GW@@QAEPB_WXZ",
+      "ordinal": 138,
+      "rva": 92960,
+      "forwarder": null
+    },
+    {
+      "name": "?GetEquipmentVisibility@Items@GW@@YA?AW4EquipmentStatus@2@W4EquipmentType@2@@Z",
+      "ordinal": 139,
+      "rva": 113120,
+      "forwarder": null
+    },
+    {
+      "name": "?GetEvaluatedTargetId@Agents@GW@@YAIXZ",
+      "ordinal": 140,
+      "rva": 9504,
+      "forwarder": null
+    },
+    {
+      "name": "?GetFieldOfView@CameraMgr@GW@@YAMXZ",
+      "ordinal": 141,
+      "rva": 13568,
+      "forwarder": null
+    },
+    {
+      "name": "?GetFieldOfView@Render@GW@@YAMXZ",
+      "ordinal": 142,
+      "rva": 135936,
+      "forwarder": null
+    },
+    {
+      "name": "?GetFirstChildFrameId@ScrollableFrame@GW@@QAEIPAI@Z",
+      "ordinal": 143,
+      "rva": 92992,
+      "forwarder": null
+    },
+    {
+      "name": "?GetFoesKilled@Map@GW@@YAIXZ",
+      "ordinal": 144,
+      "rva": 119808,
+      "forwarder": null
+    },
+    {
+      "name": "?GetFoesToKill@Map@GW@@YAIXZ",
+      "ordinal": 145,
+      "rva": 119840,
+      "forwarder": null
+    },
+    {
+      "name": "?GetFrame@FrameRelation@UI@GW@@QAEPAUFrame@23@XZ",
+      "ordinal": 146,
+      "rva": 157440,
+      "forwarder": null
+    },
+    {
+      "name": "?GetFrameById@UI@GW@@YAPAUFrame@12@I@Z",
+      "ordinal": 147,
+      "rva": 157456,
+      "forwarder": null
+    },
+    {
+      "name": "?GetFrameByLabel@UI@GW@@YAPAUFrame@12@PB_W@Z",
+      "ordinal": 148,
+      "rva": 157568,
+      "forwarder": null
+    },
+    {
+      "name": "?GetFrameContext@UI@GW@@YAPAXPAUFrame@12@@Z",
+      "ordinal": 149,
+      "rva": 157664,
+      "forwarder": null
+    },
+    {
+      "name": "?GetFrameLimit@Render@GW@@YAIXZ",
+      "ordinal": 150,
+      "rva": 136032,
+      "forwarder": null
+    },
+    {
+      "name": "?GetFriend@FriendListMgr@GW@@YAPAUFriend@2@I@Z",
+      "ordinal": 151,
+      "rva": 99024,
+      "forwarder": null
+    },
+    {
+      "name": "?GetFriend@FriendListMgr@GW@@YAPAUFriend@2@PBE@Z",
+      "ordinal": 152,
+      "rva": 99104,
+      "forwarder": null
+    },
+    {
+      "name": "?GetFriend@FriendListMgr@GW@@YAPAUFriend@2@PB_W0W4FriendType@2@@Z",
+      "ordinal": 153,
+      "rva": 99200,
+      "forwarder": null
+    },
+    {
+      "name": "?GetFriendList@FriendListMgr@GW@@YAPAUFriendList@2@XZ",
+      "ordinal": 154,
+      "rva": 99360,
+      "forwarder": null
+    },
+    {
+      "name": "?GetGWVersion@MemoryMgr@GW@@YAIXZ",
+      "ordinal": 155,
+      "rva": 123024,
+      "forwarder": null
+    },
+    {
+      "name": "?GetGWWindowHandle@MemoryMgr@GW@@YAPAUHWND__@@XZ",
+      "ordinal": 156,
+      "rva": 123040,
+      "forwarder": null
+    },
+    {
+      "name": "?GetGameContext@GW@@YAPAUGameContext@1@XZ",
+      "ordinal": 157,
+      "rva": 102352,
+      "forwarder": null
+    },
+    {
+      "name": "?GetGameTlsIndex@Scanner@GW@@YAKXZ",
+      "ordinal": 158,
+      "rva": 139744,
+      "forwarder": null
+    },
+    {
+      "name": "?GetGameplayContext@GW@@YAPAUGameplayContext@1@XZ",
+      "ordinal": 159,
+      "rva": 102368,
+      "forwarder": null
+    },
+    {
+      "name": "?GetGoldAmountInStorage@Items@GW@@YAIXZ",
+      "ordinal": 160,
+      "rva": 113168,
+      "forwarder": null
+    },
+    {
+      "name": "?GetGoldAmountOnCharacter@Items@GW@@YAIXZ",
+      "ordinal": 161,
+      "rva": 113200,
+      "forwarder": null
+    },
+    {
+      "name": "?GetGraphicsRendererValue@Render@GW@@YAIW4Metric@12@I@Z",
+      "ordinal": 162,
+      "rva": 136288,
+      "forwarder": null
+    },
+    {
+      "name": "?GetGuildArray@GuildMgr@GW@@YAPAV?$Array@PAUGuild@GW@@@2@XZ",
+      "ordinal": 163,
+      "rva": 108112,
+      "forwarder": null
+    },
+    {
+      "name": "?GetGuildContext@GW@@YAPAUGuildContext@1@XZ",
+      "ordinal": 164,
+      "rva": 102384,
+      "forwarder": null
+    },
+    {
+      "name": "?GetGuildInfo@GuildMgr@GW@@YAPAUGuild@2@I@Z",
+      "ordinal": 165,
+      "rva": 108144,
+      "forwarder": null
+    },
+    {
+      "name": "?GetHeroAgentID@Agents@GW@@YAII@Z",
+      "ordinal": 166,
+      "rva": 9520,
+      "forwarder": null
+    },
+    {
+      "name": "?GetHeroAgentID@PartyMgr@GW@@YAII@Z",
+      "ordinal": 167,
+      "rva": 128096,
+      "forwarder": null
+    },
+    {
+      "name": "?GetHeroConstData@PartyMgr@GW@@YAPAUHeroConstData@2@W4HeroID@Constants@2@@Z",
+      "ordinal": 168,
+      "rva": 128176,
+      "forwarder": null
+    },
+    {
+      "name": "?GetHeroInfo@PartyMgr@GW@@YAPAUHeroInfo@2@W4HeroID@Constants@2@@Z",
+      "ordinal": 169,
+      "rva": 128208,
+      "forwarder": null
+    },
+    {
+      "name": "?GetHeroSkillbar@SkillbarMgr@GW@@YAPAUSkillbar@2@I@Z",
+      "ordinal": 170,
+      "rva": 144144,
+      "forwarder": null
+    },
+    {
+      "name": "?GetHoveredItem@Items@GW@@YAPAUItem@2@XZ",
+      "ordinal": 171,
+      "rva": 113232,
+      "forwarder": null
+    },
+    {
+      "name": "?GetHoveredSkill@SkillbarMgr@GW@@YAPAUSkill@2@XZ",
+      "ordinal": 172,
+      "rva": 144240,
+      "forwarder": null
+    },
+    {
+      "name": "?GetInHookCount@Hook@GW@@YAHXZ",
+      "ordinal": 173,
+      "rva": 109152,
+      "forwarder": null
+    },
+    {
+      "name": "?GetInstanceTime@Map@GW@@YAIXZ",
+      "ordinal": 174,
+      "rva": 119872,
+      "forwarder": null
+    },
+    {
+      "name": "?GetInstanceType@Map@GW@@YA?AW4InstanceType@Constants@2@XZ",
+      "ordinal": 175,
+      "rva": 119904,
+      "forwarder": null
+    },
+    {
+      "name": "?GetInventory@Items@GW@@YAPAUInventory@2@XZ",
+      "ordinal": 176,
+      "rva": 112944,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsAgentTargettable@Agents@GW@@YA_NPBUAgent@2@@Z",
+      "ordinal": 177,
+      "rva": 9536,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsFullscreen@Render@GW@@YAHXZ",
+      "ordinal": 178,
+      "rva": 136368,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsHardModeUnlocked@PartyMgr@GW@@YA_NXZ",
+      "ordinal": 179,
+      "rva": 128416,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsInCinematic@Map@GW@@YA_NXZ",
+      "ordinal": 180,
+      "rva": 119984,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsInRenderLoop@Render@GW@@YA_NXZ",
+      "ordinal": 181,
+      "rva": 136432,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsLeader@PartyMgr@GW@@YA_NXZ",
+      "ordinal": 182,
+      "rva": 128448,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsMapLoaded@Map@GW@@YA_NXZ",
+      "ordinal": 183,
+      "rva": 120016,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsMapUnlocked@Map@GW@@YA_NW4MapID@Constants@2@@Z",
+      "ordinal": 184,
+      "rva": 120080,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsMaterial@Item@GW@@QBE_NXZ",
+      "ordinal": 185,
+      "rva": 113312,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsObserving@Map@GW@@YA_NXZ",
+      "ordinal": 186,
+      "rva": 120160,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsPartyDefeated@PartyMgr@GW@@YA_NXZ",
+      "ordinal": 187,
+      "rva": 128528,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsPartyInHardMode@PartyMgr@GW@@YA_NXZ",
+      "ordinal": 188,
+      "rva": 128560,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsPartyLoaded@PartyMgr@GW@@YA_NXZ",
+      "ordinal": 189,
+      "rva": 128592,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsPartyTicked@PartyMgr@GW@@YA_NXZ",
+      "ordinal": 190,
+      "rva": 128672,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsPlayerTicked@PartyMgr@GW@@YA_NI@Z",
+      "ordinal": 191,
+      "rva": 128752,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsShiftScreenShot@UI@GW@@YA_NXZ",
+      "ordinal": 192,
+      "rva": 157872,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsSkillLearnt@SkillbarMgr@GW@@YA_NW4SkillID@Constants@2@@Z",
+      "ordinal": 193,
+      "rva": 144288,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsSkillUnlocked@SkillbarMgr@GW@@YA_NW4SkillID@Constants@2@@Z",
+      "ordinal": 194,
+      "rva": 144384,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsStorageOpen@Items@GW@@YA_NXZ",
+      "ordinal": 195,
+      "rva": 113360,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsTabEnabled@TabsFrame@GW@@QAE_NIPAI@Z",
+      "ordinal": 196,
+      "rva": 93072,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsTyping@Chat@GW@@YA_NXZ",
+      "ordinal": 197,
+      "rva": 18400,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsUIDrawn@UI@GW@@YA_NXZ",
+      "ordinal": 198,
+      "rva": 157904,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsWorldMapShowing@UI@GW@@YA_NXZ",
+      "ordinal": 199,
+      "rva": 157936,
+      "forwarder": null
+    },
+    {
+      "name": "?GetIsZcoin@Item@GW@@QBE_NXZ",
+      "ordinal": 200,
+      "rva": 113392,
+      "forwarder": null
+    },
+    {
+      "name": "?GetItemArray@Items@GW@@YAPAV?$Array@PAUItem@GW@@@2@XZ",
+      "ordinal": 201,
+      "rva": 113424,
+      "forwarder": null
+    },
+    {
+      "name": "?GetItemById@Items@GW@@YAPAUItem@2@I@Z",
+      "ordinal": 202,
+      "rva": 113456,
+      "forwarder": null
+    },
+    {
+      "name": "?GetItemByModelId@Items@GW@@YAPAUItem@2@IHH@Z",
+      "ordinal": 203,
+      "rva": 113552,
+      "forwarder": null
+    },
+    {
+      "name": "?GetItemByModelIdAndModifiers@Items@GW@@YAPAUItem@2@IPBUItemModifier@2@IHH@Z",
+      "ordinal": 204,
+      "rva": 113680,
+      "forwarder": null
+    },
+    {
+      "name": "?GetItemBySlot@Items@GW@@YAPAUItem@2@PBUBag@2@I@Z",
+      "ordinal": 205,
+      "rva": 113952,
+      "forwarder": null
+    },
+    {
+      "name": "?GetItemContext@GW@@YAPAUItemContext@1@XZ",
+      "ordinal": 206,
+      "rva": 102416,
+      "forwarder": null
+    },
+    {
+      "name": "?GetItemFormula@Items@GW@@YAPBUItemFormula@2@PBUItem@2@@Z",
+      "ordinal": 207,
+      "rva": 114000,
+      "forwarder": null
+    },
+    {
+      "name": "?GetItemFrameId@ScrollableFrame@GW@@QAEII@Z",
+      "ordinal": 208,
+      "rva": 93104,
+      "forwarder": null
+    },
+    {
+      "name": "?GetItemRect@ScrollableFrame@GW@@QAE_NIQAM@Z",
+      "ordinal": 209,
+      "rva": 93072,
+      "forwarder": null
+    },
+    {
+      "name": "?GetItems@ScrollableFrame@GW@@QAEIPAII@Z",
+      "ordinal": 210,
+      "rva": 93152,
+      "forwarder": null
+    },
+    {
+      "name": "?GetLabel@ButtonFrame@GW@@QAE_NPAPB_W@Z",
+      "ordinal": 211,
+      "rva": 93376,
+      "forwarder": null
+    },
+    {
+      "name": "?GetLanguage@Map@GW@@YA?AW4Language@Constants@2@XZ",
+      "ordinal": 212,
+      "rva": 120192,
+      "forwarder": null
+    },
+    {
+      "name": "?GetLastChildFrameId@ScrollableFrame@GW@@QAEIPAI@Z",
+      "ordinal": 213,
+      "rva": 93424,
+      "forwarder": null
+    },
+    {
+      "name": "?GetMapAgentArray@Agents@GW@@YAPAV?$Array@UMapAgent@GW@@@2@XZ",
+      "ordinal": 214,
+      "rva": 9712,
+      "forwarder": null
+    },
+    {
+      "name": "?GetMapAgentByID@Agents@GW@@YAPAUMapAgent@2@I@Z",
+      "ordinal": 215,
+      "rva": 9728,
+      "forwarder": null
+    },
+    {
+      "name": "?GetMapContext@GW@@YAPAUMapContext@1@XZ",
+      "ordinal": 216,
+      "rva": 102448,
+      "forwarder": null
+    },
+    {
+      "name": "?GetMapID@Map@GW@@YA?AW4MapID@Constants@2@XZ",
+      "ordinal": 217,
+      "rva": 120224,
+      "forwarder": null
+    },
+    {
+      "name": "?GetMapInfo@Map@GW@@YAPAUAreaInfo@2@W4MapID@Constants@2@@Z",
+      "ordinal": 218,
+      "rva": 120256,
+      "forwarder": null
+    },
+    {
+      "name": "?GetMaterialSlot@Items@GW@@YA?AW4MaterialSlot@Constants@2@PBUItem@2@@Z",
+      "ordinal": 219,
+      "rva": 114080,
+      "forwarder": null
+    },
+    {
+      "name": "?GetMaterialStorageStackSize@Items@GW@@YAIXZ",
+      "ordinal": 220,
+      "rva": 114176,
+      "forwarder": null
+    },
+    {
+      "name": "?GetMerchantItems@Merchant@GW@@YAIW4TransactionType@12@IPAI@Z",
+      "ordinal": 221,
+      "rva": 125504,
+      "forwarder": null
+    },
+    {
+      "name": "?GetMissionMapContext@Map@GW@@YAPAUMissionMapContext@2@XZ",
+      "ordinal": 222,
+      "rva": 120320,
+      "forwarder": null
+    },
+    {
+      "name": "?GetMissionMapIconArray@Map@GW@@YAPAV?$Array@UMissionMapIcon@GW@@@2@XZ",
+      "ordinal": 223,
+      "rva": 120352,
+      "forwarder": null
+    },
+    {
+      "name": "?GetMyStatus@FriendListMgr@GW@@YA?AW4FriendStatus@2@XZ",
+      "ordinal": 224,
+      "rva": 99376,
+      "forwarder": null
+    },
+    {
+      "name": "?GetNPCArray@Agents@GW@@YAPAV?$Array@UNPC@GW@@@2@XZ",
+      "ordinal": 225,
+      "rva": 9808,
+      "forwarder": null
+    },
+    {
+      "name": "?GetNPCByID@Agents@GW@@YAPAUNPC@2@I@Z",
+      "ordinal": 226,
+      "rva": 9840,
+      "forwarder": null
+    },
+    {
+      "name": "?GetNextChildFrameId@ScrollableFrame@GW@@QAEIIPAI@Z",
+      "ordinal": 227,
+      "rva": 93504,
+      "forwarder": null
+    },
+    {
+      "name": "?GetNorm@GW@@YAMUVec2f@1@@Z",
+      "ordinal": 228,
+      "rva": 104544,
+      "forwarder": null
+    },
+    {
+      "name": "?GetNorm@GW@@YAMUVec3f@1@@Z",
+      "ordinal": 229,
+      "rva": 104640,
+      "forwarder": null
+    },
+    {
+      "name": "?GetNumberOfFriends@FriendListMgr@GW@@YAIW4FriendType@2@@Z",
+      "ordinal": 230,
+      "rva": 99408,
+      "forwarder": null
+    },
+    {
+      "name": "?GetNumberOfIgnores@FriendListMgr@GW@@YAIXZ",
+      "ordinal": 231,
+      "rva": 99488,
+      "forwarder": null
+    },
+    {
+      "name": "?GetNumberOfPartners@FriendListMgr@GW@@YAIXZ",
+      "ordinal": 232,
+      "rva": 99504,
+      "forwarder": null
+    },
+    {
+      "name": "?GetNumberOfTraders@FriendListMgr@GW@@YAIXZ",
+      "ordinal": 233,
+      "rva": 99520,
+      "forwarder": null
+    },
+    {
+      "name": "?GetObservingId@Agents@GW@@YAIXZ",
+      "ordinal": 234,
+      "rva": 9904,
+      "forwarder": null
+    },
+    {
+      "name": "?GetOptionIndex@DropdownFrame@GW@@QAE_NIPAI@Z",
+      "ordinal": 235,
+      "rva": 93584,
+      "forwarder": null
+    },
+    {
+      "name": "?GetOptionValue@DropdownFrame@GW@@QAE_NIPAI@Z",
+      "ordinal": 236,
+      "rva": 93792,
+      "forwarder": null
+    },
+    {
+      "name": "?GetOptions@DropdownFrame@GW@@QAE?AV?$vector@IV?$allocator@I@std@@@std@@XZ",
+      "ordinal": 237,
+      "rva": 93984,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPage@ScrollableFrame@GW@@QAEPAUFrame@UI@2@XZ",
+      "ordinal": 238,
+      "rva": 94304,
+      "forwarder": null
+    },
+    {
+      "name": "?GetParent@FrameRelation@UI@GW@@QBEPAUFrame@23@XZ",
+      "ordinal": 239,
+      "rva": 157952,
+      "forwarder": null
+    },
+    {
+      "name": "?GetParentFrame@UI@GW@@YAPAUFrame@12@PAU312@@Z",
+      "ordinal": 240,
+      "rva": 157968,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPartyContext@GW@@YAPAUPartyContext@1@XZ",
+      "ordinal": 241,
+      "rva": 102480,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPartyEffectsArray@Effects@GW@@YAPAV?$Array@UAgentEffects@GW@@@2@XZ",
+      "ordinal": 242,
+      "rva": 23488,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPartyHenchmanCount@PartyMgr@GW@@YAIXZ",
+      "ordinal": 243,
+      "rva": 128880,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPartyHeroCount@PartyMgr@GW@@YAIXZ",
+      "ordinal": 244,
+      "rva": 128912,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPartyInfo@PartyMgr@GW@@YAPAUPartyInfo@2@I@Z",
+      "ordinal": 245,
+      "rva": 128944,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPartyPlayerCount@PartyMgr@GW@@YAIXZ",
+      "ordinal": 246,
+      "rva": 129040,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPartySearch@PartyMgr@GW@@YAPAUPartySearch@2@I@Z",
+      "ordinal": 247,
+      "rva": 129072,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPartySize@PartyMgr@GW@@YAIXZ",
+      "ordinal": 248,
+      "rva": 129136,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPathingMap@Map@GW@@YAPAV?$Array@UPathingMap@GW@@@2@XZ",
+      "ordinal": 249,
+      "rva": 120384,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPersonalDir@MemoryMgr@GW@@YA_NIPA_W@Z",
+      "ordinal": 250,
+      "rva": 123120,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPetInfo@PartyMgr@GW@@YAPAUPetInfo@2@I@Z",
+      "ordinal": 251,
+      "rva": 129184,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPlayerAgentId@PlayerMgr@GW@@YAII@Z",
+      "ordinal": 252,
+      "rva": 132816,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPlayerArray@Agents@GW@@YAPAV?$Array@UPlayer@GW@@@2@XZ",
+      "ordinal": 253,
+      "rva": 9920,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPlayerArray@PlayerMgr@GW@@YAPAV?$Array@UPlayer@GW@@@2@XZ",
+      "ordinal": 254,
+      "rva": 9920,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPlayerBuffBySkillId@Effects@GW@@YAPAUBuff@2@W4SkillID@Constants@2@@Z",
+      "ordinal": 255,
+      "rva": 23520,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPlayerBuffs@Effects@GW@@YAPAV?$Array@UBuff@GW@@@2@XZ",
+      "ordinal": 256,
+      "rva": 23584,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPlayerByID@Agents@GW@@YAPAUAgent@2@I@Z",
+      "ordinal": 257,
+      "rva": 9952,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPlayerByID@PlayerMgr@GW@@YAPAUPlayer@2@I@Z",
+      "ordinal": 258,
+      "rva": 132896,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPlayerByName@PlayerMgr@GW@@YAPAUPlayer@2@PB_W@Z",
+      "ordinal": 259,
+      "rva": 132976,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPlayerEffectBySkillId@Effects@GW@@YAPAUEffect@2@W4SkillID@Constants@2@@Z",
+      "ordinal": 260,
+      "rva": 23600,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPlayerEffects@Effects@GW@@YAPAV?$Array@UEffect@GW@@@2@XZ",
+      "ordinal": 261,
+      "rva": 23664,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPlayerEffectsArray@Effects@GW@@YAPAUAgentEffects@2@XZ",
+      "ordinal": 262,
+      "rva": 23680,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPlayerGuild@GuildMgr@GW@@YAPAUGuild@2@XZ",
+      "ordinal": 263,
+      "rva": 108192,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPlayerGuildAnnouncement@GuildMgr@GW@@YAPA_WXZ",
+      "ordinal": 264,
+      "rva": 108256,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPlayerGuildAnnouncer@GuildMgr@GW@@YAPA_WXZ",
+      "ordinal": 265,
+      "rva": 108272,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPlayerGuildIndex@GuildMgr@GW@@YAIXZ",
+      "ordinal": 266,
+      "rva": 108304,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPlayerName@PlayerMgr@GW@@YAPA_WI@Z",
+      "ordinal": 267,
+      "rva": 133200,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPlayerNameByLoginNumber@Agents@GW@@YAPA_WI@Z",
+      "ordinal": 268,
+      "rva": 10048,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPlayerNumber@PlayerMgr@GW@@YAIXZ",
+      "ordinal": 269,
+      "rva": 133280,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPlayerSkillbar@SkillbarMgr@GW@@YAPAUSkillbar@2@XZ",
+      "ordinal": 270,
+      "rva": 144480,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPreGameContext@GW@@YAPAUPreGameContext@1@XZ",
+      "ordinal": 271,
+      "rva": 102512,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPreference@UI@GW@@YAIW4EnumPreference@12@@Z",
+      "ordinal": 272,
+      "rva": 158016,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPreference@UI@GW@@YAIW4NumberPreference@12@@Z",
+      "ordinal": 273,
+      "rva": 158064,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPreference@UI@GW@@YAPA_WW4StringPreference@12@@Z",
+      "ordinal": 274,
+      "rva": 158112,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPreference@UI@GW@@YA_NW4FlagPreference@12@@Z",
+      "ordinal": 275,
+      "rva": 158160,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPreferenceOptions@UI@GW@@YAIW4EnumPreference@12@PAPAI@Z",
+      "ordinal": 276,
+      "rva": 158208,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPrevChildFrameId@ScrollableFrame@GW@@QAEIIPAI@Z",
+      "ordinal": 277,
+      "rva": 94336,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPvPItemInfo@Items@GW@@YAPBUPvPItemInfo@2@I@Z",
+      "ordinal": 278,
+      "rva": 114240,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPvPItemInfoArray@Items@GW@@YAABV?$BaseArray@UPvPItemInfo@GW@@@2@XZ",
+      "ordinal": 279,
+      "rva": 114320,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPvPItemUpgrade@Items@GW@@YAPBUPvPItemUpgradeInfo@2@I@Z",
+      "ordinal": 280,
+      "rva": 114336,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPvPItemUpgradeEncodedDescription@Items@GW@@YA_NIPAPA_W@Z",
+      "ordinal": 281,
+      "rva": 114416,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPvPItemUpgradeEncodedName@Items@GW@@YA_NIPAPA_W@Z",
+      "ordinal": 282,
+      "rva": 114544,
+      "forwarder": null
+    },
+    {
+      "name": "?GetPvPItemUpgradesArray@Items@GW@@YAABV?$BaseArray@UPvPItemUpgradeInfo@GW@@@2@XZ",
+      "ordinal": 283,
+      "rva": 114672,
+      "forwarder": null
+    },
+    {
+      "name": "?GetQuest@QuestMgr@GW@@YAPAUQuest@2@W4QuestID@Constants@2@@Z",
+      "ordinal": 284,
+      "rva": 134400,
+      "forwarder": null
+    },
+    {
+      "name": "?GetQuestEntryGroupName@QuestMgr@GW@@YA_NW4QuestID@Constants@2@PA_WI@Z",
+      "ordinal": 285,
+      "rva": 134480,
+      "forwarder": null
+    },
+    {
+      "name": "?GetQuestLog@QuestMgr@GW@@YAPAV?$Array@UQuest@GW@@@2@XZ",
+      "ordinal": 286,
+      "rva": 134672,
+      "forwarder": null
+    },
+    {
+      "name": "?GetRecharge@SkillbarSkill@GW@@QBEIXZ",
+      "ordinal": 287,
+      "rva": 140624,
+      "forwarder": null
+    },
+    {
+      "name": "?GetRegion@Map@GW@@YA?AW4ServerRegion@Constants@2@XZ",
+      "ordinal": 288,
+      "rva": 120416,
+      "forwarder": null
+    },
+    {
+      "name": "?GetRenderCallback@Render@GW@@YAP6AXPAUIDirect3DDevice9@@@ZXZ",
+      "ordinal": 289,
+      "rva": 136480,
+      "forwarder": null
+    },
+    {
+      "name": "?GetRootFrame@UI@GW@@YAPAUFrame@12@XZ",
+      "ordinal": 290,
+      "rva": 158256,
+      "forwarder": null
+    },
+    {
+      "name": "?GetSalvageSessionInfo@Items@GW@@YAPAUSalvageSessionInfo@2@XZ",
+      "ordinal": 291,
+      "rva": 114688,
+      "forwarder": null
+    },
+    {
+      "name": "?GetSectionAddressRange@Scanner@GW@@YAXW4ScannerSection@2@PAI1@Z",
+      "ordinal": 292,
+      "rva": 139760,
+      "forwarder": null
+    },
+    {
+      "name": "?GetSelectedIndex@DropdownFrame@GW@@QAE_NPAI@Z",
+      "ordinal": 293,
+      "rva": 94416,
+      "forwarder": null
+    },
+    {
+      "name": "?GetSelectedValue@ScrollableFrame@GW@@QAE_NPAI@Z",
+      "ordinal": 294,
+      "rva": 94464,
+      "forwarder": null
+    },
+    {
+      "name": "?GetSettings@UI@GW@@YAPAV?$Array@E@2@XZ",
+      "ordinal": 295,
+      "rva": 158272,
+      "forwarder": null
+    },
+    {
+      "name": "?GetSizeOnScreen@FramePosition@UI@GW@@QBE?AUVec2f@3@PBUFrame@23@@Z",
+      "ordinal": 296,
+      "rva": 158288,
+      "forwarder": null
+    },
+    {
+      "name": "?GetSkillById@Skillbar@GW@@QAEPAUSkillbarSkill@2@W4SkillID@Constants@2@PAI@Z",
+      "ordinal": 297,
+      "rva": 140656,
+      "forwarder": null
+    },
+    {
+      "name": "?GetSkillConstantData@SkillbarMgr@GW@@YAPAUSkill@2@W4SkillID@Constants@2@@Z",
+      "ordinal": 298,
+      "rva": 144560,
+      "forwarder": null
+    },
+    {
+      "name": "?GetSkillSlot@SkillbarMgr@GW@@YAHW4SkillID@Constants@2@@Z",
+      "ordinal": 299,
+      "rva": 144592,
+      "forwarder": null
+    },
+    {
+      "name": "?GetSkillTemplate@SkillbarMgr@GW@@YA_NAAUSkillTemplate@12@@Z",
+      "ordinal": 300,
+      "rva": 144656,
+      "forwarder": null
+    },
+    {
+      "name": "?GetSkillTemplate@SkillbarMgr@GW@@YA_NIAAUSkillTemplate@12@@Z",
+      "ordinal": 301,
+      "rva": 144688,
+      "forwarder": null
+    },
+    {
+      "name": "?GetSkillTimer@MemoryMgr@GW@@YAKXZ",
+      "ordinal": 302,
+      "rva": 123168,
+      "forwarder": null
+    },
+    {
+      "name": "?GetSkillbar@SkillbarMgr@GW@@YAPAUSkillbar@2@I@Z",
+      "ordinal": 303,
+      "rva": 145280,
+      "forwarder": null
+    },
+    {
+      "name": "?GetSkillbarArray@SkillbarMgr@GW@@YAPAV?$Array@USkillbar@GW@@@2@XZ",
+      "ordinal": 304,
+      "rva": 145360,
+      "forwarder": null
+    },
+    {
+      "name": "?GetSortHandler@ScrollableFrame@GW@@QAEP6AHII@ZXZ",
+      "ordinal": 305,
+      "rva": 94544,
+      "forwarder": null
+    },
+    {
+      "name": "?GetStoragePage@Items@GW@@YA?AW4StoragePane@Constants@2@XZ",
+      "ordinal": 306,
+      "rva": 114704,
+      "forwarder": null
+    },
+    {
+      "name": "?GetTabButton@TabsFrame@GW@@QAEPAUButtonFrame@2@PAUFrame@UI@2@@Z",
+      "ordinal": 307,
+      "rva": 94592,
+      "forwarder": null
+    },
+    {
+      "name": "?GetTabByLabel@TabsFrame@GW@@QAEPAUFrame@UI@2@PB_W@Z",
+      "ordinal": 308,
+      "rva": 94672,
+      "forwarder": null
+    },
+    {
+      "name": "?GetTabFrameId@TabsFrame@GW@@QAE_NIPAI@Z",
+      "ordinal": 309,
+      "rva": 94912,
+      "forwarder": null
+    },
+    {
+      "name": "?GetTargetAsAgentLiving@Agents@GW@@YAPAUAgentLiving@2@XZ",
+      "ordinal": 310,
+      "rva": 10064,
+      "forwarder": null
+    },
+    {
+      "name": "?GetTargetId@Agents@GW@@YAIXZ",
+      "ordinal": 311,
+      "rva": 10176,
+      "forwarder": null
+    },
+    {
+      "name": "?GetTextLanguage@UI@GW@@YA?AW4Language@Constants@2@XZ",
+      "ordinal": 312,
+      "rva": 158464,
+      "forwarder": null
+    },
+    {
+      "name": "?GetTimeElapsed@Effect@GW@@QBEKXZ",
+      "ordinal": 313,
+      "rva": 140704,
+      "forwarder": null
+    },
+    {
+      "name": "?GetTimeRemaining@Effect@GW@@QBEKXZ",
+      "ordinal": 314,
+      "rva": 140720,
+      "forwarder": null
+    },
+    {
+      "name": "?GetTitleData@PlayerMgr@GW@@YAPAUTitleClientData@2@W4TitleID@Constants@2@@Z",
+      "ordinal": 315,
+      "rva": 133312,
+      "forwarder": null
+    },
+    {
+      "name": "?GetTitleTrack@PlayerMgr@GW@@YAPAUTitle@2@W4TitleID@Constants@2@@Z",
+      "ordinal": 316,
+      "rva": 133344,
+      "forwarder": null
+    },
+    {
+      "name": "?GetTopLeftOnScreen@FramePosition@UI@GW@@QBE?AUVec2f@3@PBUFrame@23@@Z",
+      "ordinal": 317,
+      "rva": 158512,
+      "forwarder": null
+    },
+    {
+      "name": "?GetTransform@Render@GW@@YAPAUMat4x3f@12@W4Transform@12@@Z",
+      "ordinal": 318,
+      "rva": 136496,
+      "forwarder": null
+    },
+    {
+      "name": "?GetValue@CheckboxFrame@GW@@UAEIXZ",
+      "ordinal": 319,
+      "rva": 94944,
+      "forwarder": null
+    },
+    {
+      "name": "?GetValue@DropdownFrame@GW@@UAEIXZ",
+      "ordinal": 320,
+      "rva": 95008,
+      "forwarder": null
+    },
+    {
+      "name": "?GetValue@EditableTextFrame@GW@@QAEPB_WXZ",
+      "ordinal": 321,
+      "rva": 95088,
+      "forwarder": null
+    },
+    {
+      "name": "?GetValue@ProgressBar@GW@@UAEIXZ",
+      "ordinal": 322,
+      "rva": 95120,
+      "forwarder": null
+    },
+    {
+      "name": "?GetValue@SliderFrame@GW@@QAE_NPAI@Z",
+      "ordinal": 323,
+      "rva": 95168,
+      "forwarder": null
+    },
+    {
+      "name": "?GetValue@SliderFrame@GW@@UAEIXZ",
+      "ordinal": 324,
+      "rva": 95200,
+      "forwarder": null
+    },
+    {
+      "name": "?GetViewportHeight@Render@GW@@YAIXZ",
+      "ordinal": 325,
+      "rva": 136544,
+      "forwarder": null
+    },
+    {
+      "name": "?GetViewportScale@FramePosition@UI@GW@@QBE?AUVec2f@3@PBUFrame@23@@Z",
+      "ordinal": 326,
+      "rva": 158672,
+      "forwarder": null
+    },
+    {
+      "name": "?GetViewportWidth@Render@GW@@YAIXZ",
+      "ordinal": 327,
+      "rva": 136576,
+      "forwarder": null
+    },
+    {
+      "name": "?GetWindowHandle@Render@GW@@YAPAUHWND__@@XZ",
+      "ordinal": 328,
+      "rva": 136608,
+      "forwarder": null
+    },
+    {
+      "name": "?GetWindowPosition@UI@GW@@YAPAUWindowPosition@12@W4WindowID@12@@Z",
+      "ordinal": 329,
+      "rva": 158816,
+      "forwarder": null
+    },
+    {
+      "name": "?GetWorldContext@GW@@YAPAUWorldContext@1@XZ",
+      "ordinal": 330,
+      "rva": 102560,
+      "forwarder": null
+    },
+    {
+      "name": "?GetWorldMapContext@Map@GW@@YAPAUWorldMapContext@2@XZ",
+      "ordinal": 331,
+      "rva": 120432,
+      "forwarder": null
+    },
+    {
+      "name": "?GetYaw@CameraMgr@GW@@YAMXZ",
+      "ordinal": 332,
+      "rva": 13616,
+      "forwarder": null
+    },
+    {
+      "name": "?HasValueMapping@DropdownFrame@GW@@QAE_NXZ",
+      "ordinal": 333,
+      "rva": 95264,
+      "forwarder": null
+    },
+    {
+      "name": "?Hash16@GW@@YAIG@Z",
+      "ordinal": 334,
+      "rva": 108496,
+      "forwarder": null
+    },
+    {
+      "name": "?Hash32@GW@@YAII@Z",
+      "ordinal": 335,
+      "rva": 108592,
+      "forwarder": null
+    },
+    {
+      "name": "?Hash8@GW@@YAIE@Z",
+      "ordinal": 336,
+      "rva": 108752,
+      "forwarder": null
+    },
+    {
+      "name": "?Hash@GW@@YAIPBXI@Z",
+      "ordinal": 337,
+      "rva": 108800,
+      "forwarder": null
+    },
+    {
+      "name": "?HashWString@GW@@YAIPB_WI@Z",
+      "ordinal": 338,
+      "rva": 108880,
+      "forwarder": null
+    },
+    {
+      "name": "?IdentifyItem@Items@GW@@YA_NII@Z",
+      "ordinal": 339,
+      "rva": 114720,
+      "forwarder": null
+    },
+    {
+      "name": "?Initialize@GW@@YA_NXZ",
+      "ordinal": 340,
+      "rva": 102592,
+      "forwarder": null
+    },
+    {
+      "name": "?Initialize@Hook@GW@@YAXXZ",
+      "ordinal": 341,
+      "rva": 109168,
+      "forwarder": null
+    },
+    {
+      "name": "?Initialize@Scanner@GW@@YAXPAUHINSTANCE__@@@Z",
+      "ordinal": 342,
+      "rva": 139792,
+      "forwarder": null
+    },
+    {
+      "name": "?Initialize@Scanner@GW@@YAXPBD@Z",
+      "ordinal": 343,
+      "rva": 140464,
+      "forwarder": null
+    },
+    {
+      "name": "?InteractAgent@Agents@GW@@YA_NPBUAgent@2@_N@Z",
+      "ordinal": 344,
+      "rva": 10704,
+      "forwarder": null
+    },
+    {
+      "name": "?InvitePlayer@PartyMgr@GW@@YA_NI@Z",
+      "ordinal": 345,
+      "rva": 129280,
+      "forwarder": null
+    },
+    {
+      "name": "?InvitePlayer@PartyMgr@GW@@YA_NPB_W@Z",
+      "ordinal": 346,
+      "rva": 129328,
+      "forwarder": null
+    },
+    {
+      "name": "?IsChecked@CheckboxFrame@GW@@QAE_NXZ",
+      "ordinal": 347,
+      "rva": 95328,
+      "forwarder": null
+    },
+    {
+      "name": "?IsInControllerCursorMode@UI@GW@@YA_NXZ",
+      "ordinal": 348,
+      "rva": 158864,
+      "forwarder": null
+    },
+    {
+      "name": "?IsInControllerMode@UI@GW@@YA_NXZ",
+      "ordinal": 349,
+      "rva": 158960,
+      "forwarder": null
+    },
+    {
+      "name": "?IsInGameThread@GameThread@GW@@YA_NXZ",
+      "ordinal": 350,
+      "rva": 106752,
+      "forwarder": null
+    },
+    {
+      "name": "?IsItemOffered@Trade@GW@@YAPAUTradeItem@2@I@Z",
+      "ordinal": 351,
+      "rva": 151200,
+      "forwarder": null
+    },
+    {
+      "name": "?IsObserving@Agents@GW@@YA_NXZ",
+      "ordinal": 352,
+      "rva": 10928,
+      "forwarder": null
+    },
+    {
+      "name": "?IsReadOnly@EditableTextFrame@GW@@QAE_NXZ",
+      "ordinal": 353,
+      "rva": 95376,
+      "forwarder": null
+    },
+    {
+      "name": "?IsValidEncStr@UI@GW@@YA_NPB_W@Z",
+      "ordinal": 354,
+      "rva": 158992,
+      "forwarder": null
+    },
+    {
+      "name": "?IsValidPtr@Scanner@GW@@YA_NIW4ScannerSection@2@@Z",
+      "ordinal": 355,
+      "rva": 140496,
+      "forwarder": null
+    },
+    {
+      "name": "?Keydown@UI@GW@@YA_NW4ControlAction@12@PAUFrame@12@@Z",
+      "ordinal": 356,
+      "rva": 159072,
+      "forwarder": null
+    },
+    {
+      "name": "?Keypress@UI@GW@@YA_NW4ControlAction@12@PAUFrame@12@@Z",
+      "ordinal": 357,
+      "rva": 159168,
+      "forwarder": null
+    },
+    {
+      "name": "?Keyup@UI@GW@@YA_NW4ControlAction@12@PAUFrame@12@@Z",
+      "ordinal": 358,
+      "rva": 159328,
+      "forwarder": null
+    },
+    {
+      "name": "?KickAllHeroes@PartyMgr@GW@@YA_NXZ",
+      "ordinal": 359,
+      "rva": 129440,
+      "forwarder": null
+    },
+    {
+      "name": "?KickHenchman@PartyMgr@GW@@YA_NI@Z",
+      "ordinal": 360,
+      "rva": 129536,
+      "forwarder": null
+    },
+    {
+      "name": "?KickHero@PartyMgr@GW@@YA_NW4HeroID@Constants@2@@Z",
+      "ordinal": 361,
+      "rva": 129632,
+      "forwarder": null
+    },
+    {
+      "name": "?KickPlayer@PartyMgr@GW@@YA_NI@Z",
+      "ordinal": 362,
+      "rva": 129824,
+      "forwarder": null
+    },
+    {
+      "name": "?LanguageFromDistrict@Map@GW@@YA?AW4Language@Constants@2@W4District@42@@Z",
+      "ordinal": 363,
+      "rva": 120608,
+      "forwarder": null
+    },
+    {
+      "name": "?LeaveGH@GuildMgr@GW@@YA_NXZ",
+      "ordinal": 364,
+      "rva": 108320,
+      "forwarder": null
+    },
+    {
+      "name": "?LeaveHook@Hook@GW@@YAXXZ",
+      "ordinal": 365,
+      "rva": 109184,
+      "forwarder": null
+    },
+    {
+      "name": "?LeaveParty@PartyMgr@GW@@YA_NXZ",
+      "ordinal": 366,
+      "rva": 129920,
+      "forwarder": null
+    },
+    {
+      "name": "?LoadSkillTemplate@SkillbarMgr@GW@@YA_NAAUSkillTemplate@12@@Z",
+      "ordinal": 367,
+      "rva": 145520,
+      "forwarder": null
+    },
+    {
+      "name": "?LoadSkillTemplate@SkillbarMgr@GW@@YA_NIAAUSkillTemplate@12@@Z",
+      "ordinal": 368,
+      "rva": 145552,
+      "forwarder": null
+    },
+    {
+      "name": "?LoadSkillTemplate@SkillbarMgr@GW@@YA_NIPBD@Z",
+      "ordinal": 369,
+      "rva": 146080,
+      "forwarder": null
+    },
+    {
+      "name": "?LoadSkillTemplate@SkillbarMgr@GW@@YA_NPBD@Z",
+      "ordinal": 370,
+      "rva": 146208,
+      "forwarder": null
+    },
+    {
+      "name": "?LogMessage@GW@@YAXW4LogLevel@1@PBDI11ZZ",
+      "ordinal": 371,
+      "rva": 13184,
+      "forwarder": null
+    },
+    {
+      "name": "?MemAlloc@MemoryMgr@GW@@YAPAXI@Z",
+      "ordinal": 372,
+      "rva": 123184,
+      "forwarder": null
+    },
+    {
+      "name": "?MemFree@MemoryMgr@GW@@YAXPAX@Z",
+      "ordinal": 373,
+      "rva": 123232,
+      "forwarder": null
+    },
+    {
+      "name": "?MemRealloc@MemoryMgr@GW@@YAPAXPAXI@Z",
+      "ordinal": 374,
+      "rva": 123280,
+      "forwarder": null
+    },
+    {
+      "name": "?MouseAction@ButtonFrame@GW@@QAE_NW4ActionState@UIPacket@UI@2@@Z",
+      "ordinal": 375,
+      "rva": 95408,
+      "forwarder": null
+    },
+    {
+      "name": "?Move@Agents@GW@@YA_NMMI@Z",
+      "ordinal": 376,
+      "rva": 10992,
+      "forwarder": null
+    },
+    {
+      "name": "?Move@Agents@GW@@YA_NUGamePos@2@@Z",
+      "ordinal": 377,
+      "rva": 11040,
+      "forwarder": null
+    },
+    {
+      "name": "?MoveItem@Items@GW@@YA_NPBUItem@2@0I@Z",
+      "ordinal": 378,
+      "rva": 115072,
+      "forwarder": null
+    },
+    {
+      "name": "?MoveItem@Items@GW@@YA_NPBUItem@2@PBUBag@2@II@Z",
+      "ordinal": 379,
+      "rva": 115168,
+      "forwarder": null
+    },
+    {
+      "name": "?MoveItem@Items@GW@@YA_NPBUItem@2@W4Bag@Constants@2@II@Z",
+      "ordinal": 380,
+      "rva": 115248,
+      "forwarder": null
+    },
+    {
+      "name": "?OfferItem@Trade@GW@@YA_NII@Z",
+      "ordinal": 381,
+      "rva": 151344,
+      "forwarder": null
+    },
+    {
+      "name": "?OpenTradeWindow@Trade@GW@@YA_NI@Z",
+      "ordinal": 382,
+      "rva": 151488,
+      "forwarder": null
+    },
+    {
+      "name": "?OpenXunlaiWindow@Items@GW@@YA_N_N0@Z",
+      "ordinal": 383,
+      "rva": 116880,
+      "forwarder": null
+    },
+    {
+      "name": "?PickUpItem@Items@GW@@YA_NPBUItem@2@I@Z",
+      "ordinal": 384,
+      "rva": 116928,
+      "forwarder": null
+    },
+    {
+      "name": "?PingWeaponSet@Items@GW@@YA_NIII@Z",
+      "ordinal": 385,
+      "rva": 117008,
+      "forwarder": null
+    },
+    {
+      "name": "?QueryAltitude@Map@GW@@YAMPBUGamePos@2@MPAUMapContext@2@@Z",
+      "ordinal": 386,
+      "rva": 120848,
+      "forwarder": null
+    },
+    {
+      "name": "?RegionFromDistrict@Map@GW@@YA?AW4ServerRegion@Constants@2@W4District@42@@Z",
+      "ordinal": 387,
+      "rva": 121056,
+      "forwarder": null
+    },
+    {
+      "name": "?RegisterCreateUIComponentCallback@UI@GW@@YAXPAUHookEntry@2@ABV?$function@$$A6AXPAUCreateUIComponentPacket@UI@GW@@@Z@std@@H@Z",
+      "ordinal": 388,
+      "rva": 160576,
+      "forwarder": null
+    },
+    {
+      "name": "?RegisterEventCallback@EventMgr@GW@@YAXPAUHookEntry@2@W4EventID@12@ABV?$function@$$A6AXPAUHookStatus@GW@@W4EventID@EventMgr@2@PAXI@Z@std@@H@Z",
+      "ordinal": 389,
+      "rva": 27600,
+      "forwarder": null
+    },
+    {
+      "name": "?RegisterFrameUIMessageCallback@UI@GW@@YAXPAUHookEntry@2@W4UIMessage@12@ABV?$function@$$A6AXPAUHookStatus@GW@@PBUFrame@UI@2@W4UIMessage@42@PAX3@Z@std@@H@Z",
+      "ordinal": 390,
+      "rva": 160816,
+      "forwarder": null
+    },
+    {
+      "name": "?RegisterFriendStatusCallback@FriendListMgr@GW@@YAXPAUHookEntry@2@ABV?$function@$$A6AXPAUHookStatus@GW@@PBUFriend@2@1@Z@std@@@Z",
+      "ordinal": 391,
+      "rva": 100224,
+      "forwarder": null
+    },
+    {
+      "name": "?RegisterGameThreadCallback@GameThread@GW@@YAXPAUHookEntry@2@ABV?$function@$$A6AXPAUHookStatus@GW@@@Z@std@@H@Z",
+      "ordinal": 392,
+      "rva": 106848,
+      "forwarder": null
+    },
+    {
+      "name": "?RegisterItemClickCallback@Items@GW@@YAXPAUHookEntry@2@ABV?$function@$$A6AXPAUHookStatus@GW@@PAUkMouseAction@UIPacket@UI@2@PAUItem@2@@Z@std@@@Z",
+      "ordinal": 393,
+      "rva": 117056,
+      "forwarder": null
+    },
+    {
+      "name": "?RegisterKeydownCallback@UI@GW@@YAXPAUHookEntry@2@ABV?$function@$$A6AXPAUHookStatus@GW@@I@Z@std@@@Z",
+      "ordinal": 394,
+      "rva": 161296,
+      "forwarder": null
+    },
+    {
+      "name": "?RegisterKeyupCallback@UI@GW@@YAXPAUHookEntry@2@ABV?$function@$$A6AXPAUHookStatus@GW@@I@Z@std@@@Z",
+      "ordinal": 395,
+      "rva": 161552,
+      "forwarder": null
+    },
+    {
+      "name": "?RegisterLogHandler@GW@@YAXP6AXPAXW4LogLevel@1@PBD2I2@Z0@Z",
+      "ordinal": 396,
+      "rva": 13184,
+      "forwarder": null
+    },
+    {
+      "name": "?RegisterPacketCallback@StoC@GW@@YA_NPAUHookEntry@2@IABV?$function@$$A6AXPAUHookStatus@GW@@PAUPacketBase@StoC@Packet@2@@Z@std@@H@Z",
+      "ordinal": 397,
+      "rva": 149536,
+      "forwarder": null
+    },
+    {
+      "name": "?RegisterPanicHandler@GW@@YAXP6AXPAXPBD1I1@Z0@Z",
+      "ordinal": 398,
+      "rva": 22688,
+      "forwarder": null
+    },
+    {
+      "name": "?RegisterPostPacketCallback@StoC@GW@@YA_NPAUHookEntry@2@IABV?$function@$$A6AXPAUHookStatus@GW@@PAUPacketBase@StoC@Packet@2@@Z@std@@@Z",
+      "ordinal": 399,
+      "rva": 149920,
+      "forwarder": null
+    },
+    {
+      "name": "?RegisterUIMessageCallback@UI@GW@@YAXPAUHookEntry@2@W4UIMessage@12@ABV?$function@$$A6AXPAUHookStatus@GW@@W4UIMessage@UI@2@PAX2@Z@std@@H@Z",
+      "ordinal": 400,
+      "rva": 161808,
+      "forwarder": null
+    },
+    {
+      "name": "?RemoveActiveTitle@PlayerMgr@GW@@YA_NXZ",
+      "ordinal": 401,
+      "rva": 133408,
+      "forwarder": null
+    },
+    {
+      "name": "?RemoveCallback@StoC@GW@@YAIIPAUHookEntry@2@@Z",
+      "ordinal": 402,
+      "rva": 149952,
+      "forwarder": null
+    },
+    {
+      "name": "?RemoveCallbacks@StoC@GW@@YAIPAUHookEntry@2@@Z",
+      "ordinal": 403,
+      "rva": 150112,
+      "forwarder": null
+    },
+    {
+      "name": "?RemoveCreateUIComponentCallback@UI@GW@@YAXPAUHookEntry@2@@Z",
+      "ordinal": 404,
+      "rva": 162288,
+      "forwarder": null
+    },
+    {
+      "name": "?RemoveEventCallback@EventMgr@GW@@YAXPAUHookEntry@2@W4EventID@12@@Z",
+      "ordinal": 405,
+      "rva": 28080,
+      "forwarder": null
+    },
+    {
+      "name": "?RemoveFrameUIMessageCallback@UI@GW@@YAXPAUHookEntry@2@@Z",
+      "ordinal": 406,
+      "rva": 162544,
+      "forwarder": null
+    },
+    {
+      "name": "?RemoveFriend@FriendListMgr@GW@@YA_NPAUFriend@2@@Z",
+      "ordinal": 407,
+      "rva": 100288,
+      "forwarder": null
+    },
+    {
+      "name": "?RemoveFriendStatusCallback@FriendListMgr@GW@@YAXPAUHookEntry@2@@Z",
+      "ordinal": 408,
+      "rva": 100336,
+      "forwarder": null
+    },
+    {
+      "name": "?RemoveGameThreadCallback@GameThread@GW@@YAXPAUHookEntry@2@@Z",
+      "ordinal": 409,
+      "rva": 107088,
+      "forwarder": null
+    },
+    {
+      "name": "?RemoveHook@Hook@GW@@YAXPAX@Z",
+      "ordinal": 410,
+      "rva": 109200,
+      "forwarder": null
+    },
+    {
+      "name": "?RemoveItem@ScrollableFrame@GW@@QAE_NI@Z",
+      "ordinal": 411,
+      "rva": 92560,
+      "forwarder": null
+    },
+    {
+      "name": "?RemoveItem@Trade@GW@@YA_NI@Z",
+      "ordinal": 412,
+      "rva": 151520,
+      "forwarder": null
+    },
+    {
+      "name": "?RemoveItemClickCallback@Items@GW@@YAXPAUHookEntry@2@@Z",
+      "ordinal": 413,
+      "rva": 117232,
+      "forwarder": null
+    },
+    {
+      "name": "?RemoveKeydownCallback@UI@GW@@YAXPAUHookEntry@2@@Z",
+      "ordinal": 414,
+      "rva": 162848,
+      "forwarder": null
+    },
+    {
+      "name": "?RemoveKeyupCallback@UI@GW@@YAXPAUHookEntry@2@@Z",
+      "ordinal": 415,
+      "rva": 162848,
+      "forwarder": null
+    },
+    {
+      "name": "?RemovePostCallback@StoC@GW@@YAXIPAUHookEntry@2@@Z",
+      "ordinal": 416,
+      "rva": 150448,
+      "forwarder": null
+    },
+    {
+      "name": "?RemoveTab@TabsFrame@GW@@QAE_NI@Z",
+      "ordinal": 417,
+      "rva": 95648,
+      "forwarder": null
+    },
+    {
+      "name": "?RemoveUIMessageCallback@UI@GW@@YAXPAUHookEntry@2@W4UIMessage@12@@Z",
+      "ordinal": 418,
+      "rva": 162864,
+      "forwarder": null
+    },
+    {
+      "name": "?RequestQuestInfo@QuestMgr@GW@@YA_NPBUQuest@2@_N@Z",
+      "ordinal": 419,
+      "rva": 134912,
+      "forwarder": null
+    },
+    {
+      "name": "?RequestQuestInfoId@QuestMgr@GW@@YA_NW4QuestID@Constants@2@_N@Z",
+      "ordinal": 420,
+      "rva": 134992,
+      "forwarder": null
+    },
+    {
+      "name": "?RequestQuote@Merchant@GW@@YA_NW4TransactionType@12@I@Z",
+      "ordinal": 421,
+      "rva": 126272,
+      "forwarder": null
+    },
+    {
+      "name": "?Reset@MemoryPatcher@GW@@QAEXXZ",
+      "ordinal": 422,
+      "rva": 124528,
+      "forwarder": null
+    },
+    {
+      "name": "?RespondToPartyRequest@PartyMgr@GW@@YA_NI_N@Z",
+      "ordinal": 423,
+      "rva": 130176,
+      "forwarder": null
+    },
+    {
+      "name": "?ReturnToOutpost@PartyMgr@GW@@YA_NXZ",
+      "ordinal": 424,
+      "rva": 130288,
+      "forwarder": null
+    },
+    {
+      "name": "?Rotate@GW@@YA?AUVec2f@1@U21@M@Z",
+      "ordinal": 425,
+      "rva": 104752,
+      "forwarder": null
+    },
+    {
+      "name": "?SalvageMaterials@Items@GW@@YA_NXZ",
+      "ordinal": 426,
+      "rva": 117520,
+      "forwarder": null
+    },
+    {
+      "name": "?SalvageSessionCancel@Items@GW@@YA_NXZ",
+      "ordinal": 427,
+      "rva": 117680,
+      "forwarder": null
+    },
+    {
+      "name": "?SalvageStart@Items@GW@@YA_NII@Z",
+      "ordinal": 428,
+      "rva": 117728,
+      "forwarder": null
+    },
+    {
+      "name": "?SearchParty@PartyMgr@GW@@YA_NIPB_W@Z",
+      "ordinal": 429,
+      "rva": 130320,
+      "forwarder": null
+    },
+    {
+      "name": "?SearchPartyCancel@PartyMgr@GW@@YA_NXZ",
+      "ordinal": 430,
+      "rva": 130368,
+      "forwarder": null
+    },
+    {
+      "name": "?SearchPartyReply@PartyMgr@GW@@YA_NI_N@Z",
+      "ordinal": 431,
+      "rva": 130448,
+      "forwarder": null
+    },
+    {
+      "name": "?SelectDropdownOption@UI@GW@@YA_NPAUFrame@12@I@Z",
+      "ordinal": 432,
+      "rva": 163216,
+      "forwarder": null
+    },
+    {
+      "name": "?SelectIndex@DropdownFrame@GW@@QAE_NI@Z",
+      "ordinal": 433,
+      "rva": 95760,
+      "forwarder": null
+    },
+    {
+      "name": "?SelectOption@DropdownFrame@GW@@QAE_NI@Z",
+      "ordinal": 434,
+      "rva": 95904,
+      "forwarder": null
+    },
+    {
+      "name": "?SendChat@Chat@GW@@YA_NDPBD@Z",
+      "ordinal": 435,
+      "rva": 20336,
+      "forwarder": null
+    },
+    {
+      "name": "?SendChat@Chat@GW@@YA_NDPB_W@Z",
+      "ordinal": 436,
+      "rva": 20480,
+      "forwarder": null
+    },
+    {
+      "name": "?SendChat@Chat@GW@@YA_NPB_W0@Z",
+      "ordinal": 437,
+      "rva": 20704,
+      "forwarder": null
+    },
+    {
+      "name": "?SendDialog@Agents@GW@@YA_NI@Z",
+      "ordinal": 438,
+      "rva": 11792,
+      "forwarder": null
+    },
+    {
+      "name": "?SendFrameUIMessage@UI@GW@@YA_NPAUFrame@12@W4UIMessage@12@PAX2@Z",
+      "ordinal": 439,
+      "rva": 163616,
+      "forwarder": null
+    },
+    {
+      "name": "?SendUIMessage@UI@GW@@YA_NW4UIMessage@12@PAX1@Z",
+      "ordinal": 440,
+      "rva": 164048,
+      "forwarder": null
+    },
+    {
+      "name": "?SetActiveQuest@QuestMgr@GW@@YA_NPAUQuest@2@@Z",
+      "ordinal": 441,
+      "rva": 135056,
+      "forwarder": null
+    },
+    {
+      "name": "?SetActiveQuestId@QuestMgr@GW@@YA_NW4QuestID@Constants@2@@Z",
+      "ordinal": 442,
+      "rva": 135120,
+      "forwarder": null
+    },
+    {
+      "name": "?SetActiveTitle@PlayerMgr@GW@@YA_NW4TitleID@Constants@2@@Z",
+      "ordinal": 443,
+      "rva": 133440,
+      "forwarder": null
+    },
+    {
+      "name": "?SetChecked@CheckboxFrame@GW@@QAE_N_N@Z",
+      "ordinal": 444,
+      "rva": 96032,
+      "forwarder": null
+    },
+    {
+      "name": "?SetColorId@ProgressBar@GW@@QAE_NI@Z",
+      "ordinal": 445,
+      "rva": 96128,
+      "forwarder": null
+    },
+    {
+      "name": "?SetCommandLinePref@UI@GW@@YA_NPB_WI@Z",
+      "ordinal": 446,
+      "rva": 164448,
+      "forwarder": null
+    },
+    {
+      "name": "?SetCommandLinePref@UI@GW@@YA_NPB_WPA_W@Z",
+      "ordinal": 447,
+      "rva": 164512,
+      "forwarder": null
+    },
+    {
+      "name": "?SetEquipmentVisibility@Items@GW@@YA_NW4EquipmentType@2@W4EquipmentStatus@2@@Z",
+      "ordinal": 448,
+      "rva": 118080,
+      "forwarder": null
+    },
+    {
+      "name": "?SetFieldOfView@CameraMgr@GW@@YA_NM@Z",
+      "ordinal": 449,
+      "rva": 13664,
+      "forwarder": null
+    },
+    {
+      "name": "?SetFog@CameraMgr@GW@@YA_N_N@Z",
+      "ordinal": 450,
+      "rva": 13712,
+      "forwarder": null
+    },
+    {
+      "name": "?SetFog@Render@GW@@YA_N_N@Z",
+      "ordinal": 451,
+      "rva": 137088,
+      "forwarder": null
+    },
+    {
+      "name": "?SetFont@TextLabelFrame@GW@@QAE_NI@Z",
+      "ordinal": 452,
+      "rva": 96192,
+      "forwarder": null
+    },
+    {
+      "name": "?SetFrameDisabled@UI@GW@@YA_NPAUFrame@12@_N@Z",
+      "ordinal": 453,
+      "rva": 164592,
+      "forwarder": null
+    },
+    {
+      "name": "?SetFrameLimit@Render@GW@@YA_NI@Z",
+      "ordinal": 454,
+      "rva": 137104,
+      "forwarder": null
+    },
+    {
+      "name": "?SetFrameMargins@UI@GW@@YA_NPAUFrame@12@IQAM1I@Z",
+      "ordinal": 455,
+      "rva": 96256,
+      "forwarder": null
+    },
+    {
+      "name": "?SetFrameTitle@UI@GW@@YA_NPAUFrame@12@PB_W@Z",
+      "ordinal": 456,
+      "rva": 164656,
+      "forwarder": null
+    },
+    {
+      "name": "?SetFrameVisible@UI@GW@@YA_NPAUFrame@12@_N@Z",
+      "ordinal": 457,
+      "rva": 164720,
+      "forwarder": null
+    },
+    {
+      "name": "?SetFriendListStatus@FriendListMgr@GW@@YA_NW4FriendStatus@2@@Z",
+      "ordinal": 458,
+      "rva": 100624,
+      "forwarder": null
+    },
+    {
+      "name": "?SetGraphicsRendererValue@Render@GW@@YA_NW4Metric@12@II@Z",
+      "ordinal": 459,
+      "rva": 137136,
+      "forwarder": null
+    },
+    {
+      "name": "?SetHardMode@PartyMgr@GW@@YA_N_N@Z",
+      "ordinal": 460,
+      "rva": 130544,
+      "forwarder": null
+    },
+    {
+      "name": "?SetHeroBehavior@PartyMgr@GW@@YA_NIW4HeroBehavior@2@@Z",
+      "ordinal": 461,
+      "rva": 130704,
+      "forwarder": null
+    },
+    {
+      "name": "?SetHeroTarget@PartyMgr@GW@@YA_NII@Z",
+      "ordinal": 462,
+      "rva": 131008,
+      "forwarder": null
+    },
+    {
+      "name": "?SetLabel@ButtonFrame@GW@@QAE_NPB_W@Z",
+      "ordinal": 463,
+      "rva": 96320,
+      "forwarder": null
+    },
+    {
+      "name": "?SetLabel@MultiLineTextLabelFrame@GW@@QAE_NPB_W@Z",
+      "ordinal": 464,
+      "rva": 96368,
+      "forwarder": null
+    },
+    {
+      "name": "?SetLabel@TextLabelFrame@GW@@QAE_NPB_W@Z",
+      "ordinal": 465,
+      "rva": 96320,
+      "forwarder": null
+    },
+    {
+      "name": "?SetMax@ProgressBar@GW@@QAE_NI@Z",
+      "ordinal": 466,
+      "rva": 96416,
+      "forwarder": null
+    },
+    {
+      "name": "?SetMaxDist@CameraMgr@GW@@YA_NM@Z",
+      "ordinal": 467,
+      "rva": 13728,
+      "forwarder": null
+    },
+    {
+      "name": "?SetMaxLength@EditableTextFrame@GW@@QAE_NI@Z",
+      "ordinal": 468,
+      "rva": 96448,
+      "forwarder": null
+    },
+    {
+      "name": "?SetMessageColor@Chat@GW@@YAIW4Channel@12@I@Z",
+      "ordinal": 469,
+      "rva": 20880,
+      "forwarder": null
+    },
+    {
+      "name": "?SetOpenLinks@UI@GW@@YAX_N@Z",
+      "ordinal": 470,
+      "rva": 164784,
+      "forwarder": null
+    },
+    {
+      "name": "?SetPage@ScrollableFrame@GW@@QAEPAUFrame@UI@2@PAUScrollablePageContext@12@@Z",
+      "ordinal": 471,
+      "rva": 96496,
+      "forwarder": null
+    },
+    {
+      "name": "?SetPatch@MemoryPatcher@GW@@QAEXIPBDI@Z",
+      "ordinal": 472,
+      "rva": 124784,
+      "forwarder": null
+    },
+    {
+      "name": "?SetPetBehavior@PartyMgr@GW@@YA_NIW4HeroBehavior@2@@Z",
+      "ordinal": 473,
+      "rva": 131440,
+      "forwarder": null
+    },
+    {
+      "name": "?SetPlayerName@PlayerMgr@GW@@YAPA_WIPB_W@Z",
+      "ordinal": 474,
+      "rva": 133472,
+      "forwarder": null
+    },
+    {
+      "name": "?SetPreference@UI@GW@@YA_NW4EnumPreference@12@I@Z",
+      "ordinal": 475,
+      "rva": 165040,
+      "forwarder": null
+    },
+    {
+      "name": "?SetPreference@UI@GW@@YA_NW4FlagPreference@12@_N@Z",
+      "ordinal": 476,
+      "rva": 165344,
+      "forwarder": null
+    },
+    {
+      "name": "?SetPreference@UI@GW@@YA_NW4NumberPreference@12@I@Z",
+      "ordinal": 477,
+      "rva": 165792,
+      "forwarder": null
+    },
+    {
+      "name": "?SetPreference@UI@GW@@YA_NW4StringPreference@12@PA_W@Z",
+      "ordinal": 478,
+      "rva": 166816,
+      "forwarder": null
+    },
+    {
+      "name": "?SetReadOnly@EditableTextFrame@GW@@QAE_N_N@Z",
+      "ordinal": 479,
+      "rva": 96544,
+      "forwarder": null
+    },
+    {
+      "name": "?SetRedirect@MemoryPatcher@GW@@QAE_NIPAX@Z",
+      "ordinal": 480,
+      "rva": 124960,
+      "forwarder": null
+    },
+    {
+      "name": "?SetRenderCallback@Render@GW@@YAXP6AXPAUIDirect3DDevice9@@@Z@Z",
+      "ordinal": 481,
+      "rva": 137552,
+      "forwarder": null
+    },
+    {
+      "name": "?SetResetCallback@Render@GW@@YAXP6AXPAUIDirect3DDevice9@@@Z@Z",
+      "ordinal": 482,
+      "rva": 137568,
+      "forwarder": null
+    },
+    {
+      "name": "?SetSenderColor@Chat@GW@@YAIW4Channel@12@I@Z",
+      "ordinal": 483,
+      "rva": 20944,
+      "forwarder": null
+    },
+    {
+      "name": "?SetSortHandler@ScrollableFrame@GW@@QAE_NP6AHII@Z@Z",
+      "ordinal": 484,
+      "rva": 96576,
+      "forwarder": null
+    },
+    {
+      "name": "?SetStyle@ProgressBar@GW@@QAE_NW4ProgressBarStyle@12@@Z",
+      "ordinal": 485,
+      "rva": 96608,
+      "forwarder": null
+    },
+    {
+      "name": "?SetTickToggle@PartyMgr@GW@@YAX_N@Z",
+      "ordinal": 486,
+      "rva": 131840,
+      "forwarder": null
+    },
+    {
+      "name": "?SetTimestampsColor@Chat@GW@@YAXI@Z",
+      "ordinal": 487,
+      "rva": 21008,
+      "forwarder": null
+    },
+    {
+      "name": "?SetTimestampsFormat@Chat@GW@@YAX_N0@Z",
+      "ordinal": 488,
+      "rva": 21056,
+      "forwarder": null
+    },
+    {
+      "name": "?SetValue@CheckboxFrame@GW@@UAE_NI@Z",
+      "ordinal": 489,
+      "rva": 96688,
+      "forwarder": null
+    },
+    {
+      "name": "?SetValue@DropdownFrame@GW@@UAE_NI@Z",
+      "ordinal": 490,
+      "rva": 95904,
+      "forwarder": null
+    },
+    {
+      "name": "?SetValue@EditableTextFrame@GW@@QAE_NPB_W@Z",
+      "ordinal": 491,
+      "rva": 96784,
+      "forwarder": null
+    },
+    {
+      "name": "?SetValue@ProgressBar@GW@@UAE_NI@Z",
+      "ordinal": 492,
+      "rva": 95168,
+      "forwarder": null
+    },
+    {
+      "name": "?SetValue@SliderFrame@GW@@UAE_NI@Z",
+      "ordinal": 493,
+      "rva": 96912,
+      "forwarder": null
+    },
+    {
+      "name": "?SetWindowPosition@UI@GW@@YA_NW4WindowID@12@PAUWindowPosition@12@@Z",
+      "ordinal": 494,
+      "rva": 166928,
+      "forwarder": null
+    },
+    {
+      "name": "?SetWindowVisible@UI@GW@@YA_NW4WindowID@12@_N@Z",
+      "ordinal": 495,
+      "rva": 166976,
+      "forwarder": null
+    },
+    {
+      "name": "?SkipCinematic@Map@GW@@YA_NXZ",
+      "ordinal": 496,
+      "rva": 121184,
+      "forwarder": null
+    },
+    {
+      "name": "?SubmitOffer@Trade@GW@@YA_NI@Z",
+      "ordinal": 497,
+      "rva": 151168,
+      "forwarder": null
+    },
+    {
+      "name": "?Terminate@GW@@YAXXZ",
+      "ordinal": 498,
+      "rva": 104048,
+      "forwarder": null
+    },
+    {
+      "name": "?Tick@PartyMgr@GW@@YA_N_N@Z",
+      "ordinal": 499,
+      "rva": 131856,
+      "forwarder": null
+    },
+    {
+      "name": "?ToFunctionStart@Scanner@GW@@YAIII@Z",
+      "ordinal": 500,
+      "rva": 140544,
+      "forwarder": null
+    },
+    {
+      "name": "?TogglePatch@MemoryPatcher@GW@@QAE_N_N@Z",
+      "ordinal": 501,
+      "rva": 125136,
+      "forwarder": null
+    },
+    {
+      "name": "?ToggleTimestamps@Chat@GW@@YAX_N@Z",
+      "ordinal": 502,
+      "rva": 21104,
+      "forwarder": null
+    },
+    {
+      "name": "?TransactItems@Merchant@GW@@YA_NXZ",
+      "ordinal": 503,
+      "rva": 126736,
+      "forwarder": null
+    },
+    {
+      "name": "?Travel@Map@GW@@YA_NW4MapID@Constants@2@W4District@42@H@Z",
+      "ordinal": 504,
+      "rva": 121232,
+      "forwarder": null
+    },
+    {
+      "name": "?Travel@Map@GW@@YA_NW4MapID@Constants@2@W4ServerRegion@42@HW4Language@42@@Z",
+      "ordinal": 505,
+      "rva": 121328,
+      "forwarder": null
+    },
+    {
+      "name": "?TravelGH@GuildMgr@GW@@YA_NUGHKey@2@@Z",
+      "ordinal": 506,
+      "rva": 108352,
+      "forwarder": null
+    },
+    {
+      "name": "?TravelGH@GuildMgr@GW@@YA_NXZ",
+      "ordinal": 507,
+      "rva": 108384,
+      "forwarder": null
+    },
+    {
+      "name": "?TriggerFrameRedraw@UI@GW@@YA_NPAUFrame@12@@Z",
+      "ordinal": 508,
+      "rva": 167104,
+      "forwarder": null
+    },
+    {
+      "name": "?UInt32ToEncStr@UI@GW@@YA_NIPA_WI@Z",
+      "ordinal": 509,
+      "rva": 167152,
+      "forwarder": null
+    },
+    {
+      "name": "?UnflagAll@PartyMgr@GW@@YA_NXZ",
+      "ordinal": 510,
+      "rva": 132128,
+      "forwarder": null
+    },
+    {
+      "name": "?UnflagHero@PartyMgr@GW@@YA_NI@Z",
+      "ordinal": 511,
+      "rva": 132288,
+      "forwarder": null
+    },
+    {
+      "name": "?UnlockCam@CameraMgr@GW@@YA_N_N@Z",
+      "ordinal": 512,
+      "rva": 13760,
+      "forwarder": null
+    },
+    {
+      "name": "?UpdateCameraPos@CameraMgr@GW@@YA_NXZ",
+      "ordinal": 513,
+      "rva": 13808,
+      "forwarder": null
+    },
+    {
+      "name": "?UseItem@Items@GW@@YA_NPBUItem@2@@Z",
+      "ordinal": 514,
+      "rva": 118160,
+      "forwarder": null
+    },
+    {
+      "name": "?UseItemByModelId@Items@GW@@YA_NIHH@Z",
+      "ordinal": 515,
+      "rva": 118544,
+      "forwarder": null
+    },
+    {
+      "name": "?UseSkill@SkillbarMgr@GW@@YA_NII@Z",
+      "ordinal": 516,
+      "rva": 146320,
+      "forwarder": null
+    },
+    {
+      "name": "?UseSkillByID@SkillbarMgr@GW@@YA_NII@Z",
+      "ordinal": 517,
+      "rva": 146448,
+      "forwarder": null
+    },
+    {
+      "name": "?WithdrawGold@Items@GW@@YAII@Z",
+      "ordinal": 518,
+      "rva": 118576,
+      "forwarder": null
+    },
+    {
+      "name": "?WriteChat@Chat@GW@@YAXW4Channel@12@PB_W1_N@Z",
+      "ordinal": 519,
+      "rva": 21136,
+      "forwarder": null
+    },
+    {
+      "name": "?WriteChatEnc@Chat@GW@@YAXW4Channel@12@PB_W1_N@Z",
+      "ordinal": 520,
+      "rva": 21408,
+      "forwarder": null
+    },
+    {
+      "name": "?WriteChatF@Chat@GW@@YAXW4Channel@12@PB_WZZ",
+      "ordinal": 521,
+      "rva": 21760,
+      "forwarder": null
+    },
+    {
+      "name": "?xAxis@WindowPosition@UI@GW@@QBE?AUVec2f@3@M_N@Z",
+      "ordinal": 522,
+      "rva": 170288,
+      "forwarder": null
+    },
+    {
+      "name": "?yAxis@WindowPosition@UI@GW@@QBE?AUVec2f@3@M_N@Z",
+      "ordinal": 523,
+      "rva": 170864,
+      "forwarder": null
+    },
+    {
+      "name": "AbandonQuest",
+      "ordinal": 524,
+      "rva": 134176,
+      "forwarder": null
+    },
+    {
+      "name": "AbandonQuestId",
+      "ordinal": 525,
+      "rva": 134240,
+      "forwarder": null
+    },
+    {
+      "name": "AcceptTrade",
+      "ordinal": 526,
+      "rva": 151072,
+      "forwarder": null
+    },
+    {
+      "name": "AddFriend",
+      "ordinal": 527,
+      "rva": 98624,
+      "forwarder": null
+    },
+    {
+      "name": "AddIgnore",
+      "ordinal": 528,
+      "rva": 98800,
+      "forwarder": null
+    },
+    {
+      "name": "AddToChatLog",
+      "ordinal": 529,
+      "rva": 17296,
+      "forwarder": null
+    },
+    {
+      "name": "ButtonClick",
+      "ordinal": 530,
+      "rva": 155696,
+      "forwarder": null
+    },
+    {
+      "name": "CanAccessXunlaiChest",
+      "ordinal": 531,
+      "rva": 111568,
+      "forwarder": null
+    },
+    {
+      "name": "CanInteractWithItem",
+      "ordinal": 532,
+      "rva": 111632,
+      "forwarder": null
+    },
+    {
+      "name": "CancelEnterChallenge",
+      "ordinal": 533,
+      "rva": 119536,
+      "forwarder": null
+    },
+    {
+      "name": "CancelTrade",
+      "ordinal": 534,
+      "rva": 151104,
+      "forwarder": null
+    },
+    {
+      "name": "ChangeFriendType",
+      "ordinal": 535,
+      "rva": 98976,
+      "forwarder": null
+    },
+    {
+      "name": "ChangeOffer",
+      "ordinal": 536,
+      "rva": 151168,
+      "forwarder": null
+    },
+    {
+      "name": "ChangeSecondProfession",
+      "ordinal": 537,
+      "rva": 132496,
+      "forwarder": null
+    },
+    {
+      "name": "ChangeTargetByAgent",
+      "ordinal": 538,
+      "rva": 7808,
+      "forwarder": null
+    },
+    {
+      "name": "ChangeTargetById",
+      "ordinal": 539,
+      "rva": 7760,
+      "forwarder": null
+    },
+    {
+      "name": "ComputeCamPos",
+      "ordinal": 540,
+      "rva": 13920,
+      "forwarder": null
+    },
+    {
+      "name": "CountAllegianceInRange",
+      "ordinal": 541,
+      "rva": 12896,
+      "forwarder": null
+    },
+    {
+      "name": "CountItemByModelId",
+      "ordinal": 542,
+      "rva": 118832,
+      "forwarder": null
+    },
+    {
+      "name": "CreateMapContext",
+      "ordinal": 543,
+      "rva": 121408,
+      "forwarder": null
+    },
+    {
+      "name": "DepositGold",
+      "ordinal": 544,
+      "rva": 118848,
+      "forwarder": null
+    },
+    {
+      "name": "DestroyItem",
+      "ordinal": 545,
+      "rva": 118864,
+      "forwarder": null
+    },
+    {
+      "name": "DestroyMapContext",
+      "ordinal": 546,
+      "rva": 119696,
+      "forwarder": null
+    },
+    {
+      "name": "DropBuff",
+      "ordinal": 547,
+      "rva": 23792,
+      "forwarder": null
+    },
+    {
+      "name": "DropGold",
+      "ordinal": 548,
+      "rva": 118880,
+      "forwarder": null
+    },
+    {
+      "name": "DropItem",
+      "ordinal": 549,
+      "rva": 118896,
+      "forwarder": null
+    },
+    {
+      "name": "EncStrToUInt32",
+      "ordinal": 550,
+      "rva": 171344,
+      "forwarder": null
+    },
+    {
+      "name": "Enqueue",
+      "ordinal": 551,
+      "rva": 107632,
+      "forwarder": null
+    },
+    {
+      "name": "EnterChallenge",
+      "ordinal": 552,
+      "rva": 119728,
+      "forwarder": null
+    },
+    {
+      "name": "EquipItem",
+      "ordinal": 553,
+      "rva": 118912,
+      "forwarder": null
+    },
+    {
+      "name": "GWCAVersion",
+      "ordinal": 554,
+      "rva": 565436,
+      "forwarder": null
+    },
+    {
+      "name": "GetActiveQuest",
+      "ordinal": 555,
+      "rva": 135168,
+      "forwarder": null
+    },
+    {
+      "name": "GetActiveQuestId",
+      "ordinal": 556,
+      "rva": 134368,
+      "forwarder": null
+    },
+    {
+      "name": "GetActiveTitle",
+      "ordinal": 557,
+      "rva": 132528,
+      "forwarder": null
+    },
+    {
+      "name": "GetActiveTitleId",
+      "ordinal": 558,
+      "rva": 133568,
+      "forwarder": null
+    },
+    {
+      "name": "GetAgentByID",
+      "ordinal": 559,
+      "rva": 8048,
+      "forwarder": null
+    },
+    {
+      "name": "GetAgentEffectsArray",
+      "ordinal": 560,
+      "rva": 23312,
+      "forwarder": null
+    },
+    {
+      "name": "GetAgentEncNameByAgent",
+      "ordinal": 561,
+      "rva": 12928,
+      "forwarder": null
+    },
+    {
+      "name": "GetAgentEncNameById",
+      "ordinal": 562,
+      "rva": 12944,
+      "forwarder": null
+    },
+    {
+      "name": "GetAgentIdByLoginNumber",
+      "ordinal": 563,
+      "rva": 8720,
+      "forwarder": null
+    },
+    {
+      "name": "GetAlcoholLevel",
+      "ordinal": 564,
+      "rva": 23376,
+      "forwarder": null
+    },
+    {
+      "name": "GetAmountOfPlayersInInstance",
+      "ordinal": 565,
+      "rva": 8752,
+      "forwarder": null
+    },
+    {
+      "name": "GetAttributeConstantData",
+      "ordinal": 566,
+      "rva": 143952,
+      "forwarder": null
+    },
+    {
+      "name": "GetAvailableChars",
+      "ordinal": 567,
+      "rva": 102304,
+      "forwarder": null
+    },
+    {
+      "name": "GetBag",
+      "ordinal": 568,
+      "rva": 112896,
+      "forwarder": null
+    },
+    {
+      "name": "GetBagByIndex",
+      "ordinal": 569,
+      "rva": 112976,
+      "forwarder": null
+    },
+    {
+      "name": "GetCamera",
+      "ordinal": 570,
+      "rva": 13536,
+      "forwarder": null
+    },
+    {
+      "name": "GetCameraUnlock",
+      "ordinal": 571,
+      "rva": 13552,
+      "forwarder": null
+    },
+    {
+      "name": "GetChannelColors",
+      "ordinal": 572,
+      "rva": 18256,
+      "forwarder": null
+    },
+    {
+      "name": "GetChannelFromChar",
+      "ordinal": 573,
+      "rva": 18240,
+      "forwarder": null
+    },
+    {
+      "name": "GetChannelFromWChar",
+      "ordinal": 574,
+      "rva": 18240,
+      "forwarder": null
+    },
+    {
+      "name": "GetChatLog",
+      "ordinal": 575,
+      "rva": 18320,
+      "forwarder": null
+    },
+    {
+      "name": "GetChildFrame",
+      "ordinal": 576,
+      "rva": 156656,
+      "forwarder": null
+    },
+    {
+      "name": "GetCommandLinePref_String",
+      "ordinal": 577,
+      "rva": 156768,
+      "forwarder": null
+    },
+    {
+      "name": "GetCommandLinePref_UInt",
+      "ordinal": 578,
+      "rva": 156704,
+      "forwarder": null
+    },
+    {
+      "name": "GetCompositeModelInfo",
+      "ordinal": 579,
+      "rva": 113024,
+      "forwarder": null
+    },
+    {
+      "name": "GetControlledCharacter",
+      "ordinal": 580,
+      "rva": 12960,
+      "forwarder": null
+    },
+    {
+      "name": "GetControlledCharacterId",
+      "ordinal": 581,
+      "rva": 8912,
+      "forwarder": null
+    },
+    {
+      "name": "GetCurrentGH",
+      "ordinal": 582,
+      "rva": 108480,
+      "forwarder": null
+    },
+    {
+      "name": "GetDefaultColors",
+      "ordinal": 583,
+      "rva": 18336,
+      "forwarder": null
+    },
+    {
+      "name": "GetDistrict",
+      "ordinal": 584,
+      "rva": 119776,
+      "forwarder": null
+    },
+    {
+      "name": "GetDrunkAf",
+      "ordinal": 585,
+      "rva": 23440,
+      "forwarder": null
+    },
+    {
+      "name": "GetEquipmentVisibility",
+      "ordinal": 586,
+      "rva": 113120,
+      "forwarder": null
+    },
+    {
+      "name": "GetEvaluatedTargetId",
+      "ordinal": 587,
+      "rva": 9504,
+      "forwarder": null
+    },
+    {
+      "name": "GetFieldOfView",
+      "ordinal": 588,
+      "rva": 13568,
+      "forwarder": null
+    },
+    {
+      "name": "GetFoesKilled",
+      "ordinal": 589,
+      "rva": 119808,
+      "forwarder": null
+    },
+    {
+      "name": "GetFoesToKill",
+      "ordinal": 590,
+      "rva": 119840,
+      "forwarder": null
+    },
+    {
+      "name": "GetFrameById",
+      "ordinal": 591,
+      "rva": 171360,
+      "forwarder": null
+    },
+    {
+      "name": "GetFrameByLabel",
+      "ordinal": 592,
+      "rva": 171376,
+      "forwarder": null
+    },
+    {
+      "name": "GetFrameContext",
+      "ordinal": 593,
+      "rva": 171472,
+      "forwarder": null
+    },
+    {
+      "name": "GetFriendByIndex",
+      "ordinal": 594,
+      "rva": 99024,
+      "forwarder": null
+    },
+    {
+      "name": "GetFriendByName",
+      "ordinal": 595,
+      "rva": 101856,
+      "forwarder": null
+    },
+    {
+      "name": "GetFriendByUuid",
+      "ordinal": 596,
+      "rva": 102016,
+      "forwarder": null
+    },
+    {
+      "name": "GetFriendList",
+      "ordinal": 597,
+      "rva": 99360,
+      "forwarder": null
+    },
+    {
+      "name": "GetGoldAmountInStorage",
+      "ordinal": 598,
+      "rva": 113168,
+      "forwarder": null
+    },
+    {
+      "name": "GetGoldAmountOnCharacter",
+      "ordinal": 599,
+      "rva": 113200,
+      "forwarder": null
+    },
+    {
+      "name": "GetGuildInfo",
+      "ordinal": 600,
+      "rva": 108144,
+      "forwarder": null
+    },
+    {
+      "name": "GetHeroAgentID",
+      "ordinal": 601,
+      "rva": 9520,
+      "forwarder": null
+    },
+    {
+      "name": "GetHeroSkillbar",
+      "ordinal": 602,
+      "rva": 147200,
+      "forwarder": null
+    },
+    {
+      "name": "GetHoveredItem",
+      "ordinal": 603,
+      "rva": 113232,
+      "forwarder": null
+    },
+    {
+      "name": "GetHoveredSkill",
+      "ordinal": 604,
+      "rva": 144240,
+      "forwarder": null
+    },
+    {
+      "name": "GetInstanceTime",
+      "ordinal": 605,
+      "rva": 119872,
+      "forwarder": null
+    },
+    {
+      "name": "GetInstanceType",
+      "ordinal": 606,
+      "rva": 119904,
+      "forwarder": null
+    },
+    {
+      "name": "GetInventory",
+      "ordinal": 607,
+      "rva": 112944,
+      "forwarder": null
+    },
+    {
+      "name": "GetIsAgentTargettable",
+      "ordinal": 608,
+      "rva": 12976,
+      "forwarder": null
+    },
+    {
+      "name": "GetIsInCinematic",
+      "ordinal": 609,
+      "rva": 121520,
+      "forwarder": null
+    },
+    {
+      "name": "GetIsMapLoaded",
+      "ordinal": 610,
+      "rva": 120016,
+      "forwarder": null
+    },
+    {
+      "name": "GetIsMapUnlocked",
+      "ordinal": 611,
+      "rva": 121552,
+      "forwarder": null
+    },
+    {
+      "name": "GetIsObserving",
+      "ordinal": 612,
+      "rva": 121632,
+      "forwarder": null
+    },
+    {
+      "name": "GetIsShiftScreenShot",
+      "ordinal": 613,
+      "rva": 157872,
+      "forwarder": null
+    },
+    {
+      "name": "GetIsSkillLearnt",
+      "ordinal": 614,
+      "rva": 147216,
+      "forwarder": null
+    },
+    {
+      "name": "GetIsSkillUnlocked",
+      "ordinal": 615,
+      "rva": 147232,
+      "forwarder": null
+    },
+    {
+      "name": "GetIsStorageOpen",
+      "ordinal": 616,
+      "rva": 113360,
+      "forwarder": null
+    },
+    {
+      "name": "GetIsTyping",
+      "ordinal": 617,
+      "rva": 18400,
+      "forwarder": null
+    },
+    {
+      "name": "GetIsUIDrawn",
+      "ordinal": 618,
+      "rva": 157904,
+      "forwarder": null
+    },
+    {
+      "name": "GetIsWorldMapShowing",
+      "ordinal": 619,
+      "rva": 157936,
+      "forwarder": null
+    },
+    {
+      "name": "GetItemById",
+      "ordinal": 620,
+      "rva": 119072,
+      "forwarder": null
+    },
+    {
+      "name": "GetItemByModelId",
+      "ordinal": 621,
+      "rva": 119088,
+      "forwarder": null
+    },
+    {
+      "name": "GetItemBySlot",
+      "ordinal": 622,
+      "rva": 119104,
+      "forwarder": null
+    },
+    {
+      "name": "GetItemFormula",
+      "ordinal": 623,
+      "rva": 114000,
+      "forwarder": null
+    },
+    {
+      "name": "GetLanguage",
+      "ordinal": 624,
+      "rva": 120192,
+      "forwarder": null
+    },
+    {
+      "name": "GetMapAgentByID",
+      "ordinal": 625,
+      "rva": 9728,
+      "forwarder": null
+    },
+    {
+      "name": "GetMapID",
+      "ordinal": 626,
+      "rva": 120224,
+      "forwarder": null
+    },
+    {
+      "name": "GetMapInfo",
+      "ordinal": 627,
+      "rva": 120256,
+      "forwarder": null
+    },
+    {
+      "name": "GetMaterialSlot",
+      "ordinal": 628,
+      "rva": 114080,
+      "forwarder": null
+    },
+    {
+      "name": "GetMaterialStorageStackSize",
+      "ordinal": 629,
+      "rva": 114176,
+      "forwarder": null
+    },
+    {
+      "name": "GetMissionMapContext",
+      "ordinal": 630,
+      "rva": 120320,
+      "forwarder": null
+    },
+    {
+      "name": "GetMyStatus",
+      "ordinal": 631,
+      "rva": 99376,
+      "forwarder": null
+    },
+    {
+      "name": "GetNPCByID",
+      "ordinal": 632,
+      "rva": 9840,
+      "forwarder": null
+    },
+    {
+      "name": "GetNumberOfFriends",
+      "ordinal": 633,
+      "rva": 102032,
+      "forwarder": null
+    },
+    {
+      "name": "GetNumberOfIgnores",
+      "ordinal": 634,
+      "rva": 99488,
+      "forwarder": null
+    },
+    {
+      "name": "GetNumberOfPartners",
+      "ordinal": 635,
+      "rva": 99504,
+      "forwarder": null
+    },
+    {
+      "name": "GetNumberOfTraders",
+      "ordinal": 636,
+      "rva": 99520,
+      "forwarder": null
+    },
+    {
+      "name": "GetObservingId",
+      "ordinal": 637,
+      "rva": 9904,
+      "forwarder": null
+    },
+    {
+      "name": "GetParentFrame",
+      "ordinal": 638,
+      "rva": 157968,
+      "forwarder": null
+    },
+    {
+      "name": "GetPlayerAgentId",
+      "ordinal": 639,
+      "rva": 132816,
+      "forwarder": null
+    },
+    {
+      "name": "GetPlayerBuffBySkillId",
+      "ordinal": 640,
+      "rva": 23520,
+      "forwarder": null
+    },
+    {
+      "name": "GetPlayerByID",
+      "ordinal": 641,
+      "rva": 12992,
+      "forwarder": null
+    },
+    {
+      "name": "GetPlayerEffectBySkillId",
+      "ordinal": 642,
+      "rva": 23600,
+      "forwarder": null
+    },
+    {
+      "name": "GetPlayerEffectsArray",
+      "ordinal": 643,
+      "rva": 23680,
+      "forwarder": null
+    },
+    {
+      "name": "GetPlayerGuild",
+      "ordinal": 644,
+      "rva": 108192,
+      "forwarder": null
+    },
+    {
+      "name": "GetPlayerGuildAnnouncement",
+      "ordinal": 645,
+      "rva": 108256,
+      "forwarder": null
+    },
+    {
+      "name": "GetPlayerGuildAnnouncer",
+      "ordinal": 646,
+      "rva": 108272,
+      "forwarder": null
+    },
+    {
+      "name": "GetPlayerGuildIndex",
+      "ordinal": 647,
+      "rva": 108304,
+      "forwarder": null
+    },
+    {
+      "name": "GetPlayerNameByLoginNumber",
+      "ordinal": 648,
+      "rva": 10048,
+      "forwarder": null
+    },
+    {
+      "name": "GetPlayerNumber",
+      "ordinal": 649,
+      "rva": 133280,
+      "forwarder": null
+    },
+    {
+      "name": "GetPlayerSkillbar",
+      "ordinal": 650,
+      "rva": 147248,
+      "forwarder": null
+    },
+    {
+      "name": "GetPreference_Enum",
+      "ordinal": 651,
+      "rva": 158016,
+      "forwarder": null
+    },
+    {
+      "name": "GetPreference_Flag",
+      "ordinal": 652,
+      "rva": 158160,
+      "forwarder": null
+    },
+    {
+      "name": "GetPreference_Number",
+      "ordinal": 653,
+      "rva": 158064,
+      "forwarder": null
+    },
+    {
+      "name": "GetPreference_String",
+      "ordinal": 654,
+      "rva": 158112,
+      "forwarder": null
+    },
+    {
+      "name": "GetPvPItemInfo",
+      "ordinal": 655,
+      "rva": 114240,
+      "forwarder": null
+    },
+    {
+      "name": "GetPvPItemUpgrade",
+      "ordinal": 656,
+      "rva": 114336,
+      "forwarder": null
+    },
+    {
+      "name": "GetPvPItemUpgradeEncodedDescription",
+      "ordinal": 657,
+      "rva": 114416,
+      "forwarder": null
+    },
+    {
+      "name": "GetPvPItemUpgradeEncodedName",
+      "ordinal": 658,
+      "rva": 114544,
+      "forwarder": null
+    },
+    {
+      "name": "GetQuest",
+      "ordinal": 659,
+      "rva": 134400,
+      "forwarder": null
+    },
+    {
+      "name": "GetQuestEntryGroupName",
+      "ordinal": 660,
+      "rva": 135184,
+      "forwarder": null
+    },
+    {
+      "name": "GetQuestLog",
+      "ordinal": 661,
+      "rva": 135200,
+      "forwarder": null
+    },
+    {
+      "name": "GetRegion",
+      "ordinal": 662,
+      "rva": 120416,
+      "forwarder": null
+    },
+    {
+      "name": "GetRootFrame",
+      "ordinal": 663,
+      "rva": 158256,
+      "forwarder": null
+    },
+    {
+      "name": "GetSalvageSessionInfo",
+      "ordinal": 664,
+      "rva": 114688,
+      "forwarder": null
+    },
+    {
+      "name": "GetSkillConstantData",
+      "ordinal": 665,
+      "rva": 144560,
+      "forwarder": null
+    },
+    {
+      "name": "GetSkillSlot",
+      "ordinal": 666,
+      "rva": 144592,
+      "forwarder": null
+    },
+    {
+      "name": "GetSkillbar",
+      "ordinal": 667,
+      "rva": 145280,
+      "forwarder": null
+    },
+    {
+      "name": "GetStoragePage",
+      "ordinal": 668,
+      "rva": 119168,
+      "forwarder": null
+    },
+    {
+      "name": "GetTargetAsAgentLiving",
+      "ordinal": 669,
+      "rva": 13008,
+      "forwarder": null
+    },
+    {
+      "name": "GetTargetId",
+      "ordinal": 670,
+      "rva": 10176,
+      "forwarder": null
+    },
+    {
+      "name": "GetTextLanguage",
+      "ordinal": 671,
+      "rva": 158464,
+      "forwarder": null
+    },
+    {
+      "name": "GetTitleData",
+      "ordinal": 672,
+      "rva": 133312,
+      "forwarder": null
+    },
+    {
+      "name": "GetTitleTrack",
+      "ordinal": 673,
+      "rva": 133344,
+      "forwarder": null
+    },
+    {
+      "name": "GetWindowPosition",
+      "ordinal": 674,
+      "rva": 158816,
+      "forwarder": null
+    },
+    {
+      "name": "GetWorldMapContext",
+      "ordinal": 675,
+      "rva": 121664,
+      "forwarder": null
+    },
+    {
+      "name": "GetYaw",
+      "ordinal": 676,
+      "rva": 13616,
+      "forwarder": null
+    },
+    {
+      "name": "IdentifyItem",
+      "ordinal": 677,
+      "rva": 119184,
+      "forwarder": null
+    },
+    {
+      "name": "InteractAgent",
+      "ordinal": 678,
+      "rva": 13024,
+      "forwarder": null
+    },
+    {
+      "name": "IsInControllerCursorMode",
+      "ordinal": 679,
+      "rva": 171488,
+      "forwarder": null
+    },
+    {
+      "name": "IsInControllerMode",
+      "ordinal": 680,
+      "rva": 158960,
+      "forwarder": null
+    },
+    {
+      "name": "IsInGameThread",
+      "ordinal": 681,
+      "rva": 106752,
+      "forwarder": null
+    },
+    {
+      "name": "IsItemOffered",
+      "ordinal": 682,
+      "rva": 151648,
+      "forwarder": null
+    },
+    {
+      "name": "IsObserving",
+      "ordinal": 683,
+      "rva": 10928,
+      "forwarder": null
+    },
+    {
+      "name": "IsValidEncStr",
+      "ordinal": 684,
+      "rva": 171504,
+      "forwarder": null
+    },
+    {
+      "name": "LanguageFromDistrict",
+      "ordinal": 685,
+      "rva": 121680,
+      "forwarder": null
+    },
+    {
+      "name": "LeaveGH",
+      "ordinal": 686,
+      "rva": 108320,
+      "forwarder": null
+    },
+    {
+      "name": "LoadSkillTemplateForAgent",
+      "ordinal": 687,
+      "rva": 147264,
+      "forwarder": null
+    },
+    {
+      "name": "LoadSkillTemplateString",
+      "ordinal": 688,
+      "rva": 146208,
+      "forwarder": null
+    },
+    {
+      "name": "Move",
+      "ordinal": 689,
+      "rva": 10992,
+      "forwarder": null
+    },
+    {
+      "name": "MoveItemToBag",
+      "ordinal": 690,
+      "rva": 115248,
+      "forwarder": null
+    },
+    {
+      "name": "MoveItemToItem",
+      "ordinal": 691,
+      "rva": 115072,
+      "forwarder": null
+    },
+    {
+      "name": "OfferItem",
+      "ordinal": 692,
+      "rva": 151664,
+      "forwarder": null
+    },
+    {
+      "name": "OpenTradeWindow",
+      "ordinal": 693,
+      "rva": 151488,
+      "forwarder": null
+    },
+    {
+      "name": "OpenXunlaiWindow",
+      "ordinal": 694,
+      "rva": 116880,
+      "forwarder": null
+    },
+    {
+      "name": "PickUpItem",
+      "ordinal": 695,
+      "rva": 116928,
+      "forwarder": null
+    },
+    {
+      "name": "PingWeaponSet",
+      "ordinal": 696,
+      "rva": 117008,
+      "forwarder": null
+    },
+    {
+      "name": "QueryAltitude",
+      "ordinal": 697,
+      "rva": 121696,
+      "forwarder": null
+    },
+    {
+      "name": "RegionFromDistrict",
+      "ordinal": 698,
+      "rva": 121968,
+      "forwarder": null
+    },
+    {
+      "name": "RegisterGameThreadCallback",
+      "ordinal": 699,
+      "rva": 107904,
+      "forwarder": null
+    },
+    {
+      "name": "RemoveActiveTitle",
+      "ordinal": 700,
+      "rva": 133408,
+      "forwarder": null
+    },
+    {
+      "name": "RemoveFriend",
+      "ordinal": 701,
+      "rva": 100288,
+      "forwarder": null
+    },
+    {
+      "name": "RemoveGameThreadCallback",
+      "ordinal": 702,
+      "rva": 108000,
+      "forwarder": null
+    },
+    {
+      "name": "RemoveOfferedItem",
+      "ordinal": 703,
+      "rva": 151680,
+      "forwarder": null
+    },
+    {
+      "name": "RequestQuestInfo",
+      "ordinal": 704,
+      "rva": 134912,
+      "forwarder": null
+    },
+    {
+      "name": "RequestQuestInfoId",
+      "ordinal": 705,
+      "rva": 134992,
+      "forwarder": null
+    },
+    {
+      "name": "SalvageMaterials",
+      "ordinal": 706,
+      "rva": 119200,
+      "forwarder": null
+    },
+    {
+      "name": "SalvageSessionCancel",
+      "ordinal": 707,
+      "rva": 117680,
+      "forwarder": null
+    },
+    {
+      "name": "SalvageStart",
+      "ordinal": 708,
+      "rva": 119216,
+      "forwarder": null
+    },
+    {
+      "name": "SelectDropdownOption",
+      "ordinal": 709,
+      "rva": 163216,
+      "forwarder": null
+    },
+    {
+      "name": "SendChat",
+      "ordinal": 710,
+      "rva": 22032,
+      "forwarder": null
+    },
+    {
+      "name": "SendDialog",
+      "ordinal": 711,
+      "rva": 11792,
+      "forwarder": null
+    },
+    {
+      "name": "SendUIMessage",
+      "ordinal": 712,
+      "rva": 171584,
+      "forwarder": null
+    },
+    {
+      "name": "SendWhisper",
+      "ordinal": 713,
+      "rva": 22048,
+      "forwarder": null
+    },
+    {
+      "name": "SetActiveQuest",
+      "ordinal": 714,
+      "rva": 135056,
+      "forwarder": null
+    },
+    {
+      "name": "SetActiveQuestId",
+      "ordinal": 715,
+      "rva": 135120,
+      "forwarder": null
+    },
+    {
+      "name": "SetActiveTitle",
+      "ordinal": 716,
+      "rva": 133440,
+      "forwarder": null
+    },
+    {
+      "name": "SetCommandLinePref_String",
+      "ordinal": 717,
+      "rva": 164512,
+      "forwarder": null
+    },
+    {
+      "name": "SetCommandLinePref_UInt",
+      "ordinal": 718,
+      "rva": 164448,
+      "forwarder": null
+    },
+    {
+      "name": "SetEquipmentVisibility",
+      "ordinal": 719,
+      "rva": 118080,
+      "forwarder": null
+    },
+    {
+      "name": "SetFieldOfView",
+      "ordinal": 720,
+      "rva": 13664,
+      "forwarder": null
+    },
+    {
+      "name": "SetFog",
+      "ordinal": 721,
+      "rva": 13712,
+      "forwarder": null
+    },
+    {
+      "name": "SetFrameDisabled",
+      "ordinal": 722,
+      "rva": 164592,
+      "forwarder": null
+    },
+    {
+      "name": "SetFrameTitle",
+      "ordinal": 723,
+      "rva": 164656,
+      "forwarder": null
+    },
+    {
+      "name": "SetFrameVisible",
+      "ordinal": 724,
+      "rva": 164720,
+      "forwarder": null
+    },
+    {
+      "name": "SetFriendListStatus",
+      "ordinal": 725,
+      "rva": 100624,
+      "forwarder": null
+    },
+    {
+      "name": "SetMaxDist",
+      "ordinal": 726,
+      "rva": 13728,
+      "forwarder": null
+    },
+    {
+      "name": "SetMessageColor",
+      "ordinal": 727,
+      "rva": 22064,
+      "forwarder": null
+    },
+    {
+      "name": "SetPlayerName",
+      "ordinal": 728,
+      "rva": 133584,
+      "forwarder": null
+    },
+    {
+      "name": "SetPreference_Enum",
+      "ordinal": 729,
+      "rva": 171600,
+      "forwarder": null
+    },
+    {
+      "name": "SetPreference_Flag",
+      "ordinal": 730,
+      "rva": 171616,
+      "forwarder": null
+    },
+    {
+      "name": "SetPreference_Number",
+      "ordinal": 731,
+      "rva": 171632,
+      "forwarder": null
+    },
+    {
+      "name": "SetPreference_String",
+      "ordinal": 732,
+      "rva": 171648,
+      "forwarder": null
+    },
+    {
+      "name": "SetSenderColor",
+      "ordinal": 733,
+      "rva": 22128,
+      "forwarder": null
+    },
+    {
+      "name": "SetTimestampsColor",
+      "ordinal": 734,
+      "rva": 21008,
+      "forwarder": null
+    },
+    {
+      "name": "SetTimestampsFormat",
+      "ordinal": 735,
+      "rva": 21056,
+      "forwarder": null
+    },
+    {
+      "name": "SetWindowPosition",
+      "ordinal": 736,
+      "rva": 166928,
+      "forwarder": null
+    },
+    {
+      "name": "SetWindowVisible",
+      "ordinal": 737,
+      "rva": 171664,
+      "forwarder": null
+    },
+    {
+      "name": "SkipCinematic",
+      "ordinal": 738,
+      "rva": 121184,
+      "forwarder": null
+    },
+    {
+      "name": "SubmitOffer",
+      "ordinal": 739,
+      "rva": 151168,
+      "forwarder": null
+    },
+    {
+      "name": "ToggleTimestamps",
+      "ordinal": 740,
+      "rva": 21104,
+      "forwarder": null
+    },
+    {
+      "name": "TravelByDistrict",
+      "ordinal": 741,
+      "rva": 121232,
+      "forwarder": null
+    },
+    {
+      "name": "TravelByRegion",
+      "ordinal": 742,
+      "rva": 121328,
+      "forwarder": null
+    },
+    {
+      "name": "TravelGH",
+      "ordinal": 743,
+      "rva": 108384,
+      "forwarder": null
+    },
+    {
+      "name": "UInt32ToEncStr",
+      "ordinal": 744,
+      "rva": 171680,
+      "forwarder": null
+    },
+    {
+      "name": "UnlockCam",
+      "ordinal": 745,
+      "rva": 13760,
+      "forwarder": null
+    },
+    {
+      "name": "UpdateCameraPos",
+      "ordinal": 746,
+      "rva": 13808,
+      "forwarder": null
+    },
+    {
+      "name": "UseItem",
+      "ordinal": 747,
+      "rva": 119232,
+      "forwarder": null
+    },
+    {
+      "name": "UseItemByModelId",
+      "ordinal": 748,
+      "rva": 118544,
+      "forwarder": null
+    },
+    {
+      "name": "UseSkill",
+      "ordinal": 749,
+      "rva": 147280,
+      "forwarder": null
+    },
+    {
+      "name": "UseSkillByID",
+      "ordinal": 750,
+      "rva": 146448,
+      "forwarder": null
+    },
+    {
+      "name": "WithdrawGold",
+      "ordinal": 751,
+      "rva": 119248,
+      "forwarder": null
+    },
+    {
+      "name": "WriteChat",
+      "ordinal": 752,
+      "rva": 22192,
+      "forwarder": null
+    },
+    {
+      "name": "WriteChatEnc",
+      "ordinal": 753,
+      "rva": 22208,
+      "forwarder": null
+    }
+  ],
+  "aliased": {
+    "134176": {
+      "cpp": [
+        "?AbandonQuest@QuestMgr@GW@@YA_NPAUQuest@2@@Z"
+      ],
+      "c": [
+        "AbandonQuest"
+      ],
+      "all": [
+        "?AbandonQuest@QuestMgr@GW@@YA_NPAUQuest@2@@Z",
+        "AbandonQuest"
+      ]
+    },
+    "134240": {
+      "cpp": [
+        "?AbandonQuestId@QuestMgr@GW@@YA_NW4QuestID@Constants@2@@Z"
+      ],
+      "c": [
+        "AbandonQuestId"
+      ],
+      "all": [
+        "?AbandonQuestId@QuestMgr@GW@@YA_NW4QuestID@Constants@2@@Z",
+        "AbandonQuestId"
+      ]
+    },
+    "151072": {
+      "cpp": [
+        "?AcceptTrade@Trade@GW@@YA_NXZ"
+      ],
+      "c": [
+        "AcceptTrade"
+      ],
+      "all": [
+        "?AcceptTrade@Trade@GW@@YA_NXZ",
+        "AcceptTrade"
+      ]
+    },
+    "98624": {
+      "cpp": [
+        "?AddFriend@FriendListMgr@GW@@YA_NPB_W0@Z"
+      ],
+      "c": [
+        "AddFriend"
+      ],
+      "all": [
+        "?AddFriend@FriendListMgr@GW@@YA_NPB_W0@Z",
+        "AddFriend"
+      ]
+    },
+    "98800": {
+      "cpp": [
+        "?AddIgnore@FriendListMgr@GW@@YA_NPB_W0@Z"
+      ],
+      "c": [
+        "AddIgnore"
+      ],
+      "all": [
+        "?AddIgnore@FriendListMgr@GW@@YA_NPB_W0@Z",
+        "AddIgnore"
+      ]
+    },
+    "17296": {
+      "cpp": [
+        "?AddToChatLog@Chat@GW@@YA_NPA_WI@Z"
+      ],
+      "c": [
+        "AddToChatLog"
+      ],
+      "all": [
+        "?AddToChatLog@Chat@GW@@YA_NPA_WI@Z",
+        "AddToChatLog"
+      ]
+    },
+    "155696": {
+      "cpp": [
+        "?ButtonClick@UI@GW@@YA_NPAUFrame@12@@Z"
+      ],
+      "c": [
+        "ButtonClick"
+      ],
+      "all": [
+        "?ButtonClick@UI@GW@@YA_NPAUFrame@12@@Z",
+        "ButtonClick"
+      ]
+    },
+    "111568": {
+      "cpp": [
+        "?CanAccessXunlaiChest@Items@GW@@YA_NXZ"
+      ],
+      "c": [
+        "CanAccessXunlaiChest"
+      ],
+      "all": [
+        "?CanAccessXunlaiChest@Items@GW@@YA_NXZ",
+        "CanAccessXunlaiChest"
+      ]
+    },
+    "111632": {
+      "cpp": [
+        "?CanInteractWithItem@Items@GW@@YA_NPBUItem@2@@Z"
+      ],
+      "c": [
+        "CanInteractWithItem"
+      ],
+      "all": [
+        "?CanInteractWithItem@Items@GW@@YA_NPBUItem@2@@Z",
+        "CanInteractWithItem"
+      ]
+    },
+    "119536": {
+      "cpp": [
+        "?CancelEnterChallenge@Map@GW@@YA_NXZ"
+      ],
+      "c": [
+        "CancelEnterChallenge"
+      ],
+      "all": [
+        "?CancelEnterChallenge@Map@GW@@YA_NXZ",
+        "CancelEnterChallenge"
+      ]
+    },
+    "151104": {
+      "cpp": [
+        "?CancelTrade@Trade@GW@@YA_NXZ"
+      ],
+      "c": [
+        "CancelTrade"
+      ],
+      "all": [
+        "?CancelTrade@Trade@GW@@YA_NXZ",
+        "CancelTrade"
+      ]
+    },
+    "98976": {
+      "cpp": [
+        "?ChangeFriendType@FriendListMgr@GW@@YA_NPAUFriend@2@W4FriendType@2@@Z"
+      ],
+      "c": [
+        "ChangeFriendType"
+      ],
+      "all": [
+        "?ChangeFriendType@FriendListMgr@GW@@YA_NPAUFriend@2@W4FriendType@2@@Z",
+        "ChangeFriendType"
+      ]
+    },
+    "151168": {
+      "cpp": [
+        "?ChangeOffer@Trade@GW@@YA_NXZ",
+        "?SubmitOffer@Trade@GW@@YA_NI@Z"
+      ],
+      "c": [
+        "ChangeOffer",
+        "SubmitOffer"
+      ],
+      "all": [
+        "?ChangeOffer@Trade@GW@@YA_NXZ",
+        "?SubmitOffer@Trade@GW@@YA_NI@Z",
+        "ChangeOffer",
+        "SubmitOffer"
+      ]
+    },
+    "132496": {
+      "cpp": [
+        "?ChangeSecondProfession@PlayerMgr@GW@@YA_NW4Profession@Constants@2@I@Z"
+      ],
+      "c": [
+        "ChangeSecondProfession"
+      ],
+      "all": [
+        "?ChangeSecondProfession@PlayerMgr@GW@@YA_NW4Profession@Constants@2@I@Z",
+        "ChangeSecondProfession"
+      ]
+    },
+    "7760": {
+      "cpp": [
+        "?ChangeTarget@Agents@GW@@YA_NI@Z"
+      ],
+      "c": [
+        "ChangeTargetById"
+      ],
+      "all": [
+        "?ChangeTarget@Agents@GW@@YA_NI@Z",
+        "ChangeTargetById"
+      ]
+    },
+    "7808": {
+      "cpp": [
+        "?ChangeTarget@Agents@GW@@YA_NPBUAgent@2@@Z"
+      ],
+      "c": [
+        "ChangeTargetByAgent"
+      ],
+      "all": [
+        "?ChangeTarget@Agents@GW@@YA_NPBUAgent@2@@Z",
+        "ChangeTargetByAgent"
+      ]
+    },
+    "119696": {
+      "cpp": [
+        "?DestroyMapContext@Map@GW@@YA_NPAUMapContext@2@@Z"
+      ],
+      "c": [
+        "DestroyMapContext"
+      ],
+      "all": [
+        "?DestroyMapContext@Map@GW@@YA_NPAUMapContext@2@@Z",
+        "DestroyMapContext"
+      ]
+    },
+    "92560": {
+      "cpp": [
+        "?EnableTab@TabsFrame@GW@@QAE_NI@Z",
+        "?RemoveItem@ScrollableFrame@GW@@QAE_NI@Z"
+      ],
+      "c": [],
+      "all": [
+        "?EnableTab@TabsFrame@GW@@QAE_NI@Z",
+        "?RemoveItem@ScrollableFrame@GW@@QAE_NI@Z"
+      ]
+    },
+    "119728": {
+      "cpp": [
+        "?EnterChallenge@Map@GW@@YA_NXZ"
+      ],
+      "c": [
+        "EnterChallenge"
+      ],
+      "all": [
+        "?EnterChallenge@Map@GW@@YA_NXZ",
+        "EnterChallenge"
+      ]
+    },
+    "134368": {
+      "cpp": [
+        "?GetActiveQuestId@QuestMgr@GW@@YA?AW4QuestID@Constants@2@XZ"
+      ],
+      "c": [
+        "GetActiveQuestId"
+      ],
+      "all": [
+        "?GetActiveQuestId@QuestMgr@GW@@YA?AW4QuestID@Constants@2@XZ",
+        "GetActiveQuestId"
+      ]
+    },
+    "132528": {
+      "cpp": [
+        "?GetActiveTitle@PlayerMgr@GW@@YAPAUTitle@2@XZ"
+      ],
+      "c": [
+        "GetActiveTitle"
+      ],
+      "all": [
+        "?GetActiveTitle@PlayerMgr@GW@@YAPAUTitle@2@XZ",
+        "GetActiveTitle"
+      ]
+    },
+    "8048": {
+      "cpp": [
+        "?GetAgentByID@Agents@GW@@YAPAUAgent@2@I@Z"
+      ],
+      "c": [
+        "GetAgentByID"
+      ],
+      "all": [
+        "?GetAgentByID@Agents@GW@@YAPAUAgent@2@I@Z",
+        "GetAgentByID"
+      ]
+    },
+    "23312": {
+      "cpp": [
+        "?GetAgentEffectsArray@Effects@GW@@YAPAUAgentEffects@2@I@Z"
+      ],
+      "c": [
+        "GetAgentEffectsArray"
+      ],
+      "all": [
+        "?GetAgentEffectsArray@Effects@GW@@YAPAUAgentEffects@2@I@Z",
+        "GetAgentEffectsArray"
+      ]
+    },
+    "8720": {
+      "cpp": [
+        "?GetAgentIdByLoginNumber@Agents@GW@@YAII@Z"
+      ],
+      "c": [
+        "GetAgentIdByLoginNumber"
+      ],
+      "all": [
+        "?GetAgentIdByLoginNumber@Agents@GW@@YAII@Z",
+        "GetAgentIdByLoginNumber"
+      ]
+    },
+    "23376": {
+      "cpp": [
+        "?GetAlcoholLevel@Effects@GW@@YAIXZ"
+      ],
+      "c": [
+        "GetAlcoholLevel"
+      ],
+      "all": [
+        "?GetAlcoholLevel@Effects@GW@@YAIXZ",
+        "GetAlcoholLevel"
+      ]
+    },
+    "8752": {
+      "cpp": [
+        "?GetAmountOfPlayersInInstance@Agents@GW@@YAIXZ"
+      ],
+      "c": [
+        "GetAmountOfPlayersInInstance"
+      ],
+      "all": [
+        "?GetAmountOfPlayersInInstance@Agents@GW@@YAIXZ",
+        "GetAmountOfPlayersInInstance"
+      ]
+    },
+    "143952": {
+      "cpp": [
+        "?GetAttributeConstantData@SkillbarMgr@GW@@YAPAUAttributeInfo@2@W4Attribute@Constants@2@@Z"
+      ],
+      "c": [
+        "GetAttributeConstantData"
+      ],
+      "all": [
+        "?GetAttributeConstantData@SkillbarMgr@GW@@YAPAUAttributeInfo@2@W4Attribute@Constants@2@@Z",
+        "GetAttributeConstantData"
+      ]
+    },
+    "102304": {
+      "cpp": [
+        "?GetAvailableChars@GW@@YAPAV?$Array@UCharacterInformation@GW@@@1@XZ"
+      ],
+      "c": [
+        "GetAvailableChars"
+      ],
+      "all": [
+        "?GetAvailableChars@GW@@YAPAV?$Array@UCharacterInformation@GW@@@1@XZ",
+        "GetAvailableChars"
+      ]
+    },
+    "112896": {
+      "cpp": [
+        "?GetBag@Items@GW@@YAPAUBag@2@W43Constants@2@@Z"
+      ],
+      "c": [
+        "GetBag"
+      ],
+      "all": [
+        "?GetBag@Items@GW@@YAPAUBag@2@W43Constants@2@@Z",
+        "GetBag"
+      ]
+    },
+    "112944": {
+      "cpp": [
+        "?GetBagArray@Items@GW@@YAPAPAUBag@2@XZ",
+        "?GetInventory@Items@GW@@YAPAUInventory@2@XZ"
+      ],
+      "c": [
+        "GetInventory"
+      ],
+      "all": [
+        "?GetBagArray@Items@GW@@YAPAPAUBag@2@XZ",
+        "?GetInventory@Items@GW@@YAPAUInventory@2@XZ",
+        "GetInventory"
+      ]
+    },
+    "112976": {
+      "cpp": [
+        "?GetBagByIndex@Items@GW@@YAPAUBag@2@I@Z"
+      ],
+      "c": [
+        "GetBagByIndex"
+      ],
+      "all": [
+        "?GetBagByIndex@Items@GW@@YAPAUBag@2@I@Z",
+        "GetBagByIndex"
+      ]
+    },
+    "13536": {
+      "cpp": [
+        "?GetCamera@CameraMgr@GW@@YAPAUCamera@2@XZ"
+      ],
+      "c": [
+        "GetCamera"
+      ],
+      "all": [
+        "?GetCamera@CameraMgr@GW@@YAPAUCamera@2@XZ",
+        "GetCamera"
+      ]
+    },
+    "13552": {
+      "cpp": [
+        "?GetCameraUnlock@CameraMgr@GW@@YA_NXZ"
+      ],
+      "c": [
+        "GetCameraUnlock"
+      ],
+      "all": [
+        "?GetCameraUnlock@CameraMgr@GW@@YA_NXZ",
+        "GetCameraUnlock"
+      ]
+    },
+    "18240": {
+      "cpp": [
+        "?GetChannel@Chat@GW@@YA?AW4Channel@12@_W@Z"
+      ],
+      "c": [
+        "GetChannelFromChar",
+        "GetChannelFromWChar"
+      ],
+      "all": [
+        "?GetChannel@Chat@GW@@YA?AW4Channel@12@_W@Z",
+        "GetChannelFromChar",
+        "GetChannelFromWChar"
+      ]
+    },
+    "18256": {
+      "cpp": [
+        "?GetChannelColors@Chat@GW@@YAXW4Channel@12@PAI1@Z"
+      ],
+      "c": [
+        "GetChannelColors"
+      ],
+      "all": [
+        "?GetChannelColors@Chat@GW@@YAXW4Channel@12@PAI1@Z",
+        "GetChannelColors"
+      ]
+    },
+    "18320": {
+      "cpp": [
+        "?GetChatLog@Chat@GW@@YAPAUChatBuffer@12@XZ"
+      ],
+      "c": [
+        "GetChatLog"
+      ],
+      "all": [
+        "?GetChatLog@Chat@GW@@YAPAUChatBuffer@12@XZ",
+        "GetChatLog"
+      ]
+    },
+    "156656": {
+      "cpp": [
+        "?GetChildFrame@UI@GW@@YAPAUFrame@12@PAU312@I@Z"
+      ],
+      "c": [
+        "GetChildFrame"
+      ],
+      "all": [
+        "?GetChildFrame@UI@GW@@YAPAUFrame@12@PAU312@I@Z",
+        "GetChildFrame"
+      ]
+    },
+    "156704": {
+      "cpp": [
+        "?GetCommandLinePref@UI@GW@@YA_NPB_WPAI@Z"
+      ],
+      "c": [
+        "GetCommandLinePref_UInt"
+      ],
+      "all": [
+        "?GetCommandLinePref@UI@GW@@YA_NPB_WPAI@Z",
+        "GetCommandLinePref_UInt"
+      ]
+    },
+    "156768": {
+      "cpp": [
+        "?GetCommandLinePref@UI@GW@@YA_NPB_WPAPA_W@Z"
+      ],
+      "c": [
+        "GetCommandLinePref_String"
+      ],
+      "all": [
+        "?GetCommandLinePref@UI@GW@@YA_NPB_WPAPA_W@Z",
+        "GetCommandLinePref_String"
+      ]
+    },
+    "113024": {
+      "cpp": [
+        "?GetCompositeModelInfo@Items@GW@@YAPBUCompositeModelInfo@2@I@Z"
+      ],
+      "c": [
+        "GetCompositeModelInfo"
+      ],
+      "all": [
+        "?GetCompositeModelInfo@Items@GW@@YAPBUCompositeModelInfo@2@I@Z",
+        "GetCompositeModelInfo"
+      ]
+    },
+    "8912": {
+      "cpp": [
+        "?GetControlledCharacterId@Agents@GW@@YAIXZ"
+      ],
+      "c": [
+        "GetControlledCharacterId"
+      ],
+      "all": [
+        "?GetControlledCharacterId@Agents@GW@@YAIXZ",
+        "GetControlledCharacterId"
+      ]
+    },
+    "18336": {
+      "cpp": [
+        "?GetDefaultColors@Chat@GW@@YAXW4Channel@12@PAI1@Z"
+      ],
+      "c": [
+        "GetDefaultColors"
+      ],
+      "all": [
+        "?GetDefaultColors@Chat@GW@@YAXW4Channel@12@PAI1@Z",
+        "GetDefaultColors"
+      ]
+    },
+    "119776": {
+      "cpp": [
+        "?GetDistrict@Map@GW@@YAHXZ"
+      ],
+      "c": [
+        "GetDistrict"
+      ],
+      "all": [
+        "?GetDistrict@Map@GW@@YAHXZ",
+        "GetDistrict"
+      ]
+    },
+    "23440": {
+      "cpp": [
+        "?GetDrunkAf@Effects@GW@@YAXMI@Z"
+      ],
+      "c": [
+        "GetDrunkAf"
+      ],
+      "all": [
+        "?GetDrunkAf@Effects@GW@@YAXMI@Z",
+        "GetDrunkAf"
+      ]
+    },
+    "113120": {
+      "cpp": [
+        "?GetEquipmentVisibility@Items@GW@@YA?AW4EquipmentStatus@2@W4EquipmentType@2@@Z"
+      ],
+      "c": [
+        "GetEquipmentVisibility"
+      ],
+      "all": [
+        "?GetEquipmentVisibility@Items@GW@@YA?AW4EquipmentStatus@2@W4EquipmentType@2@@Z",
+        "GetEquipmentVisibility"
+      ]
+    },
+    "9504": {
+      "cpp": [
+        "?GetEvaluatedTargetId@Agents@GW@@YAIXZ"
+      ],
+      "c": [
+        "GetEvaluatedTargetId"
+      ],
+      "all": [
+        "?GetEvaluatedTargetId@Agents@GW@@YAIXZ",
+        "GetEvaluatedTargetId"
+      ]
+    },
+    "13568": {
+      "cpp": [
+        "?GetFieldOfView@CameraMgr@GW@@YAMXZ"
+      ],
+      "c": [
+        "GetFieldOfView"
+      ],
+      "all": [
+        "?GetFieldOfView@CameraMgr@GW@@YAMXZ",
+        "GetFieldOfView"
+      ]
+    },
+    "119808": {
+      "cpp": [
+        "?GetFoesKilled@Map@GW@@YAIXZ"
+      ],
+      "c": [
+        "GetFoesKilled"
+      ],
+      "all": [
+        "?GetFoesKilled@Map@GW@@YAIXZ",
+        "GetFoesKilled"
+      ]
+    },
+    "119840": {
+      "cpp": [
+        "?GetFoesToKill@Map@GW@@YAIXZ"
+      ],
+      "c": [
+        "GetFoesToKill"
+      ],
+      "all": [
+        "?GetFoesToKill@Map@GW@@YAIXZ",
+        "GetFoesToKill"
+      ]
+    },
+    "99024": {
+      "cpp": [
+        "?GetFriend@FriendListMgr@GW@@YAPAUFriend@2@I@Z"
+      ],
+      "c": [
+        "GetFriendByIndex"
+      ],
+      "all": [
+        "?GetFriend@FriendListMgr@GW@@YAPAUFriend@2@I@Z",
+        "GetFriendByIndex"
+      ]
+    },
+    "99360": {
+      "cpp": [
+        "?GetFriendList@FriendListMgr@GW@@YAPAUFriendList@2@XZ"
+      ],
+      "c": [
+        "GetFriendList"
+      ],
+      "all": [
+        "?GetFriendList@FriendListMgr@GW@@YAPAUFriendList@2@XZ",
+        "GetFriendList"
+      ]
+    },
+    "113168": {
+      "cpp": [
+        "?GetGoldAmountInStorage@Items@GW@@YAIXZ"
+      ],
+      "c": [
+        "GetGoldAmountInStorage"
+      ],
+      "all": [
+        "?GetGoldAmountInStorage@Items@GW@@YAIXZ",
+        "GetGoldAmountInStorage"
+      ]
+    },
+    "113200": {
+      "cpp": [
+        "?GetGoldAmountOnCharacter@Items@GW@@YAIXZ"
+      ],
+      "c": [
+        "GetGoldAmountOnCharacter"
+      ],
+      "all": [
+        "?GetGoldAmountOnCharacter@Items@GW@@YAIXZ",
+        "GetGoldAmountOnCharacter"
+      ]
+    },
+    "108144": {
+      "cpp": [
+        "?GetGuildInfo@GuildMgr@GW@@YAPAUGuild@2@I@Z"
+      ],
+      "c": [
+        "GetGuildInfo"
+      ],
+      "all": [
+        "?GetGuildInfo@GuildMgr@GW@@YAPAUGuild@2@I@Z",
+        "GetGuildInfo"
+      ]
+    },
+    "9520": {
+      "cpp": [
+        "?GetHeroAgentID@Agents@GW@@YAII@Z"
+      ],
+      "c": [
+        "GetHeroAgentID"
+      ],
+      "all": [
+        "?GetHeroAgentID@Agents@GW@@YAII@Z",
+        "GetHeroAgentID"
+      ]
+    },
+    "113232": {
+      "cpp": [
+        "?GetHoveredItem@Items@GW@@YAPAUItem@2@XZ"
+      ],
+      "c": [
+        "GetHoveredItem"
+      ],
+      "all": [
+        "?GetHoveredItem@Items@GW@@YAPAUItem@2@XZ",
+        "GetHoveredItem"
+      ]
+    },
+    "144240": {
+      "cpp": [
+        "?GetHoveredSkill@SkillbarMgr@GW@@YAPAUSkill@2@XZ"
+      ],
+      "c": [
+        "GetHoveredSkill"
+      ],
+      "all": [
+        "?GetHoveredSkill@SkillbarMgr@GW@@YAPAUSkill@2@XZ",
+        "GetHoveredSkill"
+      ]
+    },
+    "119872": {
+      "cpp": [
+        "?GetInstanceTime@Map@GW@@YAIXZ"
+      ],
+      "c": [
+        "GetInstanceTime"
+      ],
+      "all": [
+        "?GetInstanceTime@Map@GW@@YAIXZ",
+        "GetInstanceTime"
+      ]
+    },
+    "119904": {
+      "cpp": [
+        "?GetInstanceType@Map@GW@@YA?AW4InstanceType@Constants@2@XZ"
+      ],
+      "c": [
+        "GetInstanceType"
+      ],
+      "all": [
+        "?GetInstanceType@Map@GW@@YA?AW4InstanceType@Constants@2@XZ",
+        "GetInstanceType"
+      ]
+    },
+    "120016": {
+      "cpp": [
+        "?GetIsMapLoaded@Map@GW@@YA_NXZ"
+      ],
+      "c": [
+        "GetIsMapLoaded"
+      ],
+      "all": [
+        "?GetIsMapLoaded@Map@GW@@YA_NXZ",
+        "GetIsMapLoaded"
+      ]
+    },
+    "157872": {
+      "cpp": [
+        "?GetIsShiftScreenShot@UI@GW@@YA_NXZ"
+      ],
+      "c": [
+        "GetIsShiftScreenShot"
+      ],
+      "all": [
+        "?GetIsShiftScreenShot@UI@GW@@YA_NXZ",
+        "GetIsShiftScreenShot"
+      ]
+    },
+    "113360": {
+      "cpp": [
+        "?GetIsStorageOpen@Items@GW@@YA_NXZ"
+      ],
+      "c": [
+        "GetIsStorageOpen"
+      ],
+      "all": [
+        "?GetIsStorageOpen@Items@GW@@YA_NXZ",
+        "GetIsStorageOpen"
+      ]
+    },
+    "93072": {
+      "cpp": [
+        "?GetIsTabEnabled@TabsFrame@GW@@QAE_NIPAI@Z",
+        "?GetItemRect@ScrollableFrame@GW@@QAE_NIQAM@Z"
+      ],
+      "c": [],
+      "all": [
+        "?GetIsTabEnabled@TabsFrame@GW@@QAE_NIPAI@Z",
+        "?GetItemRect@ScrollableFrame@GW@@QAE_NIQAM@Z"
+      ]
+    },
+    "18400": {
+      "cpp": [
+        "?GetIsTyping@Chat@GW@@YA_NXZ"
+      ],
+      "c": [
+        "GetIsTyping"
+      ],
+      "all": [
+        "?GetIsTyping@Chat@GW@@YA_NXZ",
+        "GetIsTyping"
+      ]
+    },
+    "157904": {
+      "cpp": [
+        "?GetIsUIDrawn@UI@GW@@YA_NXZ"
+      ],
+      "c": [
+        "GetIsUIDrawn"
+      ],
+      "all": [
+        "?GetIsUIDrawn@UI@GW@@YA_NXZ",
+        "GetIsUIDrawn"
+      ]
+    },
+    "157936": {
+      "cpp": [
+        "?GetIsWorldMapShowing@UI@GW@@YA_NXZ"
+      ],
+      "c": [
+        "GetIsWorldMapShowing"
+      ],
+      "all": [
+        "?GetIsWorldMapShowing@UI@GW@@YA_NXZ",
+        "GetIsWorldMapShowing"
+      ]
+    },
+    "114000": {
+      "cpp": [
+        "?GetItemFormula@Items@GW@@YAPBUItemFormula@2@PBUItem@2@@Z"
+      ],
+      "c": [
+        "GetItemFormula"
+      ],
+      "all": [
+        "?GetItemFormula@Items@GW@@YAPBUItemFormula@2@PBUItem@2@@Z",
+        "GetItemFormula"
+      ]
+    },
+    "120192": {
+      "cpp": [
+        "?GetLanguage@Map@GW@@YA?AW4Language@Constants@2@XZ"
+      ],
+      "c": [
+        "GetLanguage"
+      ],
+      "all": [
+        "?GetLanguage@Map@GW@@YA?AW4Language@Constants@2@XZ",
+        "GetLanguage"
+      ]
+    },
+    "9728": {
+      "cpp": [
+        "?GetMapAgentByID@Agents@GW@@YAPAUMapAgent@2@I@Z"
+      ],
+      "c": [
+        "GetMapAgentByID"
+      ],
+      "all": [
+        "?GetMapAgentByID@Agents@GW@@YAPAUMapAgent@2@I@Z",
+        "GetMapAgentByID"
+      ]
+    },
+    "120224": {
+      "cpp": [
+        "?GetMapID@Map@GW@@YA?AW4MapID@Constants@2@XZ"
+      ],
+      "c": [
+        "GetMapID"
+      ],
+      "all": [
+        "?GetMapID@Map@GW@@YA?AW4MapID@Constants@2@XZ",
+        "GetMapID"
+      ]
+    },
+    "120256": {
+      "cpp": [
+        "?GetMapInfo@Map@GW@@YAPAUAreaInfo@2@W4MapID@Constants@2@@Z"
+      ],
+      "c": [
+        "GetMapInfo"
+      ],
+      "all": [
+        "?GetMapInfo@Map@GW@@YAPAUAreaInfo@2@W4MapID@Constants@2@@Z",
+        "GetMapInfo"
+      ]
+    },
+    "114080": {
+      "cpp": [
+        "?GetMaterialSlot@Items@GW@@YA?AW4MaterialSlot@Constants@2@PBUItem@2@@Z"
+      ],
+      "c": [
+        "GetMaterialSlot"
+      ],
+      "all": [
+        "?GetMaterialSlot@Items@GW@@YA?AW4MaterialSlot@Constants@2@PBUItem@2@@Z",
+        "GetMaterialSlot"
+      ]
+    },
+    "114176": {
+      "cpp": [
+        "?GetMaterialStorageStackSize@Items@GW@@YAIXZ"
+      ],
+      "c": [
+        "GetMaterialStorageStackSize"
+      ],
+      "all": [
+        "?GetMaterialStorageStackSize@Items@GW@@YAIXZ",
+        "GetMaterialStorageStackSize"
+      ]
+    },
+    "120320": {
+      "cpp": [
+        "?GetMissionMapContext@Map@GW@@YAPAUMissionMapContext@2@XZ"
+      ],
+      "c": [
+        "GetMissionMapContext"
+      ],
+      "all": [
+        "?GetMissionMapContext@Map@GW@@YAPAUMissionMapContext@2@XZ",
+        "GetMissionMapContext"
+      ]
+    },
+    "99376": {
+      "cpp": [
+        "?GetMyStatus@FriendListMgr@GW@@YA?AW4FriendStatus@2@XZ"
+      ],
+      "c": [
+        "GetMyStatus"
+      ],
+      "all": [
+        "?GetMyStatus@FriendListMgr@GW@@YA?AW4FriendStatus@2@XZ",
+        "GetMyStatus"
+      ]
+    },
+    "9840": {
+      "cpp": [
+        "?GetNPCByID@Agents@GW@@YAPAUNPC@2@I@Z"
+      ],
+      "c": [
+        "GetNPCByID"
+      ],
+      "all": [
+        "?GetNPCByID@Agents@GW@@YAPAUNPC@2@I@Z",
+        "GetNPCByID"
+      ]
+    },
+    "99488": {
+      "cpp": [
+        "?GetNumberOfIgnores@FriendListMgr@GW@@YAIXZ"
+      ],
+      "c": [
+        "GetNumberOfIgnores"
+      ],
+      "all": [
+        "?GetNumberOfIgnores@FriendListMgr@GW@@YAIXZ",
+        "GetNumberOfIgnores"
+      ]
+    },
+    "99504": {
+      "cpp": [
+        "?GetNumberOfPartners@FriendListMgr@GW@@YAIXZ"
+      ],
+      "c": [
+        "GetNumberOfPartners"
+      ],
+      "all": [
+        "?GetNumberOfPartners@FriendListMgr@GW@@YAIXZ",
+        "GetNumberOfPartners"
+      ]
+    },
+    "99520": {
+      "cpp": [
+        "?GetNumberOfTraders@FriendListMgr@GW@@YAIXZ"
+      ],
+      "c": [
+        "GetNumberOfTraders"
+      ],
+      "all": [
+        "?GetNumberOfTraders@FriendListMgr@GW@@YAIXZ",
+        "GetNumberOfTraders"
+      ]
+    },
+    "9904": {
+      "cpp": [
+        "?GetObservingId@Agents@GW@@YAIXZ"
+      ],
+      "c": [
+        "GetObservingId"
+      ],
+      "all": [
+        "?GetObservingId@Agents@GW@@YAIXZ",
+        "GetObservingId"
+      ]
+    },
+    "157968": {
+      "cpp": [
+        "?GetParentFrame@UI@GW@@YAPAUFrame@12@PAU312@@Z"
+      ],
+      "c": [
+        "GetParentFrame"
+      ],
+      "all": [
+        "?GetParentFrame@UI@GW@@YAPAUFrame@12@PAU312@@Z",
+        "GetParentFrame"
+      ]
+    },
+    "132816": {
+      "cpp": [
+        "?GetPlayerAgentId@PlayerMgr@GW@@YAII@Z"
+      ],
+      "c": [
+        "GetPlayerAgentId"
+      ],
+      "all": [
+        "?GetPlayerAgentId@PlayerMgr@GW@@YAII@Z",
+        "GetPlayerAgentId"
+      ]
+    },
+    "9920": {
+      "cpp": [
+        "?GetPlayerArray@Agents@GW@@YAPAV?$Array@UPlayer@GW@@@2@XZ",
+        "?GetPlayerArray@PlayerMgr@GW@@YAPAV?$Array@UPlayer@GW@@@2@XZ"
+      ],
+      "c": [],
+      "all": [
+        "?GetPlayerArray@Agents@GW@@YAPAV?$Array@UPlayer@GW@@@2@XZ",
+        "?GetPlayerArray@PlayerMgr@GW@@YAPAV?$Array@UPlayer@GW@@@2@XZ"
+      ]
+    },
+    "23520": {
+      "cpp": [
+        "?GetPlayerBuffBySkillId@Effects@GW@@YAPAUBuff@2@W4SkillID@Constants@2@@Z"
+      ],
+      "c": [
+        "GetPlayerBuffBySkillId"
+      ],
+      "all": [
+        "?GetPlayerBuffBySkillId@Effects@GW@@YAPAUBuff@2@W4SkillID@Constants@2@@Z",
+        "GetPlayerBuffBySkillId"
+      ]
+    },
+    "23600": {
+      "cpp": [
+        "?GetPlayerEffectBySkillId@Effects@GW@@YAPAUEffect@2@W4SkillID@Constants@2@@Z"
+      ],
+      "c": [
+        "GetPlayerEffectBySkillId"
+      ],
+      "all": [
+        "?GetPlayerEffectBySkillId@Effects@GW@@YAPAUEffect@2@W4SkillID@Constants@2@@Z",
+        "GetPlayerEffectBySkillId"
+      ]
+    },
+    "23680": {
+      "cpp": [
+        "?GetPlayerEffectsArray@Effects@GW@@YAPAUAgentEffects@2@XZ"
+      ],
+      "c": [
+        "GetPlayerEffectsArray"
+      ],
+      "all": [
+        "?GetPlayerEffectsArray@Effects@GW@@YAPAUAgentEffects@2@XZ",
+        "GetPlayerEffectsArray"
+      ]
+    },
+    "108192": {
+      "cpp": [
+        "?GetPlayerGuild@GuildMgr@GW@@YAPAUGuild@2@XZ"
+      ],
+      "c": [
+        "GetPlayerGuild"
+      ],
+      "all": [
+        "?GetPlayerGuild@GuildMgr@GW@@YAPAUGuild@2@XZ",
+        "GetPlayerGuild"
+      ]
+    },
+    "108256": {
+      "cpp": [
+        "?GetPlayerGuildAnnouncement@GuildMgr@GW@@YAPA_WXZ"
+      ],
+      "c": [
+        "GetPlayerGuildAnnouncement"
+      ],
+      "all": [
+        "?GetPlayerGuildAnnouncement@GuildMgr@GW@@YAPA_WXZ",
+        "GetPlayerGuildAnnouncement"
+      ]
+    },
+    "108272": {
+      "cpp": [
+        "?GetPlayerGuildAnnouncer@GuildMgr@GW@@YAPA_WXZ"
+      ],
+      "c": [
+        "GetPlayerGuildAnnouncer"
+      ],
+      "all": [
+        "?GetPlayerGuildAnnouncer@GuildMgr@GW@@YAPA_WXZ",
+        "GetPlayerGuildAnnouncer"
+      ]
+    },
+    "108304": {
+      "cpp": [
+        "?GetPlayerGuildIndex@GuildMgr@GW@@YAIXZ"
+      ],
+      "c": [
+        "GetPlayerGuildIndex"
+      ],
+      "all": [
+        "?GetPlayerGuildIndex@GuildMgr@GW@@YAIXZ",
+        "GetPlayerGuildIndex"
+      ]
+    },
+    "10048": {
+      "cpp": [
+        "?GetPlayerNameByLoginNumber@Agents@GW@@YAPA_WI@Z"
+      ],
+      "c": [
+        "GetPlayerNameByLoginNumber"
+      ],
+      "all": [
+        "?GetPlayerNameByLoginNumber@Agents@GW@@YAPA_WI@Z",
+        "GetPlayerNameByLoginNumber"
+      ]
+    },
+    "133280": {
+      "cpp": [
+        "?GetPlayerNumber@PlayerMgr@GW@@YAIXZ"
+      ],
+      "c": [
+        "GetPlayerNumber"
+      ],
+      "all": [
+        "?GetPlayerNumber@PlayerMgr@GW@@YAIXZ",
+        "GetPlayerNumber"
+      ]
+    },
+    "158016": {
+      "cpp": [
+        "?GetPreference@UI@GW@@YAIW4EnumPreference@12@@Z"
+      ],
+      "c": [
+        "GetPreference_Enum"
+      ],
+      "all": [
+        "?GetPreference@UI@GW@@YAIW4EnumPreference@12@@Z",
+        "GetPreference_Enum"
+      ]
+    },
+    "158064": {
+      "cpp": [
+        "?GetPreference@UI@GW@@YAIW4NumberPreference@12@@Z"
+      ],
+      "c": [
+        "GetPreference_Number"
+      ],
+      "all": [
+        "?GetPreference@UI@GW@@YAIW4NumberPreference@12@@Z",
+        "GetPreference_Number"
+      ]
+    },
+    "158112": {
+      "cpp": [
+        "?GetPreference@UI@GW@@YAPA_WW4StringPreference@12@@Z"
+      ],
+      "c": [
+        "GetPreference_String"
+      ],
+      "all": [
+        "?GetPreference@UI@GW@@YAPA_WW4StringPreference@12@@Z",
+        "GetPreference_String"
+      ]
+    },
+    "158160": {
+      "cpp": [
+        "?GetPreference@UI@GW@@YA_NW4FlagPreference@12@@Z"
+      ],
+      "c": [
+        "GetPreference_Flag"
+      ],
+      "all": [
+        "?GetPreference@UI@GW@@YA_NW4FlagPreference@12@@Z",
+        "GetPreference_Flag"
+      ]
+    },
+    "114240": {
+      "cpp": [
+        "?GetPvPItemInfo@Items@GW@@YAPBUPvPItemInfo@2@I@Z"
+      ],
+      "c": [
+        "GetPvPItemInfo"
+      ],
+      "all": [
+        "?GetPvPItemInfo@Items@GW@@YAPBUPvPItemInfo@2@I@Z",
+        "GetPvPItemInfo"
+      ]
+    },
+    "114336": {
+      "cpp": [
+        "?GetPvPItemUpgrade@Items@GW@@YAPBUPvPItemUpgradeInfo@2@I@Z"
+      ],
+      "c": [
+        "GetPvPItemUpgrade"
+      ],
+      "all": [
+        "?GetPvPItemUpgrade@Items@GW@@YAPBUPvPItemUpgradeInfo@2@I@Z",
+        "GetPvPItemUpgrade"
+      ]
+    },
+    "114416": {
+      "cpp": [
+        "?GetPvPItemUpgradeEncodedDescription@Items@GW@@YA_NIPAPA_W@Z"
+      ],
+      "c": [
+        "GetPvPItemUpgradeEncodedDescription"
+      ],
+      "all": [
+        "?GetPvPItemUpgradeEncodedDescription@Items@GW@@YA_NIPAPA_W@Z",
+        "GetPvPItemUpgradeEncodedDescription"
+      ]
+    },
+    "114544": {
+      "cpp": [
+        "?GetPvPItemUpgradeEncodedName@Items@GW@@YA_NIPAPA_W@Z"
+      ],
+      "c": [
+        "GetPvPItemUpgradeEncodedName"
+      ],
+      "all": [
+        "?GetPvPItemUpgradeEncodedName@Items@GW@@YA_NIPAPA_W@Z",
+        "GetPvPItemUpgradeEncodedName"
+      ]
+    },
+    "134400": {
+      "cpp": [
+        "?GetQuest@QuestMgr@GW@@YAPAUQuest@2@W4QuestID@Constants@2@@Z"
+      ],
+      "c": [
+        "GetQuest"
+      ],
+      "all": [
+        "?GetQuest@QuestMgr@GW@@YAPAUQuest@2@W4QuestID@Constants@2@@Z",
+        "GetQuest"
+      ]
+    },
+    "120416": {
+      "cpp": [
+        "?GetRegion@Map@GW@@YA?AW4ServerRegion@Constants@2@XZ"
+      ],
+      "c": [
+        "GetRegion"
+      ],
+      "all": [
+        "?GetRegion@Map@GW@@YA?AW4ServerRegion@Constants@2@XZ",
+        "GetRegion"
+      ]
+    },
+    "158256": {
+      "cpp": [
+        "?GetRootFrame@UI@GW@@YAPAUFrame@12@XZ"
+      ],
+      "c": [
+        "GetRootFrame"
+      ],
+      "all": [
+        "?GetRootFrame@UI@GW@@YAPAUFrame@12@XZ",
+        "GetRootFrame"
+      ]
+    },
+    "114688": {
+      "cpp": [
+        "?GetSalvageSessionInfo@Items@GW@@YAPAUSalvageSessionInfo@2@XZ"
+      ],
+      "c": [
+        "GetSalvageSessionInfo"
+      ],
+      "all": [
+        "?GetSalvageSessionInfo@Items@GW@@YAPAUSalvageSessionInfo@2@XZ",
+        "GetSalvageSessionInfo"
+      ]
+    },
+    "144560": {
+      "cpp": [
+        "?GetSkillConstantData@SkillbarMgr@GW@@YAPAUSkill@2@W4SkillID@Constants@2@@Z"
+      ],
+      "c": [
+        "GetSkillConstantData"
+      ],
+      "all": [
+        "?GetSkillConstantData@SkillbarMgr@GW@@YAPAUSkill@2@W4SkillID@Constants@2@@Z",
+        "GetSkillConstantData"
+      ]
+    },
+    "144592": {
+      "cpp": [
+        "?GetSkillSlot@SkillbarMgr@GW@@YAHW4SkillID@Constants@2@@Z"
+      ],
+      "c": [
+        "GetSkillSlot"
+      ],
+      "all": [
+        "?GetSkillSlot@SkillbarMgr@GW@@YAHW4SkillID@Constants@2@@Z",
+        "GetSkillSlot"
+      ]
+    },
+    "145280": {
+      "cpp": [
+        "?GetSkillbar@SkillbarMgr@GW@@YAPAUSkillbar@2@I@Z"
+      ],
+      "c": [
+        "GetSkillbar"
+      ],
+      "all": [
+        "?GetSkillbar@SkillbarMgr@GW@@YAPAUSkillbar@2@I@Z",
+        "GetSkillbar"
+      ]
+    },
+    "10176": {
+      "cpp": [
+        "?GetTargetId@Agents@GW@@YAIXZ"
+      ],
+      "c": [
+        "GetTargetId"
+      ],
+      "all": [
+        "?GetTargetId@Agents@GW@@YAIXZ",
+        "GetTargetId"
+      ]
+    },
+    "158464": {
+      "cpp": [
+        "?GetTextLanguage@UI@GW@@YA?AW4Language@Constants@2@XZ"
+      ],
+      "c": [
+        "GetTextLanguage"
+      ],
+      "all": [
+        "?GetTextLanguage@UI@GW@@YA?AW4Language@Constants@2@XZ",
+        "GetTextLanguage"
+      ]
+    },
+    "133312": {
+      "cpp": [
+        "?GetTitleData@PlayerMgr@GW@@YAPAUTitleClientData@2@W4TitleID@Constants@2@@Z"
+      ],
+      "c": [
+        "GetTitleData"
+      ],
+      "all": [
+        "?GetTitleData@PlayerMgr@GW@@YAPAUTitleClientData@2@W4TitleID@Constants@2@@Z",
+        "GetTitleData"
+      ]
+    },
+    "133344": {
+      "cpp": [
+        "?GetTitleTrack@PlayerMgr@GW@@YAPAUTitle@2@W4TitleID@Constants@2@@Z"
+      ],
+      "c": [
+        "GetTitleTrack"
+      ],
+      "all": [
+        "?GetTitleTrack@PlayerMgr@GW@@YAPAUTitle@2@W4TitleID@Constants@2@@Z",
+        "GetTitleTrack"
+      ]
+    },
+    "95168": {
+      "cpp": [
+        "?GetValue@SliderFrame@GW@@QAE_NPAI@Z",
+        "?SetValue@ProgressBar@GW@@UAE_NI@Z"
+      ],
+      "c": [],
+      "all": [
+        "?GetValue@SliderFrame@GW@@QAE_NPAI@Z",
+        "?SetValue@ProgressBar@GW@@UAE_NI@Z"
+      ]
+    },
+    "158816": {
+      "cpp": [
+        "?GetWindowPosition@UI@GW@@YAPAUWindowPosition@12@W4WindowID@12@@Z"
+      ],
+      "c": [
+        "GetWindowPosition"
+      ],
+      "all": [
+        "?GetWindowPosition@UI@GW@@YAPAUWindowPosition@12@W4WindowID@12@@Z",
+        "GetWindowPosition"
+      ]
+    },
+    "13616": {
+      "cpp": [
+        "?GetYaw@CameraMgr@GW@@YAMXZ"
+      ],
+      "c": [
+        "GetYaw"
+      ],
+      "all": [
+        "?GetYaw@CameraMgr@GW@@YAMXZ",
+        "GetYaw"
+      ]
+    },
+    "158960": {
+      "cpp": [
+        "?IsInControllerMode@UI@GW@@YA_NXZ"
+      ],
+      "c": [
+        "IsInControllerMode"
+      ],
+      "all": [
+        "?IsInControllerMode@UI@GW@@YA_NXZ",
+        "IsInControllerMode"
+      ]
+    },
+    "106752": {
+      "cpp": [
+        "?IsInGameThread@GameThread@GW@@YA_NXZ"
+      ],
+      "c": [
+        "IsInGameThread"
+      ],
+      "all": [
+        "?IsInGameThread@GameThread@GW@@YA_NXZ",
+        "IsInGameThread"
+      ]
+    },
+    "10928": {
+      "cpp": [
+        "?IsObserving@Agents@GW@@YA_NXZ"
+      ],
+      "c": [
+        "IsObserving"
+      ],
+      "all": [
+        "?IsObserving@Agents@GW@@YA_NXZ",
+        "IsObserving"
+      ]
+    },
+    "108320": {
+      "cpp": [
+        "?LeaveGH@GuildMgr@GW@@YA_NXZ"
+      ],
+      "c": [
+        "LeaveGH"
+      ],
+      "all": [
+        "?LeaveGH@GuildMgr@GW@@YA_NXZ",
+        "LeaveGH"
+      ]
+    },
+    "146208": {
+      "cpp": [
+        "?LoadSkillTemplate@SkillbarMgr@GW@@YA_NPBD@Z"
+      ],
+      "c": [
+        "LoadSkillTemplateString"
+      ],
+      "all": [
+        "?LoadSkillTemplate@SkillbarMgr@GW@@YA_NPBD@Z",
+        "LoadSkillTemplateString"
+      ]
+    },
+    "13184": {
+      "cpp": [
+        "?LogMessage@GW@@YAXW4LogLevel@1@PBDI11ZZ",
+        "?RegisterLogHandler@GW@@YAXP6AXPAXW4LogLevel@1@PBD2I2@Z0@Z"
+      ],
+      "c": [],
+      "all": [
+        "?LogMessage@GW@@YAXW4LogLevel@1@PBDI11ZZ",
+        "?RegisterLogHandler@GW@@YAXP6AXPAXW4LogLevel@1@PBD2I2@Z0@Z"
+      ]
+    },
+    "10992": {
+      "cpp": [
+        "?Move@Agents@GW@@YA_NMMI@Z"
+      ],
+      "c": [
+        "Move"
+      ],
+      "all": [
+        "?Move@Agents@GW@@YA_NMMI@Z",
+        "Move"
+      ]
+    },
+    "115072": {
+      "cpp": [
+        "?MoveItem@Items@GW@@YA_NPBUItem@2@0I@Z"
+      ],
+      "c": [
+        "MoveItemToItem"
+      ],
+      "all": [
+        "?MoveItem@Items@GW@@YA_NPBUItem@2@0I@Z",
+        "MoveItemToItem"
+      ]
+    },
+    "115248": {
+      "cpp": [
+        "?MoveItem@Items@GW@@YA_NPBUItem@2@W4Bag@Constants@2@II@Z"
+      ],
+      "c": [
+        "MoveItemToBag"
+      ],
+      "all": [
+        "?MoveItem@Items@GW@@YA_NPBUItem@2@W4Bag@Constants@2@II@Z",
+        "MoveItemToBag"
+      ]
+    },
+    "151488": {
+      "cpp": [
+        "?OpenTradeWindow@Trade@GW@@YA_NI@Z"
+      ],
+      "c": [
+        "OpenTradeWindow"
+      ],
+      "all": [
+        "?OpenTradeWindow@Trade@GW@@YA_NI@Z",
+        "OpenTradeWindow"
+      ]
+    },
+    "116880": {
+      "cpp": [
+        "?OpenXunlaiWindow@Items@GW@@YA_N_N0@Z"
+      ],
+      "c": [
+        "OpenXunlaiWindow"
+      ],
+      "all": [
+        "?OpenXunlaiWindow@Items@GW@@YA_N_N0@Z",
+        "OpenXunlaiWindow"
+      ]
+    },
+    "116928": {
+      "cpp": [
+        "?PickUpItem@Items@GW@@YA_NPBUItem@2@I@Z"
+      ],
+      "c": [
+        "PickUpItem"
+      ],
+      "all": [
+        "?PickUpItem@Items@GW@@YA_NPBUItem@2@I@Z",
+        "PickUpItem"
+      ]
+    },
+    "117008": {
+      "cpp": [
+        "?PingWeaponSet@Items@GW@@YA_NIII@Z"
+      ],
+      "c": [
+        "PingWeaponSet"
+      ],
+      "all": [
+        "?PingWeaponSet@Items@GW@@YA_NIII@Z",
+        "PingWeaponSet"
+      ]
+    },
+    "133408": {
+      "cpp": [
+        "?RemoveActiveTitle@PlayerMgr@GW@@YA_NXZ"
+      ],
+      "c": [
+        "RemoveActiveTitle"
+      ],
+      "all": [
+        "?RemoveActiveTitle@PlayerMgr@GW@@YA_NXZ",
+        "RemoveActiveTitle"
+      ]
+    },
+    "100288": {
+      "cpp": [
+        "?RemoveFriend@FriendListMgr@GW@@YA_NPAUFriend@2@@Z"
+      ],
+      "c": [
+        "RemoveFriend"
+      ],
+      "all": [
+        "?RemoveFriend@FriendListMgr@GW@@YA_NPAUFriend@2@@Z",
+        "RemoveFriend"
+      ]
+    },
+    "162848": {
+      "cpp": [
+        "?RemoveKeydownCallback@UI@GW@@YAXPAUHookEntry@2@@Z",
+        "?RemoveKeyupCallback@UI@GW@@YAXPAUHookEntry@2@@Z"
+      ],
+      "c": [],
+      "all": [
+        "?RemoveKeydownCallback@UI@GW@@YAXPAUHookEntry@2@@Z",
+        "?RemoveKeyupCallback@UI@GW@@YAXPAUHookEntry@2@@Z"
+      ]
+    },
+    "134912": {
+      "cpp": [
+        "?RequestQuestInfo@QuestMgr@GW@@YA_NPBUQuest@2@_N@Z"
+      ],
+      "c": [
+        "RequestQuestInfo"
+      ],
+      "all": [
+        "?RequestQuestInfo@QuestMgr@GW@@YA_NPBUQuest@2@_N@Z",
+        "RequestQuestInfo"
+      ]
+    },
+    "134992": {
+      "cpp": [
+        "?RequestQuestInfoId@QuestMgr@GW@@YA_NW4QuestID@Constants@2@_N@Z"
+      ],
+      "c": [
+        "RequestQuestInfoId"
+      ],
+      "all": [
+        "?RequestQuestInfoId@QuestMgr@GW@@YA_NW4QuestID@Constants@2@_N@Z",
+        "RequestQuestInfoId"
+      ]
+    },
+    "117680": {
+      "cpp": [
+        "?SalvageSessionCancel@Items@GW@@YA_NXZ"
+      ],
+      "c": [
+        "SalvageSessionCancel"
+      ],
+      "all": [
+        "?SalvageSessionCancel@Items@GW@@YA_NXZ",
+        "SalvageSessionCancel"
+      ]
+    },
+    "163216": {
+      "cpp": [
+        "?SelectDropdownOption@UI@GW@@YA_NPAUFrame@12@I@Z"
+      ],
+      "c": [
+        "SelectDropdownOption"
+      ],
+      "all": [
+        "?SelectDropdownOption@UI@GW@@YA_NPAUFrame@12@I@Z",
+        "SelectDropdownOption"
+      ]
+    },
+    "95904": {
+      "cpp": [
+        "?SelectOption@DropdownFrame@GW@@QAE_NI@Z",
+        "?SetValue@DropdownFrame@GW@@UAE_NI@Z"
+      ],
+      "c": [],
+      "all": [
+        "?SelectOption@DropdownFrame@GW@@QAE_NI@Z",
+        "?SetValue@DropdownFrame@GW@@UAE_NI@Z"
+      ]
+    },
+    "11792": {
+      "cpp": [
+        "?SendDialog@Agents@GW@@YA_NI@Z"
+      ],
+      "c": [
+        "SendDialog"
+      ],
+      "all": [
+        "?SendDialog@Agents@GW@@YA_NI@Z",
+        "SendDialog"
+      ]
+    },
+    "135056": {
+      "cpp": [
+        "?SetActiveQuest@QuestMgr@GW@@YA_NPAUQuest@2@@Z"
+      ],
+      "c": [
+        "SetActiveQuest"
+      ],
+      "all": [
+        "?SetActiveQuest@QuestMgr@GW@@YA_NPAUQuest@2@@Z",
+        "SetActiveQuest"
+      ]
+    },
+    "135120": {
+      "cpp": [
+        "?SetActiveQuestId@QuestMgr@GW@@YA_NW4QuestID@Constants@2@@Z"
+      ],
+      "c": [
+        "SetActiveQuestId"
+      ],
+      "all": [
+        "?SetActiveQuestId@QuestMgr@GW@@YA_NW4QuestID@Constants@2@@Z",
+        "SetActiveQuestId"
+      ]
+    },
+    "133440": {
+      "cpp": [
+        "?SetActiveTitle@PlayerMgr@GW@@YA_NW4TitleID@Constants@2@@Z"
+      ],
+      "c": [
+        "SetActiveTitle"
+      ],
+      "all": [
+        "?SetActiveTitle@PlayerMgr@GW@@YA_NW4TitleID@Constants@2@@Z",
+        "SetActiveTitle"
+      ]
+    },
+    "164448": {
+      "cpp": [
+        "?SetCommandLinePref@UI@GW@@YA_NPB_WI@Z"
+      ],
+      "c": [
+        "SetCommandLinePref_UInt"
+      ],
+      "all": [
+        "?SetCommandLinePref@UI@GW@@YA_NPB_WI@Z",
+        "SetCommandLinePref_UInt"
+      ]
+    },
+    "164512": {
+      "cpp": [
+        "?SetCommandLinePref@UI@GW@@YA_NPB_WPA_W@Z"
+      ],
+      "c": [
+        "SetCommandLinePref_String"
+      ],
+      "all": [
+        "?SetCommandLinePref@UI@GW@@YA_NPB_WPA_W@Z",
+        "SetCommandLinePref_String"
+      ]
+    },
+    "118080": {
+      "cpp": [
+        "?SetEquipmentVisibility@Items@GW@@YA_NW4EquipmentType@2@W4EquipmentStatus@2@@Z"
+      ],
+      "c": [
+        "SetEquipmentVisibility"
+      ],
+      "all": [
+        "?SetEquipmentVisibility@Items@GW@@YA_NW4EquipmentType@2@W4EquipmentStatus@2@@Z",
+        "SetEquipmentVisibility"
+      ]
+    },
+    "13664": {
+      "cpp": [
+        "?SetFieldOfView@CameraMgr@GW@@YA_NM@Z"
+      ],
+      "c": [
+        "SetFieldOfView"
+      ],
+      "all": [
+        "?SetFieldOfView@CameraMgr@GW@@YA_NM@Z",
+        "SetFieldOfView"
+      ]
+    },
+    "13712": {
+      "cpp": [
+        "?SetFog@CameraMgr@GW@@YA_N_N@Z"
+      ],
+      "c": [
+        "SetFog"
+      ],
+      "all": [
+        "?SetFog@CameraMgr@GW@@YA_N_N@Z",
+        "SetFog"
+      ]
+    },
+    "164592": {
+      "cpp": [
+        "?SetFrameDisabled@UI@GW@@YA_NPAUFrame@12@_N@Z"
+      ],
+      "c": [
+        "SetFrameDisabled"
+      ],
+      "all": [
+        "?SetFrameDisabled@UI@GW@@YA_NPAUFrame@12@_N@Z",
+        "SetFrameDisabled"
+      ]
+    },
+    "164656": {
+      "cpp": [
+        "?SetFrameTitle@UI@GW@@YA_NPAUFrame@12@PB_W@Z"
+      ],
+      "c": [
+        "SetFrameTitle"
+      ],
+      "all": [
+        "?SetFrameTitle@UI@GW@@YA_NPAUFrame@12@PB_W@Z",
+        "SetFrameTitle"
+      ]
+    },
+    "164720": {
+      "cpp": [
+        "?SetFrameVisible@UI@GW@@YA_NPAUFrame@12@_N@Z"
+      ],
+      "c": [
+        "SetFrameVisible"
+      ],
+      "all": [
+        "?SetFrameVisible@UI@GW@@YA_NPAUFrame@12@_N@Z",
+        "SetFrameVisible"
+      ]
+    },
+    "100624": {
+      "cpp": [
+        "?SetFriendListStatus@FriendListMgr@GW@@YA_NW4FriendStatus@2@@Z"
+      ],
+      "c": [
+        "SetFriendListStatus"
+      ],
+      "all": [
+        "?SetFriendListStatus@FriendListMgr@GW@@YA_NW4FriendStatus@2@@Z",
+        "SetFriendListStatus"
+      ]
+    },
+    "96320": {
+      "cpp": [
+        "?SetLabel@ButtonFrame@GW@@QAE_NPB_W@Z",
+        "?SetLabel@TextLabelFrame@GW@@QAE_NPB_W@Z"
+      ],
+      "c": [],
+      "all": [
+        "?SetLabel@ButtonFrame@GW@@QAE_NPB_W@Z",
+        "?SetLabel@TextLabelFrame@GW@@QAE_NPB_W@Z"
+      ]
+    },
+    "13728": {
+      "cpp": [
+        "?SetMaxDist@CameraMgr@GW@@YA_NM@Z"
+      ],
+      "c": [
+        "SetMaxDist"
+      ],
+      "all": [
+        "?SetMaxDist@CameraMgr@GW@@YA_NM@Z",
+        "SetMaxDist"
+      ]
+    },
+    "21008": {
+      "cpp": [
+        "?SetTimestampsColor@Chat@GW@@YAXI@Z"
+      ],
+      "c": [
+        "SetTimestampsColor"
+      ],
+      "all": [
+        "?SetTimestampsColor@Chat@GW@@YAXI@Z",
+        "SetTimestampsColor"
+      ]
+    },
+    "21056": {
+      "cpp": [
+        "?SetTimestampsFormat@Chat@GW@@YAX_N0@Z"
+      ],
+      "c": [
+        "SetTimestampsFormat"
+      ],
+      "all": [
+        "?SetTimestampsFormat@Chat@GW@@YAX_N0@Z",
+        "SetTimestampsFormat"
+      ]
+    },
+    "166928": {
+      "cpp": [
+        "?SetWindowPosition@UI@GW@@YA_NW4WindowID@12@PAUWindowPosition@12@@Z"
+      ],
+      "c": [
+        "SetWindowPosition"
+      ],
+      "all": [
+        "?SetWindowPosition@UI@GW@@YA_NW4WindowID@12@PAUWindowPosition@12@@Z",
+        "SetWindowPosition"
+      ]
+    },
+    "121184": {
+      "cpp": [
+        "?SkipCinematic@Map@GW@@YA_NXZ"
+      ],
+      "c": [
+        "SkipCinematic"
+      ],
+      "all": [
+        "?SkipCinematic@Map@GW@@YA_NXZ",
+        "SkipCinematic"
+      ]
+    },
+    "21104": {
+      "cpp": [
+        "?ToggleTimestamps@Chat@GW@@YAX_N@Z"
+      ],
+      "c": [
+        "ToggleTimestamps"
+      ],
+      "all": [
+        "?ToggleTimestamps@Chat@GW@@YAX_N@Z",
+        "ToggleTimestamps"
+      ]
+    },
+    "121232": {
+      "cpp": [
+        "?Travel@Map@GW@@YA_NW4MapID@Constants@2@W4District@42@H@Z"
+      ],
+      "c": [
+        "TravelByDistrict"
+      ],
+      "all": [
+        "?Travel@Map@GW@@YA_NW4MapID@Constants@2@W4District@42@H@Z",
+        "TravelByDistrict"
+      ]
+    },
+    "121328": {
+      "cpp": [
+        "?Travel@Map@GW@@YA_NW4MapID@Constants@2@W4ServerRegion@42@HW4Language@42@@Z"
+      ],
+      "c": [
+        "TravelByRegion"
+      ],
+      "all": [
+        "?Travel@Map@GW@@YA_NW4MapID@Constants@2@W4ServerRegion@42@HW4Language@42@@Z",
+        "TravelByRegion"
+      ]
+    },
+    "108384": {
+      "cpp": [
+        "?TravelGH@GuildMgr@GW@@YA_NXZ"
+      ],
+      "c": [
+        "TravelGH"
+      ],
+      "all": [
+        "?TravelGH@GuildMgr@GW@@YA_NXZ",
+        "TravelGH"
+      ]
+    },
+    "13760": {
+      "cpp": [
+        "?UnlockCam@CameraMgr@GW@@YA_N_N@Z"
+      ],
+      "c": [
+        "UnlockCam"
+      ],
+      "all": [
+        "?UnlockCam@CameraMgr@GW@@YA_N_N@Z",
+        "UnlockCam"
+      ]
+    },
+    "13808": {
+      "cpp": [
+        "?UpdateCameraPos@CameraMgr@GW@@YA_NXZ"
+      ],
+      "c": [
+        "UpdateCameraPos"
+      ],
+      "all": [
+        "?UpdateCameraPos@CameraMgr@GW@@YA_NXZ",
+        "UpdateCameraPos"
+      ]
+    },
+    "118544": {
+      "cpp": [
+        "?UseItemByModelId@Items@GW@@YA_NIHH@Z"
+      ],
+      "c": [
+        "UseItemByModelId"
+      ],
+      "all": [
+        "?UseItemByModelId@Items@GW@@YA_NIHH@Z",
+        "UseItemByModelId"
+      ]
+    },
+    "146448": {
+      "cpp": [
+        "?UseSkillByID@SkillbarMgr@GW@@YA_NII@Z"
+      ],
+      "c": [
+        "UseSkillByID"
+      ],
+      "all": [
+        "?UseSkillByID@SkillbarMgr@GW@@YA_NII@Z",
+        "UseSkillByID"
+      ]
+    }
+  },
+  "by_module": {
+    "QuestMgr.cpp": [
+      "?AbandonQuest@QuestMgr@GW@@YA_NPAUQuest@2@@Z",
+      "?AbandonQuestId@QuestMgr@GW@@YA_NW4QuestID@Constants@2@@Z",
+      "?GetActiveQuest@QuestMgr@GW@@YAPAUQuest@2@XZ",
+      "?GetActiveQuestId@QuestMgr@GW@@YA?AW4QuestID@Constants@2@XZ",
+      "?GetQuest@QuestMgr@GW@@YAPAUQuest@2@W4QuestID@Constants@2@@Z",
+      "?GetQuestEntryGroupName@QuestMgr@GW@@YA_NW4QuestID@Constants@2@PA_WI@Z",
+      "?GetQuestLog@QuestMgr@GW@@YAPAV?$Array@UQuest@GW@@@2@XZ",
+      "?RequestQuestInfo@QuestMgr@GW@@YA_NPBUQuest@2@_N@Z",
+      "?RequestQuestInfoId@QuestMgr@GW@@YA_NW4QuestID@Constants@2@_N@Z",
+      "?SetActiveQuest@QuestMgr@GW@@YA_NPAUQuest@2@@Z",
+      "?SetActiveQuestId@QuestMgr@GW@@YA_NW4QuestID@Constants@2@@Z"
+    ],
+    "TradeMgr.cpp": [
+      "?AcceptTrade@Trade@GW@@YA_NXZ",
+      "?CancelTrade@Trade@GW@@YA_NXZ",
+      "?ChangeOffer@Trade@GW@@YA_NXZ",
+      "?IsItemOffered@Trade@GW@@YAPAUTradeItem@2@I@Z",
+      "?OfferItem@Trade@GW@@YA_NII@Z",
+      "?OpenTradeWindow@Trade@GW@@YA_NI@Z",
+      "?RemoveItem@Trade@GW@@YA_NI@Z",
+      "?SubmitOffer@Trade@GW@@YA_NI@Z",
+      "AcceptTrade",
+      "CancelTrade"
+    ],
+    "UIMgr.cpp": [
+      "?AddFrameUIInteractionCallback@UI@GW@@YA_NPAUFrame@12@P6AXPAUInteractionMessage@12@PAX2@Z2@Z",
+      "?AsyncDecodeStr@UI@GW@@YAXPB_WP6AXPAX0@Z1W4Language@Constants@2@@Z",
+      "?AsyncDecodeStr@UI@GW@@YAXPB_WPA_WI@Z",
+      "?ButtonClick@UI@GW@@YA_NPAUFrame@12@@Z",
+      "?CreateUIComponent@UI@GW@@YAIIIIP6AXPAUInteractionMessage@12@PAX1@Z1PB_W@Z",
+      "?Default_UICallback@UI@GW@@YA_NPAUInteractionMessage@12@PAX1@Z",
+      "?DestroyUIComponent@UI@GW@@YA_NPAUFrame@12@@Z",
+      "?DrawOnCompass@UI@GW@@YA_NIIPAUCompassPoint@12@@Z",
+      "?EncStrToUInt32@UI@GW@@YAIPB_W@Z",
+      "?GetChildFrame@UI@GW@@YAPAUFrame@12@PAU312@I@Z",
+      "?GetCommandLinePref@UI@GW@@YA_NPB_WPAI@Z",
+      "?GetCommandLinePref@UI@GW@@YA_NPB_WPAPA_W@Z",
+      "?GetCurrentTooltip@UI@GW@@YAPAUTooltipInfo@12@XZ",
+      "?GetFrameById@UI@GW@@YAPAUFrame@12@I@Z",
+      "?GetFrameByLabel@UI@GW@@YAPAUFrame@12@PB_W@Z",
+      "?GetFrameContext@UI@GW@@YAPAXPAUFrame@12@@Z",
+      "?GetIsShiftScreenShot@UI@GW@@YA_NXZ",
+      "?GetIsUIDrawn@UI@GW@@YA_NXZ",
+      "?GetIsWorldMapShowing@UI@GW@@YA_NXZ",
+      "?GetParentFrame@UI@GW@@YAPAUFrame@12@PAU312@@Z",
+      "?GetPreference@UI@GW@@YAIW4EnumPreference@12@@Z",
+      "?GetPreference@UI@GW@@YAIW4NumberPreference@12@@Z",
+      "?GetPreference@UI@GW@@YAPA_WW4StringPreference@12@@Z",
+      "?GetPreference@UI@GW@@YA_NW4FlagPreference@12@@Z",
+      "?GetPreferenceOptions@UI@GW@@YAIW4EnumPreference@12@PAPAI@Z",
+      "?GetRootFrame@UI@GW@@YAPAUFrame@12@XZ",
+      "?GetSettings@UI@GW@@YAPAV?$Array@E@2@XZ",
+      "?GetTextLanguage@UI@GW@@YA?AW4Language@Constants@2@XZ",
+      "?GetWindowPosition@UI@GW@@YAPAUWindowPosition@12@W4WindowID@12@@Z",
+      "?IsInControllerCursorMode@UI@GW@@YA_NXZ",
+      "?IsInControllerMode@UI@GW@@YA_NXZ",
+      "?IsValidEncStr@UI@GW@@YA_NPB_W@Z",
+      "?Keydown@UI@GW@@YA_NW4ControlAction@12@PAUFrame@12@@Z",
+      "?Keypress@UI@GW@@YA_NW4ControlAction@12@PAUFrame@12@@Z",
+      "?Keyup@UI@GW@@YA_NW4ControlAction@12@PAUFrame@12@@Z",
+      "?RegisterCreateUIComponentCallback@UI@GW@@YAXPAUHookEntry@2@ABV?$function@$$A6AXPAUCreateUIComponentPacket@UI@GW@@@Z@std@@H@Z",
+      "?RegisterFrameUIMessageCallback@UI@GW@@YAXPAUHookEntry@2@W4UIMessage@12@ABV?$function@$$A6AXPAUHookStatus@GW@@PBUFrame@UI@2@W4UIMessage@42@PAX3@Z@std@@H@Z",
+      "?RegisterKeydownCallback@UI@GW@@YAXPAUHookEntry@2@ABV?$function@$$A6AXPAUHookStatus@GW@@I@Z@std@@@Z",
+      "?RegisterKeyupCallback@UI@GW@@YAXPAUHookEntry@2@ABV?$function@$$A6AXPAUHookStatus@GW@@I@Z@std@@@Z",
+      "?RegisterUIMessageCallback@UI@GW@@YAXPAUHookEntry@2@W4UIMessage@12@ABV?$function@$$A6AXPAUHookStatus@GW@@W4UIMessage@UI@2@PAX2@Z@std@@H@Z",
+      "?RemoveCreateUIComponentCallback@UI@GW@@YAXPAUHookEntry@2@@Z",
+      "?RemoveFrameUIMessageCallback@UI@GW@@YAXPAUHookEntry@2@@Z",
+      "?RemoveKeydownCallback@UI@GW@@YAXPAUHookEntry@2@@Z",
+      "?RemoveKeyupCallback@UI@GW@@YAXPAUHookEntry@2@@Z",
+      "?RemoveUIMessageCallback@UI@GW@@YAXPAUHookEntry@2@W4UIMessage@12@@Z",
+      "?SelectDropdownOption@UI@GW@@YA_NPAUFrame@12@I@Z",
+      "?SendFrameUIMessage@UI@GW@@YA_NPAUFrame@12@W4UIMessage@12@PAX2@Z",
+      "?SendUIMessage@UI@GW@@YA_NW4UIMessage@12@PAX1@Z",
+      "?SetCommandLinePref@UI@GW@@YA_NPB_WI@Z",
+      "?SetCommandLinePref@UI@GW@@YA_NPB_WPA_W@Z",
+      "?SetFrameDisabled@UI@GW@@YA_NPAUFrame@12@_N@Z",
+      "?SetFrameMargins@UI@GW@@YA_NPAUFrame@12@IQAM1I@Z",
+      "?SetFrameTitle@UI@GW@@YA_NPAUFrame@12@PB_W@Z",
+      "?SetFrameVisible@UI@GW@@YA_NPAUFrame@12@_N@Z",
+      "?SetOpenLinks@UI@GW@@YAX_N@Z",
+      "?SetPreference@UI@GW@@YA_NW4EnumPreference@12@I@Z",
+      "?SetPreference@UI@GW@@YA_NW4FlagPreference@12@_N@Z",
+      "?SetPreference@UI@GW@@YA_NW4NumberPreference@12@I@Z",
+      "?SetPreference@UI@GW@@YA_NW4StringPreference@12@PA_W@Z",
+      "?SetWindowPosition@UI@GW@@YA_NW4WindowID@12@PAUWindowPosition@12@@Z",
+      "?SetWindowVisible@UI@GW@@YA_NW4WindowID@12@_N@Z",
+      "?TriggerFrameRedraw@UI@GW@@YA_NPAUFrame@12@@Z",
+      "?UInt32ToEncStr@UI@GW@@YA_NIPA_WI@Z",
+      "?xAxis@WindowPosition@UI@GW@@QBE?AUVec2f@3@M_N@Z",
+      "?yAxis@WindowPosition@UI@GW@@QBE?AUVec2f@3@M_N@Z",
+      "ButtonClick",
+      "GetChildFrame",
+      "GetFrameById",
+      "GetPreference_Enum",
+      "GetPreference_Flag",
+      "GetPreference_Number",
+      "GetPreference_String",
+      "GetRootFrame",
+      "SendUIMessage",
+      "SetPreference_Enum",
+      "SetPreference_Flag",
+      "SetPreference_Number",
+      "SetPreference_String"
+    ],
+    "FriendListMgr.cpp": [
+      "?AddFriend@FriendListMgr@GW@@YA_NPB_W0@Z",
+      "?AddIgnore@FriendListMgr@GW@@YA_NPB_W0@Z",
+      "?ChangeFriendType@FriendListMgr@GW@@YA_NPAUFriend@2@W4FriendType@2@@Z",
+      "?GetFriend@FriendListMgr@GW@@YAPAUFriend@2@I@Z",
+      "?GetFriend@FriendListMgr@GW@@YAPAUFriend@2@PBE@Z",
+      "?GetFriend@FriendListMgr@GW@@YAPAUFriend@2@PB_W0W4FriendType@2@@Z",
+      "?GetFriendList@FriendListMgr@GW@@YAPAUFriendList@2@XZ",
+      "?GetMyStatus@FriendListMgr@GW@@YA?AW4FriendStatus@2@XZ",
+      "?GetNumberOfFriends@FriendListMgr@GW@@YAIW4FriendType@2@@Z",
+      "?GetNumberOfIgnores@FriendListMgr@GW@@YAIXZ",
+      "?GetNumberOfPartners@FriendListMgr@GW@@YAIXZ",
+      "?GetNumberOfTraders@FriendListMgr@GW@@YAIXZ",
+      "?RegisterFriendStatusCallback@FriendListMgr@GW@@YAXPAUHookEntry@2@ABV?$function@$$A6AXPAUHookStatus@GW@@PBUFriend@2@1@Z@std@@@Z",
+      "?RemoveFriend@FriendListMgr@GW@@YA_NPAUFriend@2@@Z",
+      "?RemoveFriendStatusCallback@FriendListMgr@GW@@YAXPAUHookEntry@2@@Z",
+      "?SetFriendListStatus@FriendListMgr@GW@@YA_NW4FriendStatus@2@@Z"
+    ],
+    "PartyMgr.cpp": [
+      "?AddHenchman@PartyMgr@GW@@YA_NI@Z",
+      "?AddHero@PartyMgr@GW@@YA_NW4HeroID@Constants@2@@Z",
+      "?FlagAll@PartyMgr@GW@@YA_NUGamePos@2@@Z",
+      "?FlagHero@PartyMgr@GW@@YA_NIUGamePos@2@@Z",
+      "?GetAgentAttributes@PartyMgr@GW@@YAPAUAttribute@2@I@Z",
+      "?GetHeroAgentID@PartyMgr@GW@@YAII@Z",
+      "?GetHeroConstData@PartyMgr@GW@@YAPAUHeroConstData@2@W4HeroID@Constants@2@@Z",
+      "?GetHeroInfo@PartyMgr@GW@@YAPAUHeroInfo@2@W4HeroID@Constants@2@@Z",
+      "?GetIsHardModeUnlocked@PartyMgr@GW@@YA_NXZ",
+      "?GetIsLeader@PartyMgr@GW@@YA_NXZ",
+      "?GetIsPartyDefeated@PartyMgr@GW@@YA_NXZ",
+      "?GetIsPartyInHardMode@PartyMgr@GW@@YA_NXZ",
+      "?GetIsPartyLoaded@PartyMgr@GW@@YA_NXZ",
+      "?GetIsPartyTicked@PartyMgr@GW@@YA_NXZ",
+      "?GetIsPlayerTicked@PartyMgr@GW@@YA_NI@Z",
+      "?GetPartyHenchmanCount@PartyMgr@GW@@YAIXZ",
+      "?GetPartyHeroCount@PartyMgr@GW@@YAIXZ",
+      "?GetPartyInfo@PartyMgr@GW@@YAPAUPartyInfo@2@I@Z",
+      "?GetPartyPlayerCount@PartyMgr@GW@@YAIXZ",
+      "?GetPartySearch@PartyMgr@GW@@YAPAUPartySearch@2@I@Z",
+      "?GetPartySize@PartyMgr@GW@@YAIXZ",
+      "?GetPetInfo@PartyMgr@GW@@YAPAUPetInfo@2@I@Z",
+      "?InvitePlayer@PartyMgr@GW@@YA_NI@Z",
+      "?InvitePlayer@PartyMgr@GW@@YA_NPB_W@Z",
+      "?KickAllHeroes@PartyMgr@GW@@YA_NXZ",
+      "?KickHenchman@PartyMgr@GW@@YA_NI@Z",
+      "?KickHero@PartyMgr@GW@@YA_NW4HeroID@Constants@2@@Z",
+      "?KickPlayer@PartyMgr@GW@@YA_NI@Z",
+      "?LeaveParty@PartyMgr@GW@@YA_NXZ",
+      "?RespondToPartyRequest@PartyMgr@GW@@YA_NI_N@Z",
+      "?ReturnToOutpost@PartyMgr@GW@@YA_NXZ",
+      "?SearchParty@PartyMgr@GW@@YA_NIPB_W@Z",
+      "?SearchPartyCancel@PartyMgr@GW@@YA_NXZ",
+      "?SearchPartyReply@PartyMgr@GW@@YA_NI_N@Z",
+      "?SetHardMode@PartyMgr@GW@@YA_N_N@Z",
+      "?SetHeroBehavior@PartyMgr@GW@@YA_NIW4HeroBehavior@2@@Z",
+      "?SetHeroTarget@PartyMgr@GW@@YA_NII@Z",
+      "?SetPetBehavior@PartyMgr@GW@@YA_NIW4HeroBehavior@2@@Z",
+      "?SetTickToggle@PartyMgr@GW@@YAX_N@Z",
+      "?Tick@PartyMgr@GW@@YA_N_N@Z",
+      "?UnflagAll@PartyMgr@GW@@YA_NXZ",
+      "?UnflagHero@PartyMgr@GW@@YA_NI@Z"
+    ],
+    "Frame.cpp": [
+      "?AddItem@ScrollableFrame@GW@@QAE_NIIP6AXPAUInteractionMessage@UI@2@PAX1@Z@Z",
+      "?AddOption@DropdownFrame@GW@@QAE_NPB_WI@Z",
+      "?AddTab@TabsFrame@GW@@QAEPAUFrame@UI@2@PB_WIIP6AXPAUInteractionMessage@42@PAX2@Z2@Z",
+      "?ChooseTab@TabsFrame@GW@@QAE_NI@Z",
+      "?ChooseTab@TabsFrame@GW@@QAE_NPAUFrame@UI@2@@Z",
+      "?ClearItems@ScrollableFrame@GW@@QAE_NXZ",
+      "?Click@ButtonFrame@GW@@QAE_NXZ",
+      "?Create@ButtonFrame@GW@@SAPAU12@IIIPB_W0@Z",
+      "?Create@CheckboxFrame@GW@@SAPAU12@IIIPB_W0@Z",
+      "?Create@ScrollableFrame@GW@@SAPAU12@IIIPAUScrollablePageContext@12@PB_W@Z",
+      "?Create@TextLabelFrame@GW@@SAPAU12@IIIPB_W0@Z",
+      "?DisableTab@TabsFrame@GW@@QAE_NI@Z",
+      "?DoubleClick@ButtonFrame@GW@@QAE_NXZ",
+      "?EnableTab@TabsFrame@GW@@QAE_NI@Z",
+      "?GetBottomRightOnScreen@FramePosition@UI@GW@@QBE?AUVec2f@3@PBUFrame@23@@Z",
+      "?GetContentBottomRight@FramePosition@UI@GW@@QBE?AUVec2f@3@PBUFrame@23@@Z",
+      "?GetContentTopLeft@FramePosition@UI@GW@@QBE?AUVec2f@3@PBUFrame@23@@Z",
+      "?GetCount@DropdownFrame@GW@@QAE_NPAI@Z",
+      "?GetCount@ScrollableFrame@GW@@QAE_NPAI@Z",
+      "?GetCurrentTab@TabsFrame@GW@@QAEPAUFrame@UI@2@XZ",
+      "?GetCurrentTabIndex@TabsFrame@GW@@QAE_NPAI@Z",
+      "?GetDecodedLabel@TextLabelFrame@GW@@QAEPB_WXZ",
+      "?GetEncodedLabel@TextLabelFrame@GW@@QAEPB_WXZ",
+      "?GetFirstChildFrameId@ScrollableFrame@GW@@QAEIPAI@Z",
+      "?GetFrame@FrameRelation@UI@GW@@QAEPAUFrame@23@XZ",
+      "?GetIsTabEnabled@TabsFrame@GW@@QAE_NIPAI@Z",
+      "?GetItemFrameId@ScrollableFrame@GW@@QAEII@Z",
+      "?GetItemRect@ScrollableFrame@GW@@QAE_NIQAM@Z",
+      "?GetItems@ScrollableFrame@GW@@QAEIPAII@Z",
+      "?GetLabel@ButtonFrame@GW@@QAE_NPAPB_W@Z",
+      "?GetLastChildFrameId@ScrollableFrame@GW@@QAEIPAI@Z",
+      "?GetNextChildFrameId@ScrollableFrame@GW@@QAEIIPAI@Z",
+      "?GetOptionIndex@DropdownFrame@GW@@QAE_NIPAI@Z",
+      "?GetOptionValue@DropdownFrame@GW@@QAE_NIPAI@Z",
+      "?GetOptions@DropdownFrame@GW@@QAE?AV?$vector@IV?$allocator@I@std@@@std@@XZ",
+      "?GetPage@ScrollableFrame@GW@@QAEPAUFrame@UI@2@XZ",
+      "?GetParent@FrameRelation@UI@GW@@QBEPAUFrame@23@XZ",
+      "?GetPrevChildFrameId@ScrollableFrame@GW@@QAEIIPAI@Z",
+      "?GetSelectedIndex@DropdownFrame@GW@@QAE_NPAI@Z",
+      "?GetSelectedValue@ScrollableFrame@GW@@QAE_NPAI@Z",
+      "?GetSizeOnScreen@FramePosition@UI@GW@@QBE?AUVec2f@3@PBUFrame@23@@Z",
+      "?GetSortHandler@ScrollableFrame@GW@@QAEP6AHII@ZXZ",
+      "?GetTabButton@TabsFrame@GW@@QAEPAUButtonFrame@2@PAUFrame@UI@2@@Z",
+      "?GetTabByLabel@TabsFrame@GW@@QAEPAUFrame@UI@2@PB_W@Z",
+      "?GetTabFrameId@TabsFrame@GW@@QAE_NIPAI@Z",
+      "?GetTopLeftOnScreen@FramePosition@UI@GW@@QBE?AUVec2f@3@PBUFrame@23@@Z",
+      "?GetValue@CheckboxFrame@GW@@UAEIXZ",
+      "?GetValue@DropdownFrame@GW@@UAEIXZ",
+      "?GetValue@EditableTextFrame@GW@@QAEPB_WXZ",
+      "?GetValue@ProgressBar@GW@@UAEIXZ",
+      "?GetValue@SliderFrame@GW@@QAE_NPAI@Z",
+      "?GetValue@SliderFrame@GW@@UAEIXZ",
+      "?GetViewportScale@FramePosition@UI@GW@@QBE?AUVec2f@3@PBUFrame@23@@Z",
+      "?HasValueMapping@DropdownFrame@GW@@QAE_NXZ",
+      "?IsChecked@CheckboxFrame@GW@@QAE_NXZ",
+      "?IsReadOnly@EditableTextFrame@GW@@QAE_NXZ",
+      "?MouseAction@ButtonFrame@GW@@QAE_NW4ActionState@UIPacket@UI@2@@Z",
+      "?RemoveItem@ScrollableFrame@GW@@QAE_NI@Z",
+      "?RemoveTab@TabsFrame@GW@@QAE_NI@Z",
+      "?SelectIndex@DropdownFrame@GW@@QAE_NI@Z",
+      "?SelectOption@DropdownFrame@GW@@QAE_NI@Z",
+      "?SetChecked@CheckboxFrame@GW@@QAE_N_N@Z",
+      "?SetColorId@ProgressBar@GW@@QAE_NI@Z",
+      "?SetFont@TextLabelFrame@GW@@QAE_NI@Z",
+      "?SetLabel@ButtonFrame@GW@@QAE_NPB_W@Z",
+      "?SetLabel@TextLabelFrame@GW@@QAE_NPB_W@Z",
+      "?SetMax@ProgressBar@GW@@QAE_NI@Z",
+      "?SetMaxLength@EditableTextFrame@GW@@QAE_NI@Z",
+      "?SetPage@ScrollableFrame@GW@@QAEPAUFrame@UI@2@PAUScrollablePageContext@12@@Z",
+      "?SetReadOnly@EditableTextFrame@GW@@QAE_N_N@Z",
+      "?SetSortHandler@ScrollableFrame@GW@@QAE_NP6AHII@Z@Z",
+      "?SetStyle@ProgressBar@GW@@QAE_NW4ProgressBarStyle@12@@Z",
+      "?SetValue@CheckboxFrame@GW@@UAE_NI@Z",
+      "?SetValue@DropdownFrame@GW@@UAE_NI@Z",
+      "?SetValue@EditableTextFrame@GW@@QAE_NPB_W@Z",
+      "?SetValue@ProgressBar@GW@@UAE_NI@Z",
+      "?SetValue@SliderFrame@GW@@UAE_NI@Z"
+    ],
+    "ChatMgr.cpp": [
+      "?AddToChatLog@Chat@GW@@YA_NPA_WI@Z",
+      "?CreateCommand@Chat@GW@@YAXPAUHookEntry@2@PB_WP6AXPAUHookStatus@2@1HPBQA_W@Z@Z",
+      "?DeleteCommand@Chat@GW@@YAXPAUHookEntry@2@PB_W@Z",
+      "?GetChannel@Chat@GW@@YA?AW4Channel@12@D@Z",
+      "?GetChannel@Chat@GW@@YA?AW4Channel@12@_W@Z",
+      "?GetChannelColors@Chat@GW@@YAXW4Channel@12@PAI1@Z",
+      "?GetChatLog@Chat@GW@@YAPAUChatBuffer@12@XZ",
+      "?GetDefaultColors@Chat@GW@@YAXW4Channel@12@PAI1@Z",
+      "?GetIsTyping@Chat@GW@@YA_NXZ",
+      "?SendChat@Chat@GW@@YA_NDPBD@Z",
+      "?SendChat@Chat@GW@@YA_NDPB_W@Z",
+      "?SendChat@Chat@GW@@YA_NPB_W0@Z",
+      "?SetMessageColor@Chat@GW@@YAIW4Channel@12@I@Z",
+      "?SetSenderColor@Chat@GW@@YAIW4Channel@12@I@Z",
+      "?SetTimestampsColor@Chat@GW@@YAXI@Z",
+      "?SetTimestampsFormat@Chat@GW@@YAX_N0@Z",
+      "?ToggleTimestamps@Chat@GW@@YAX_N@Z",
+      "?WriteChat@Chat@GW@@YAXW4Channel@12@PB_W1_N@Z",
+      "?WriteChatEnc@Chat@GW@@YAXW4Channel@12@PB_W1_N@Z",
+      "?WriteChatF@Chat@GW@@YAXW4Channel@12@PB_WZZ"
+    ],
+    "ItemMgr.cpp": [
+      "?CanAccessXunlaiChest@Items@GW@@YA_NXZ",
+      "?CanInteractWithItem@Items@GW@@YA_NPBUItem@2@@Z",
+      "?CountItemByModelId@Items@GW@@YAIIHH@Z",
+      "?DepositGold@Items@GW@@YAII@Z",
+      "?DestroyItem@Items@GW@@YA_NI@Z",
+      "?DropGold@Items@GW@@YA_NI@Z",
+      "?DropItem@Items@GW@@YA_NPBUItem@2@I@Z",
+      "?EquipItem@Items@GW@@YA_NPBUItem@2@I@Z",
+      "?GetBag@Items@GW@@YAPAUBag@2@W43Constants@2@@Z",
+      "?GetBagArray@Items@GW@@YAPAPAUBag@2@XZ",
+      "?GetBagByIndex@Items@GW@@YAPAUBag@2@I@Z",
+      "?GetCompositeModelInfo@Items@GW@@YAPBUCompositeModelInfo@2@I@Z",
+      "?GetCompositeModelInfoArray@Items@GW@@YAABV?$BaseArray@UCompositeModelInfo@GW@@@2@XZ",
+      "?GetEquipmentVisibility@Items@GW@@YA?AW4EquipmentStatus@2@W4EquipmentType@2@@Z",
+      "?GetGoldAmountInStorage@Items@GW@@YAIXZ",
+      "?GetGoldAmountOnCharacter@Items@GW@@YAIXZ",
+      "?GetHoveredItem@Items@GW@@YAPAUItem@2@XZ",
+      "?GetInventory@Items@GW@@YAPAUInventory@2@XZ",
+      "?GetIsStorageOpen@Items@GW@@YA_NXZ",
+      "?GetItemArray@Items@GW@@YAPAV?$Array@PAUItem@GW@@@2@XZ",
+      "?GetItemById@Items@GW@@YAPAUItem@2@I@Z",
+      "?GetItemByModelId@Items@GW@@YAPAUItem@2@IHH@Z",
+      "?GetItemByModelIdAndModifiers@Items@GW@@YAPAUItem@2@IPBUItemModifier@2@IHH@Z",
+      "?GetItemBySlot@Items@GW@@YAPAUItem@2@PBUBag@2@I@Z",
+      "?GetItemFormula@Items@GW@@YAPBUItemFormula@2@PBUItem@2@@Z",
+      "?GetMaterialSlot@Items@GW@@YA?AW4MaterialSlot@Constants@2@PBUItem@2@@Z",
+      "?GetMaterialStorageStackSize@Items@GW@@YAIXZ",
+      "?GetPvPItemInfo@Items@GW@@YAPBUPvPItemInfo@2@I@Z",
+      "?GetPvPItemInfoArray@Items@GW@@YAABV?$BaseArray@UPvPItemInfo@GW@@@2@XZ",
+      "?GetPvPItemUpgrade@Items@GW@@YAPBUPvPItemUpgradeInfo@2@I@Z",
+      "?GetPvPItemUpgradeEncodedDescription@Items@GW@@YA_NIPAPA_W@Z",
+      "?GetPvPItemUpgradeEncodedName@Items@GW@@YA_NIPAPA_W@Z",
+      "?GetPvPItemUpgradesArray@Items@GW@@YAABV?$BaseArray@UPvPItemUpgradeInfo@GW@@@2@XZ",
+      "?GetSalvageSessionInfo@Items@GW@@YAPAUSalvageSessionInfo@2@XZ",
+      "?GetStoragePage@Items@GW@@YA?AW4StoragePane@Constants@2@XZ",
+      "?IdentifyItem@Items@GW@@YA_NII@Z",
+      "?MoveItem@Items@GW@@YA_NPBUItem@2@0I@Z",
+      "?MoveItem@Items@GW@@YA_NPBUItem@2@PBUBag@2@II@Z",
+      "?MoveItem@Items@GW@@YA_NPBUItem@2@W4Bag@Constants@2@II@Z",
+      "?OpenXunlaiWindow@Items@GW@@YA_N_N0@Z",
+      "?PickUpItem@Items@GW@@YA_NPBUItem@2@I@Z",
+      "?PingWeaponSet@Items@GW@@YA_NIII@Z",
+      "?RegisterItemClickCallback@Items@GW@@YAXPAUHookEntry@2@ABV?$function@$$A6AXPAUHookStatus@GW@@PAUkMouseAction@UIPacket@UI@2@PAUItem@2@@Z@std@@@Z",
+      "?RemoveItemClickCallback@Items@GW@@YAXPAUHookEntry@2@@Z",
+      "?SalvageMaterials@Items@GW@@YA_NXZ",
+      "?SalvageSessionCancel@Items@GW@@YA_NXZ",
+      "?SalvageStart@Items@GW@@YA_NII@Z",
+      "?SetEquipmentVisibility@Items@GW@@YA_NW4EquipmentType@2@W4EquipmentStatus@2@@Z",
+      "?UseItem@Items@GW@@YA_NPBUItem@2@@Z",
+      "?UseItemByModelId@Items@GW@@YA_NIHH@Z",
+      "?WithdrawGold@Items@GW@@YAII@Z"
+    ],
+    "MapMgr.cpp": [
+      "?CancelEnterChallenge@Map@GW@@YA_NXZ",
+      "?CreateMapContext@Map@GW@@YAPAUMapContext@2@I@Z",
+      "?DestroyMapContext@Map@GW@@YA_NPAUMapContext@2@@Z",
+      "?EnterChallenge@Map@GW@@YA_NXZ",
+      "?GetDistrict@Map@GW@@YAHXZ",
+      "?GetFoesKilled@Map@GW@@YAIXZ",
+      "?GetFoesToKill@Map@GW@@YAIXZ",
+      "?GetInstanceTime@Map@GW@@YAIXZ",
+      "?GetInstanceType@Map@GW@@YA?AW4InstanceType@Constants@2@XZ",
+      "?GetIsInCinematic@Map@GW@@YA_NXZ",
+      "?GetIsMapLoaded@Map@GW@@YA_NXZ",
+      "?GetIsMapUnlocked@Map@GW@@YA_NW4MapID@Constants@2@@Z",
+      "?GetIsObserving@Map@GW@@YA_NXZ",
+      "?GetLanguage@Map@GW@@YA?AW4Language@Constants@2@XZ",
+      "?GetMapID@Map@GW@@YA?AW4MapID@Constants@2@XZ",
+      "?GetMapInfo@Map@GW@@YAPAUAreaInfo@2@W4MapID@Constants@2@@Z",
+      "?GetMissionMapContext@Map@GW@@YAPAUMissionMapContext@2@XZ",
+      "?GetMissionMapIconArray@Map@GW@@YAPAV?$Array@UMissionMapIcon@GW@@@2@XZ",
+      "?GetPathingMap@Map@GW@@YAPAV?$Array@UPathingMap@GW@@@2@XZ",
+      "?GetRegion@Map@GW@@YA?AW4ServerRegion@Constants@2@XZ",
+      "?GetWorldMapContext@Map@GW@@YAPAUWorldMapContext@2@XZ",
+      "?LanguageFromDistrict@Map@GW@@YA?AW4Language@Constants@2@W4District@42@@Z",
+      "?QueryAltitude@Map@GW@@YAMPBUGamePos@2@MPAUMapContext@2@@Z",
+      "?RegionFromDistrict@Map@GW@@YA?AW4ServerRegion@Constants@2@W4District@42@@Z",
+      "?SkipCinematic@Map@GW@@YA_NXZ",
+      "?Travel@Map@GW@@YA_NW4MapID@Constants@2@W4District@42@H@Z",
+      "?Travel@Map@GW@@YA_NW4MapID@Constants@2@W4ServerRegion@42@HW4Language@42@@Z"
+    ],
+    "PlayerMgr.cpp": [
+      "?ChangeSecondProfession@PlayerMgr@GW@@YA_NW4Profession@Constants@2@I@Z",
+      "?GetActiveTitle@PlayerMgr@GW@@YAPAUTitle@2@XZ",
+      "?GetActiveTitleId@PlayerMgr@GW@@YA?AW4TitleID@Constants@2@XZ",
+      "?GetAmountOfPlayersInInstance@PlayerMgr@GW@@YAIXZ",
+      "?GetPlayerAgentId@PlayerMgr@GW@@YAII@Z",
+      "?GetPlayerArray@PlayerMgr@GW@@YAPAV?$Array@UPlayer@GW@@@2@XZ",
+      "?GetPlayerByID@PlayerMgr@GW@@YAPAUPlayer@2@I@Z",
+      "?GetPlayerByName@PlayerMgr@GW@@YAPAUPlayer@2@PB_W@Z",
+      "?GetPlayerName@PlayerMgr@GW@@YAPA_WI@Z",
+      "?GetPlayerNumber@PlayerMgr@GW@@YAIXZ",
+      "?GetTitleData@PlayerMgr@GW@@YAPAUTitleClientData@2@W4TitleID@Constants@2@@Z",
+      "?GetTitleTrack@PlayerMgr@GW@@YAPAUTitle@2@W4TitleID@Constants@2@@Z",
+      "?RemoveActiveTitle@PlayerMgr@GW@@YA_NXZ",
+      "?SetActiveTitle@PlayerMgr@GW@@YA_NW4TitleID@Constants@2@@Z",
+      "?SetPlayerName@PlayerMgr@GW@@YAPA_WIPB_W@Z"
+    ],
+    "SkillbarMgr.cpp": [
+      "?ChangeSecondProfession@SkillbarMgr@GW@@YA_NIW4Profession@Constants@2@@Z",
+      "?DecodeSkillTemplate@SkillbarMgr@GW@@YA_NAAUSkillTemplate@12@PBD@Z",
+      "?EncodeSkillTemplate@SkillbarMgr@GW@@YA_NABUSkillTemplate@12@PADI@Z",
+      "?GetAttributeConstantData@SkillbarMgr@GW@@YAPAUAttributeInfo@2@W4Attribute@Constants@2@@Z",
+      "?GetHeroSkillbar@SkillbarMgr@GW@@YAPAUSkillbar@2@I@Z",
+      "?GetHoveredSkill@SkillbarMgr@GW@@YAPAUSkill@2@XZ",
+      "?GetIsSkillLearnt@SkillbarMgr@GW@@YA_NW4SkillID@Constants@2@@Z",
+      "?GetIsSkillUnlocked@SkillbarMgr@GW@@YA_NW4SkillID@Constants@2@@Z",
+      "?GetPlayerSkillbar@SkillbarMgr@GW@@YAPAUSkillbar@2@XZ",
+      "?GetSkillConstantData@SkillbarMgr@GW@@YAPAUSkill@2@W4SkillID@Constants@2@@Z",
+      "?GetSkillSlot@SkillbarMgr@GW@@YAHW4SkillID@Constants@2@@Z",
+      "?GetSkillTemplate@SkillbarMgr@GW@@YA_NAAUSkillTemplate@12@@Z",
+      "?GetSkillTemplate@SkillbarMgr@GW@@YA_NIAAUSkillTemplate@12@@Z",
+      "?GetSkillbar@SkillbarMgr@GW@@YAPAUSkillbar@2@I@Z",
+      "?GetSkillbarArray@SkillbarMgr@GW@@YAPAV?$Array@USkillbar@GW@@@2@XZ",
+      "?LoadSkillTemplate@SkillbarMgr@GW@@YA_NAAUSkillTemplate@12@@Z",
+      "?LoadSkillTemplate@SkillbarMgr@GW@@YA_NIAAUSkillTemplate@12@@Z",
+      "?LoadSkillTemplate@SkillbarMgr@GW@@YA_NIPBD@Z",
+      "?LoadSkillTemplate@SkillbarMgr@GW@@YA_NPBD@Z",
+      "?UseSkill@SkillbarMgr@GW@@YA_NII@Z",
+      "?UseSkillByID@SkillbarMgr@GW@@YA_NII@Z"
+    ],
+    "AgentMgr.cpp": [
+      "?ChangeTarget@Agents@GW@@YA_NI@Z",
+      "?ChangeTarget@Agents@GW@@YA_NPBUAgent@2@@Z",
+      "?CountAllegianceInRange@Agents@GW@@YAIW4Allegiance@Constants@2@M@Z",
+      "?GetAgentArray@Agents@GW@@YAPAV?$Array@PAUAgent@GW@@@2@XZ",
+      "?GetAgentByID@Agents@GW@@YAPAUAgent@2@I@Z",
+      "?GetAgentEncName@Agents@GW@@YAPA_WI@Z",
+      "?GetAgentEncName@Agents@GW@@YAPA_WPBUAgent@2@@Z",
+      "?GetAgentIdByLoginNumber@Agents@GW@@YAII@Z",
+      "?GetAmountOfPlayersInInstance@Agents@GW@@YAIXZ",
+      "?GetControlledCharacter@Agents@GW@@YAPAUAgentLiving@2@XZ",
+      "?GetControlledCharacterId@Agents@GW@@YAIXZ",
+      "?GetEvaluatedTargetId@Agents@GW@@YAIXZ",
+      "?GetHeroAgentID@Agents@GW@@YAII@Z",
+      "?GetIsAgentTargettable@Agents@GW@@YA_NPBUAgent@2@@Z",
+      "?GetMapAgentArray@Agents@GW@@YAPAV?$Array@UMapAgent@GW@@@2@XZ",
+      "?GetMapAgentByID@Agents@GW@@YAPAUMapAgent@2@I@Z",
+      "?GetNPCArray@Agents@GW@@YAPAV?$Array@UNPC@GW@@@2@XZ",
+      "?GetNPCByID@Agents@GW@@YAPAUNPC@2@I@Z",
+      "?GetObservingId@Agents@GW@@YAIXZ",
+      "?GetPlayerArray@Agents@GW@@YAPAV?$Array@UPlayer@GW@@@2@XZ",
+      "?GetPlayerByID@Agents@GW@@YAPAUAgent@2@I@Z",
+      "?GetPlayerNameByLoginNumber@Agents@GW@@YAPA_WI@Z",
+      "?GetTargetAsAgentLiving@Agents@GW@@YAPAUAgentLiving@2@XZ",
+      "?GetTargetId@Agents@GW@@YAIXZ",
+      "?InteractAgent@Agents@GW@@YA_NPBUAgent@2@_N@Z",
+      "?IsObserving@Agents@GW@@YA_NXZ",
+      "?Move@Agents@GW@@YA_NMMI@Z",
+      "?Move@Agents@GW@@YA_NUGamePos@2@@Z",
+      "?SendDialog@Agents@GW@@YA_NI@Z",
+      "ChangeTargetByAgent",
+      "ChangeTargetById",
+      "GetAgentByID",
+      "GetControlledCharacter",
+      "GetControlledCharacterId",
+      "GetIsAgentTargettable",
+      "GetObservingId",
+      "GetPlayerByID",
+      "GetTargetId",
+      "InteractAgent",
+      "Move",
+      "MoveItemToBag",
+      "MoveItemToItem",
+      "SendDialog"
+    ],
+    "GameThreadMgr.cpp": [
+      "?ClearCalls@GameThread@GW@@YAXXZ",
+      "?EnableHooks@GameThread@GW@@YAXXZ",
+      "?Enqueue@GameThread@GW@@YAXV?$function@$$A6AXXZ@std@@_N@Z",
+      "?IsInGameThread@GameThread@GW@@YA_NXZ",
+      "?RegisterGameThreadCallback@GameThread@GW@@YAXPAUHookEntry@2@ABV?$function@$$A6AXPAUHookStatus@GW@@@Z@std@@H@Z",
+      "?RemoveGameThreadCallback@GameThread@GW@@YAXPAUHookEntry@2@@Z"
+    ],
+    "CameraMgr.cpp": [
+      "?ComputeCamPos@CameraMgr@GW@@YA?AUVec3f@2@M@Z",
+      "?GetCamera@CameraMgr@GW@@YAPAUCamera@2@XZ",
+      "?GetCameraUnlock@CameraMgr@GW@@YA_NXZ",
+      "?GetFieldOfView@CameraMgr@GW@@YAMXZ",
+      "?GetYaw@CameraMgr@GW@@YAMXZ",
+      "?SetFieldOfView@CameraMgr@GW@@YA_NM@Z",
+      "?SetFog@CameraMgr@GW@@YA_N_N@Z",
+      "?SetMaxDist@CameraMgr@GW@@YA_NM@Z",
+      "?UnlockCam@CameraMgr@GW@@YA_N_N@Z",
+      "?UpdateCameraPos@CameraMgr@GW@@YA_NXZ"
+    ],
+    "Hooker.cpp": [
+      "?CreateHook@Hook@GW@@YAHPAPAXPAX0@Z",
+      "?Deinitialize@Hook@GW@@YAXXZ",
+      "?DisableHooks@Hook@GW@@YAXPAX@Z",
+      "?EnableHooks@Hook@GW@@YAXPAX@Z",
+      "?EnterHook@Hook@GW@@YAXXZ",
+      "?GetInHookCount@Hook@GW@@YAHXZ",
+      "?Initialize@Hook@GW@@YAXXZ",
+      "?LeaveHook@Hook@GW@@YAXXZ",
+      "?RemoveHook@Hook@GW@@YAXPAX@Z"
+    ],
+    "GWCA.cpp": [
+      "?DisableHooks@GW@@YAXXZ",
+      "?EnableHooks@GW@@YAXXZ",
+      "?FatalAssert@GW@@YAXPBD0I0@Z",
+      "?GetAccountContext@GW@@YAPAUAccountContext@1@XZ",
+      "?GetAgentContext@GW@@YAPAUAgentContext@1@XZ",
+      "?GetAvailableChars@GW@@YAPAV?$Array@UCharacterInformation@GW@@@1@XZ",
+      "?GetCharContext@GW@@YAPAUCharContext@1@XZ",
+      "?GetDistance@GW@@YAMABUVec2f@1@0@Z",
+      "?GetDistance@GW@@YAMUVec3f@1@0@Z",
+      "?GetGameContext@GW@@YAPAUGameContext@1@XZ",
+      "?GetGameplayContext@GW@@YAPAUGameplayContext@1@XZ",
+      "?GetGuildContext@GW@@YAPAUGuildContext@1@XZ",
+      "?GetItemContext@GW@@YAPAUItemContext@1@XZ",
+      "?GetMapContext@GW@@YAPAUMapContext@1@XZ",
+      "?GetNorm@GW@@YAMUVec2f@1@@Z",
+      "?GetNorm@GW@@YAMUVec3f@1@@Z",
+      "?GetPartyContext@GW@@YAPAUPartyContext@1@XZ",
+      "?GetPreGameContext@GW@@YAPAUPreGameContext@1@XZ",
+      "?GetWorldContext@GW@@YAPAUWorldContext@1@XZ",
+      "?Hash16@GW@@YAIG@Z",
+      "?Hash32@GW@@YAII@Z",
+      "?Hash8@GW@@YAIE@Z",
+      "?Hash@GW@@YAIPBXI@Z",
+      "?HashWString@GW@@YAIPB_WI@Z",
+      "?Initialize@GW@@YA_NXZ",
+      "?LogMessage@GW@@YAXW4LogLevel@1@PBDI11ZZ",
+      "?RegisterLogHandler@GW@@YAXP6AXPAXW4LogLevel@1@PBD2I2@Z0@Z",
+      "?RegisterPanicHandler@GW@@YAXP6AXPAXPBD1I1@Z0@Z",
+      "?Rotate@GW@@YA?AUVec2f@1@U21@M@Z",
+      "?Terminate@GW@@YAXXZ"
+    ],
+    "MemoryPatcher.cpp": [
+      "?DisableHooks@MemoryPatcher@GW@@SAXXZ",
+      "?EnableHooks@MemoryPatcher@GW@@SAXXZ",
+      "?Reset@MemoryPatcher@GW@@QAEXXZ",
+      "?SetPatch@MemoryPatcher@GW@@QAEXIPBDI@Z",
+      "?SetRedirect@MemoryPatcher@GW@@QAE_NIPAX@Z",
+      "?TogglePatch@MemoryPatcher@GW@@QAE_N_N@Z"
+    ],
+    "EffectMgr.cpp": [
+      "?DropBuff@Effects@GW@@YA_NI@Z",
+      "?GetAgentBuffs@Effects@GW@@YAPAV?$Array@UBuff@GW@@@2@I@Z",
+      "?GetAgentEffects@Effects@GW@@YAPAV?$Array@UEffect@GW@@@2@I@Z",
+      "?GetAgentEffectsArray@Effects@GW@@YAPAUAgentEffects@2@I@Z",
+      "?GetAlcoholLevel@Effects@GW@@YAIXZ",
+      "?GetDrunkAf@Effects@GW@@YAXMI@Z",
+      "?GetPartyEffectsArray@Effects@GW@@YAPAV?$Array@UAgentEffects@GW@@@2@XZ",
+      "?GetPlayerBuffBySkillId@Effects@GW@@YAPAUBuff@2@W4SkillID@Constants@2@@Z",
+      "?GetPlayerBuffs@Effects@GW@@YAPAV?$Array@UBuff@GW@@@2@XZ",
+      "?GetPlayerEffectBySkillId@Effects@GW@@YAPAUEffect@2@W4SkillID@Constants@2@@Z",
+      "?GetPlayerEffects@Effects@GW@@YAPAV?$Array@UEffect@GW@@@2@XZ",
+      "?GetPlayerEffectsArray@Effects@GW@@YAPAUAgentEffects@2@XZ"
+    ],
+    "StoCMgr.cpp": [
+      "?EmulatePacket@StoC@GW@@YA_NPAUPacketBase@1Packet@2@@Z",
+      "?RegisterPacketCallback@StoC@GW@@YA_NPAUHookEntry@2@IABV?$function@$$A6AXPAUHookStatus@GW@@PAUPacketBase@StoC@Packet@2@@Z@std@@H@Z",
+      "?RegisterPostPacketCallback@StoC@GW@@YA_NPAUHookEntry@2@IABV?$function@$$A6AXPAUHookStatus@GW@@PAUPacketBase@StoC@Packet@2@@Z@std@@@Z",
+      "?RemoveCallback@StoC@GW@@YAIIPAUHookEntry@2@@Z",
+      "?RemoveCallbacks@StoC@GW@@YAIPAUHookEntry@2@@Z",
+      "?RemovePostCallback@StoC@GW@@YAXIPAUHookEntry@2@@Z"
+    ],
+    "RenderMgr.cpp": [
+      "?EnableHooks@Render@GW@@YAXXZ",
+      "?GetDevice@Render@GW@@YAPAUIDirect3DDevice9@@XZ",
+      "?GetFieldOfView@Render@GW@@YAMXZ",
+      "?GetFrameLimit@Render@GW@@YAIXZ",
+      "?GetGraphicsRendererValue@Render@GW@@YAIW4Metric@12@I@Z",
+      "?GetIsFullscreen@Render@GW@@YAHXZ",
+      "?GetIsInRenderLoop@Render@GW@@YA_NXZ",
+      "?GetRenderCallback@Render@GW@@YAP6AXPAUIDirect3DDevice9@@@ZXZ",
+      "?GetTransform@Render@GW@@YAPAUMat4x3f@12@W4Transform@12@@Z",
+      "?GetViewportHeight@Render@GW@@YAIXZ",
+      "?GetViewportWidth@Render@GW@@YAIXZ",
+      "?GetWindowHandle@Render@GW@@YAPAUHWND__@@XZ",
+      "?SetFog@Render@GW@@YA_N_N@Z",
+      "?SetFrameLimit@Render@GW@@YA_NI@Z",
+      "?SetGraphicsRendererValue@Render@GW@@YA_NW4Metric@12@II@Z",
+      "?SetRenderCallback@Render@GW@@YAXP6AXPAUIDirect3DDevice9@@@Z@Z",
+      "?SetResetCallback@Render@GW@@YAXP6AXPAUIDirect3DDevice9@@@Z@Z"
+    ],
+    "Scanner.cpp": [
+      "?Find@Scanner@GW@@YAIPBD0HW4ScannerSection@2@@Z",
+      "?FindAssertion@Scanner@GW@@YAIPBD0IH@Z",
+      "?FindInRange@Scanner@GW@@YAIPBD0HKK@Z",
+      "?FindNthUseOfString@Scanner@GW@@YAIPBDIHW4ScannerSection@2@@Z",
+      "?FindNthUseOfString@Scanner@GW@@YAIPB_WIHW4ScannerSection@2@@Z",
+      "?FindUseOfString@Scanner@GW@@YAIPBDHW4ScannerSection@2@@Z",
+      "?FindUseOfString@Scanner@GW@@YAIPB_WHW4ScannerSection@2@@Z",
+      "?FunctionFromNearCall@Scanner@GW@@YAII_N@Z",
+      "?GetGameTlsIndex@Scanner@GW@@YAKXZ",
+      "?GetSectionAddressRange@Scanner@GW@@YAXW4ScannerSection@2@PAI1@Z",
+      "?Initialize@Scanner@GW@@YAXPAUHINSTANCE__@@@Z",
+      "?Initialize@Scanner@GW@@YAXPBD@Z",
+      "?IsValidPtr@Scanner@GW@@YA_NIW4ScannerSection@2@@Z",
+      "?ToFunctionStart@Scanner@GW@@YAIII@Z"
+    ],
+    "GuildMgr.cpp": [
+      "?GetCurrentGH@GuildMgr@GW@@YAPAUGuild@2@XZ",
+      "?GetGuildArray@GuildMgr@GW@@YAPAV?$Array@PAUGuild@GW@@@2@XZ",
+      "?GetGuildInfo@GuildMgr@GW@@YAPAUGuild@2@I@Z",
+      "?GetPlayerGuild@GuildMgr@GW@@YAPAUGuild@2@XZ",
+      "?GetPlayerGuildAnnouncement@GuildMgr@GW@@YAPA_WXZ",
+      "?GetPlayerGuildAnnouncer@GuildMgr@GW@@YAPA_WXZ",
+      "?GetPlayerGuildIndex@GuildMgr@GW@@YAIXZ",
+      "?LeaveGH@GuildMgr@GW@@YA_NXZ",
+      "?TravelGH@GuildMgr@GW@@YA_NUGHKey@2@@Z",
+      "?TravelGH@GuildMgr@GW@@YA_NXZ"
+    ],
+    "Unknown": [
+      "?GetDecodedLabel@MultiLineTextLabelFrame@GW@@QAEPB_WXZ",
+      "?GetEncodedLabel@MultiLineTextLabelFrame@GW@@QAEPB_WXZ",
+      "?GetIsMaterial@Item@GW@@QBE_NXZ",
+      "?GetIsZcoin@Item@GW@@QBE_NXZ",
+      "?GetRecharge@SkillbarSkill@GW@@QBEIXZ",
+      "?GetSkillById@Skillbar@GW@@QAEPAUSkillbarSkill@2@W4SkillID@Constants@2@PAI@Z",
+      "?GetTimeElapsed@Effect@GW@@QBEKXZ",
+      "?GetTimeRemaining@Effect@GW@@QBEKXZ",
+      "?SetLabel@MultiLineTextLabelFrame@GW@@QAE_NPB_W@Z",
+      "AbandonQuest",
+      "AbandonQuestId",
+      "AddFriend",
+      "AddIgnore",
+      "AddToChatLog",
+      "CanAccessXunlaiChest",
+      "CanInteractWithItem",
+      "CancelEnterChallenge",
+      "ChangeFriendType",
+      "ChangeOffer",
+      "ChangeSecondProfession",
+      "ComputeCamPos",
+      "CountAllegianceInRange",
+      "CountItemByModelId",
+      "CreateMapContext",
+      "DepositGold",
+      "DestroyItem",
+      "DestroyMapContext",
+      "DropBuff",
+      "DropGold",
+      "DropItem",
+      "EncStrToUInt32",
+      "Enqueue",
+      "EnterChallenge",
+      "EquipItem",
+      "GWCAVersion",
+      "GetActiveQuest",
+      "GetActiveQuestId",
+      "GetActiveTitle",
+      "GetActiveTitleId",
+      "GetAgentEffectsArray",
+      "GetAgentEncNameByAgent",
+      "GetAgentEncNameById",
+      "GetAgentIdByLoginNumber",
+      "GetAlcoholLevel",
+      "GetAmountOfPlayersInInstance",
+      "GetAttributeConstantData",
+      "GetAvailableChars",
+      "GetBag",
+      "GetBagByIndex",
+      "GetCamera",
+      "GetCameraUnlock",
+      "GetChannelColors",
+      "GetChannelFromChar",
+      "GetChannelFromWChar",
+      "GetChatLog",
+      "GetCommandLinePref_String",
+      "GetCommandLinePref_UInt",
+      "GetCompositeModelInfo",
+      "GetCurrentGH",
+      "GetDefaultColors",
+      "GetDistrict",
+      "GetDrunkAf",
+      "GetEquipmentVisibility",
+      "GetEvaluatedTargetId",
+      "GetFieldOfView",
+      "GetFoesKilled",
+      "GetFoesToKill",
+      "GetFrameByLabel",
+      "GetFrameContext",
+      "GetFriendByIndex",
+      "GetFriendByName",
+      "GetFriendByUuid",
+      "GetFriendList",
+      "GetGoldAmountInStorage",
+      "GetGoldAmountOnCharacter",
+      "GetGuildInfo",
+      "GetHeroAgentID",
+      "GetHeroSkillbar",
+      "GetHoveredItem",
+      "GetHoveredSkill",
+      "GetInstanceTime",
+      "GetInstanceType",
+      "GetInventory",
+      "GetIsInCinematic",
+      "GetIsMapLoaded",
+      "GetIsMapUnlocked",
+      "GetIsObserving",
+      "GetIsShiftScreenShot",
+      "GetIsSkillLearnt",
+      "GetIsSkillUnlocked",
+      "GetIsStorageOpen",
+      "GetIsTyping",
+      "GetIsUIDrawn",
+      "GetIsWorldMapShowing",
+      "GetItemById",
+      "GetItemByModelId",
+      "GetItemBySlot",
+      "GetItemFormula",
+      "GetLanguage",
+      "GetMapAgentByID",
+      "GetMapID",
+      "GetMapInfo",
+      "GetMaterialSlot",
+      "GetMaterialStorageStackSize",
+      "GetMissionMapContext",
+      "GetMyStatus",
+      "GetNPCByID",
+      "GetNumberOfFriends",
+      "GetNumberOfIgnores",
+      "GetNumberOfPartners",
+      "GetNumberOfTraders",
+      "GetParentFrame",
+      "GetPlayerAgentId",
+      "GetPlayerBuffBySkillId",
+      "GetPlayerEffectBySkillId",
+      "GetPlayerEffectsArray",
+      "GetPlayerGuild",
+      "GetPlayerGuildAnnouncement",
+      "GetPlayerGuildAnnouncer",
+      "GetPlayerGuildIndex",
+      "GetPlayerNameByLoginNumber",
+      "GetPlayerNumber",
+      "GetPlayerSkillbar",
+      "GetPvPItemInfo",
+      "GetPvPItemUpgrade",
+      "GetPvPItemUpgradeEncodedDescription",
+      "GetPvPItemUpgradeEncodedName",
+      "GetQuest",
+      "GetQuestEntryGroupName",
+      "GetQuestLog",
+      "GetRegion",
+      "GetSalvageSessionInfo",
+      "GetSkillConstantData",
+      "GetSkillSlot",
+      "GetSkillbar",
+      "GetStoragePage",
+      "GetTargetAsAgentLiving",
+      "GetTextLanguage",
+      "GetTitleData",
+      "GetTitleTrack",
+      "GetWindowPosition",
+      "GetWorldMapContext",
+      "GetYaw",
+      "IdentifyItem",
+      "IsInControllerCursorMode",
+      "IsInControllerMode",
+      "IsInGameThread",
+      "IsItemOffered",
+      "IsObserving",
+      "IsValidEncStr",
+      "LanguageFromDistrict",
+      "LeaveGH",
+      "LoadSkillTemplateForAgent",
+      "LoadSkillTemplateString",
+      "OfferItem",
+      "OpenTradeWindow",
+      "OpenXunlaiWindow",
+      "PickUpItem",
+      "PingWeaponSet",
+      "QueryAltitude",
+      "RegionFromDistrict",
+      "RegisterGameThreadCallback",
+      "RemoveActiveTitle",
+      "RemoveFriend",
+      "RemoveGameThreadCallback",
+      "RemoveOfferedItem",
+      "RequestQuestInfo",
+      "RequestQuestInfoId",
+      "SalvageMaterials",
+      "SalvageSessionCancel",
+      "SalvageStart",
+      "SelectDropdownOption",
+      "SendChat",
+      "SendWhisper",
+      "SetActiveQuest",
+      "SetActiveQuestId",
+      "SetActiveTitle",
+      "SetCommandLinePref_String",
+      "SetCommandLinePref_UInt",
+      "SetEquipmentVisibility",
+      "SetFieldOfView",
+      "SetFog",
+      "SetFrameDisabled",
+      "SetFrameTitle",
+      "SetFrameVisible",
+      "SetFriendListStatus",
+      "SetMaxDist",
+      "SetMessageColor",
+      "SetPlayerName",
+      "SetSenderColor",
+      "SetTimestampsColor",
+      "SetTimestampsFormat",
+      "SetWindowPosition",
+      "SetWindowVisible",
+      "SkipCinematic",
+      "SubmitOffer",
+      "ToggleTimestamps",
+      "TravelByDistrict",
+      "TravelByRegion",
+      "TravelGH",
+      "UInt32ToEncStr",
+      "UnlockCam",
+      "UpdateCameraPos",
+      "UseItem",
+      "UseItemByModelId",
+      "UseSkill",
+      "UseSkillByID",
+      "WithdrawGold",
+      "WriteChat",
+      "WriteChatEnc"
+    ],
+    "MemoryMgr.cpp": [
+      "?GetGWVersion@MemoryMgr@GW@@YAIXZ",
+      "?GetGWWindowHandle@MemoryMgr@GW@@YAPAUHWND__@@XZ",
+      "?GetPersonalDir@MemoryMgr@GW@@YA_NIPA_W@Z",
+      "?GetSkillTimer@MemoryMgr@GW@@YAKXZ",
+      "?MemAlloc@MemoryMgr@GW@@YAPAXI@Z",
+      "?MemFree@MemoryMgr@GW@@YAXPAX@Z",
+      "?MemRealloc@MemoryMgr@GW@@YAPAXPAXI@Z"
+    ],
+    "MerchantMgr.cpp": [
+      "?GetMerchantItems@Merchant@GW@@YAIW4TransactionType@12@IPAI@Z",
+      "?RequestQuote@Merchant@GW@@YA_NW4TransactionType@12@I@Z",
+      "?TransactItems@Merchant@GW@@YA_NXZ"
+    ],
+    "EventMgr.cpp": [
+      "?RegisterEventCallback@EventMgr@GW@@YAXPAUHookEntry@2@W4EventID@12@ABV?$function@$$A6AXPAUHookStatus@GW@@W4EventID@EventMgr@2@PAXI@Z@std@@H@Z",
+      "?RemoveEventCallback@EventMgr@GW@@YAXPAUHookEntry@2@W4EventID@12@@Z"
+    ]
+  },
+  "unique_addresses": 587,
+  "header_declarations": 759
+}

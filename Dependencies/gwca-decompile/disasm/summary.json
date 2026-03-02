@@ -1,0 +1,6354 @@
+{
+  "total_functions": 586,
+  "total_bytes": 61424,
+  "modules": {
+    "AgentMgr": {
+      "function_count": 29,
+      "total_bytes": 2271,
+      "functions": [
+        {
+          "rva": 7760,
+          "size": 42,
+          "names": [
+            "?ChangeTarget@Agents@GW@@YA_NI@Z",
+            "ChangeTargetById"
+          ],
+          "demangled": [
+            "Agents::ChangeTarget",
+            "ChangeTargetById"
+          ]
+        },
+        {
+          "rva": 7808,
+          "size": 55,
+          "names": [
+            "?ChangeTarget@Agents@GW@@YA_NPBUAgent@2@@Z",
+            "ChangeTargetByAgent"
+          ],
+          "demangled": [
+            "Agents::ChangeTarget",
+            "ChangeTargetByAgent"
+          ]
+        },
+        {
+          "rva": 7872,
+          "size": 161,
+          "names": [
+            "?CountAllegianceInRange@Agents@GW@@YAIW4Allegiance@Constants@2@M@Z"
+          ],
+          "demangled": [
+            "Agents::CountAllegianceInRange"
+          ]
+        },
+        {
+          "rva": 8016,
+          "size": 17,
+          "names": [
+            "?GetAgentArray@Agents@GW@@YAPAV?$Array@PAUAgent@GW@@@2@XZ"
+          ],
+          "demangled": [
+            "Agents::GetAgentArray"
+          ]
+        },
+        {
+          "rva": 8048,
+          "size": 83,
+          "names": [
+            "?GetAgentByID@Agents@GW@@YAPAUAgent@2@I@Z",
+            "GetAgentByID"
+          ],
+          "demangled": [
+            "Agents::GetAgentByID",
+            "GetAgentByID"
+          ]
+        },
+        {
+          "rva": 8144,
+          "size": 135,
+          "names": [
+            "?GetAgentEncName@Agents@GW@@YAPA_WI@Z"
+          ],
+          "demangled": [
+            "Agents::GetAgentEncName"
+          ]
+        },
+        {
+          "rva": 8288,
+          "size": 417,
+          "names": [
+            "?GetAgentEncName@Agents@GW@@YAPA_WPBUAgent@2@@Z"
+          ],
+          "demangled": [
+            "Agents::GetAgentEncName"
+          ]
+        },
+        {
+          "rva": 8720,
+          "size": 26,
+          "names": [
+            "?GetAgentIdByLoginNumber@Agents@GW@@YAII@Z",
+            "GetAgentIdByLoginNumber"
+          ],
+          "demangled": [
+            "Agents::GetAgentIdByLoginNumber",
+            "GetAgentIdByLoginNumber"
+          ]
+        },
+        {
+          "rva": 8752,
+          "size": 29,
+          "names": [
+            "?GetAmountOfPlayersInInstance@Agents@GW@@YAIXZ",
+            "GetAmountOfPlayersInInstance"
+          ],
+          "demangled": [
+            "Agents::GetAmountOfPlayersInInstance",
+            "GetAmountOfPlayersInInstance"
+          ]
+        },
+        {
+          "rva": 8784,
+          "size": 116,
+          "names": [
+            "?GetControlledCharacter@Agents@GW@@YAPAUAgentLiving@2@XZ"
+          ],
+          "demangled": [
+            "Agents::GetControlledCharacter"
+          ]
+        },
+        {
+          "rva": 8912,
+          "size": 26,
+          "names": [
+            "?GetControlledCharacterId@Agents@GW@@YAIXZ",
+            "GetControlledCharacterId"
+          ],
+          "demangled": [
+            "Agents::GetControlledCharacterId",
+            "GetControlledCharacterId"
+          ]
+        },
+        {
+          "rva": 9504,
+          "size": 6,
+          "names": [
+            "?GetEvaluatedTargetId@Agents@GW@@YAIXZ",
+            "GetEvaluatedTargetId"
+          ],
+          "demangled": [
+            "Agents::GetEvaluatedTargetId",
+            "GetEvaluatedTargetId"
+          ]
+        },
+        {
+          "rva": 9520,
+          "size": 9,
+          "names": [
+            "?GetHeroAgentID@Agents@GW@@YAII@Z",
+            "GetHeroAgentID"
+          ],
+          "demangled": [
+            "Agents::GetHeroAgentID",
+            "GetHeroAgentID"
+          ]
+        },
+        {
+          "rva": 9536,
+          "size": 172,
+          "names": [
+            "?GetIsAgentTargettable@Agents@GW@@YA_NPBUAgent@2@@Z"
+          ],
+          "demangled": [
+            "Agents::GetIsAgentTargettable"
+          ]
+        },
+        {
+          "rva": 9712,
+          "size": 15,
+          "names": [
+            "?GetMapAgentArray@Agents@GW@@YAPAV?$Array@UMapAgent@GW@@@2@XZ"
+          ],
+          "demangled": [
+            "Agents::GetMapAgentArray"
+          ]
+        },
+        {
+          "rva": 9728,
+          "size": 102,
+          "names": [
+            "?GetMapAgentByID@Agents@GW@@YAPAUMapAgent@2@I@Z",
+            "GetMapAgentByID"
+          ],
+          "demangled": [
+            "Agents::GetMapAgentByID",
+            "GetMapAgentByID"
+          ]
+        },
+        {
+          "rva": 9808,
+          "size": 22,
+          "names": [
+            "?GetNPCArray@Agents@GW@@YAPAV?$Array@UNPC@GW@@@2@XZ"
+          ],
+          "demangled": [
+            "Agents::GetNPCArray"
+          ]
+        },
+        {
+          "rva": 9840,
+          "size": 53,
+          "names": [
+            "?GetNPCByID@Agents@GW@@YAPAUNPC@2@I@Z",
+            "GetNPCByID"
+          ],
+          "demangled": [
+            "Agents::GetNPCByID",
+            "GetNPCByID"
+          ]
+        },
+        {
+          "rva": 9904,
+          "size": 15,
+          "names": [
+            "?GetObservingId@Agents@GW@@YAIXZ",
+            "GetObservingId"
+          ],
+          "demangled": [
+            "Agents::GetObservingId",
+            "GetObservingId"
+          ]
+        },
+        {
+          "rva": 9920,
+          "size": 22,
+          "names": [
+            "?GetPlayerArray@Agents@GW@@YAPAV?$Array@UPlayer@GW@@@2@XZ",
+            "?GetPlayerArray@PlayerMgr@GW@@YAPAV?$Array@UPlayer@GW@@@2@XZ"
+          ],
+          "demangled": [
+            "Agents::GetPlayerArray",
+            "PlayerMgr::GetPlayerArray"
+          ]
+        },
+        {
+          "rva": 9952,
+          "size": 93,
+          "names": [
+            "?GetPlayerByID@Agents@GW@@YAPAUAgent@2@I@Z"
+          ],
+          "demangled": [
+            "Agents::GetPlayerByID"
+          ]
+        },
+        {
+          "rva": 10048,
+          "size": 9,
+          "names": [
+            "?GetPlayerNameByLoginNumber@Agents@GW@@YAPA_WI@Z",
+            "GetPlayerNameByLoginNumber"
+          ],
+          "demangled": [
+            "Agents::GetPlayerNameByLoginNumber",
+            "GetPlayerNameByLoginNumber"
+          ]
+        },
+        {
+          "rva": 10064,
+          "size": 100,
+          "names": [
+            "?GetTargetAsAgentLiving@Agents@GW@@YAPAUAgentLiving@2@XZ"
+          ],
+          "demangled": [
+            "Agents::GetTargetAsAgentLiving"
+          ]
+        },
+        {
+          "rva": 10176,
+          "size": 6,
+          "names": [
+            "?GetTargetId@Agents@GW@@YAIXZ",
+            "GetTargetId"
+          ],
+          "demangled": [
+            "Agents::GetTargetId",
+            "GetTargetId"
+          ]
+        },
+        {
+          "rva": 10704,
+          "size": 209,
+          "names": [
+            "?InteractAgent@Agents@GW@@YA_NPBUAgent@2@_N@Z"
+          ],
+          "demangled": [
+            "Agents::InteractAgent"
+          ]
+        },
+        {
+          "rva": 10928,
+          "size": 62,
+          "names": [
+            "?IsObserving@Agents@GW@@YA_NXZ",
+            "IsObserving"
+          ],
+          "demangled": [
+            "Agents::IsObserving",
+            "IsObserving"
+          ]
+        },
+        {
+          "rva": 10992,
+          "size": 41,
+          "names": [
+            "?Move@Agents@GW@@YA_NMMI@Z",
+            "Move"
+          ],
+          "demangled": [
+            "Agents::Move",
+            "Move"
+          ]
+        },
+        {
+          "rva": 11040,
+          "size": 155,
+          "names": [
+            "?Move@Agents@GW@@YA_NUGamePos@2@@Z"
+          ],
+          "demangled": [
+            "Agents::Move"
+          ]
+        },
+        {
+          "rva": 11792,
+          "size": 73,
+          "names": [
+            "?SendDialog@Agents@GW@@YA_NI@Z",
+            "SendDialog"
+          ],
+          "demangled": [
+            "Agents::SendDialog",
+            "SendDialog"
+          ]
+        }
+      ]
+    },
+    "Unknown": {
+      "function_count": 82,
+      "total_bytes": 3085,
+      "functions": [
+        {
+          "rva": 12896,
+          "size": 27,
+          "names": [
+            "CountAllegianceInRange"
+          ],
+          "demangled": [
+            "CountAllegianceInRange"
+          ]
+        },
+        {
+          "rva": 12928,
+          "size": 9,
+          "names": [
+            "GetAgentEncNameByAgent"
+          ],
+          "demangled": [
+            "GetAgentEncNameByAgent"
+          ]
+        },
+        {
+          "rva": 12944,
+          "size": 9,
+          "names": [
+            "GetAgentEncNameById"
+          ],
+          "demangled": [
+            "GetAgentEncNameById"
+          ]
+        },
+        {
+          "rva": 12960,
+          "size": 25,
+          "names": [
+            "GetControlledCharacter"
+          ],
+          "demangled": [
+            "GetControlledCharacter"
+          ]
+        },
+        {
+          "rva": 12976,
+          "size": 9,
+          "names": [
+            "GetIsAgentTargettable"
+          ],
+          "demangled": [
+            "GetIsAgentTargettable"
+          ]
+        },
+        {
+          "rva": 12992,
+          "size": 9,
+          "names": [
+            "GetPlayerByID"
+          ],
+          "demangled": [
+            "GetPlayerByID"
+          ]
+        },
+        {
+          "rva": 13008,
+          "size": 25,
+          "names": [
+            "GetTargetAsAgentLiving"
+          ],
+          "demangled": [
+            "GetTargetAsAgentLiving"
+          ]
+        },
+        {
+          "rva": 13024,
+          "size": 9,
+          "names": [
+            "InteractAgent"
+          ],
+          "demangled": [
+            "InteractAgent"
+          ]
+        },
+        {
+          "rva": 13920,
+          "size": 69,
+          "names": [
+            "ComputeCamPos"
+          ],
+          "demangled": [
+            "ComputeCamPos"
+          ]
+        },
+        {
+          "rva": 22032,
+          "size": 9,
+          "names": [
+            "SendChat"
+          ],
+          "demangled": [
+            "SendChat"
+          ]
+        },
+        {
+          "rva": 22048,
+          "size": 9,
+          "names": [
+            "SendWhisper"
+          ],
+          "demangled": [
+            "SendWhisper"
+          ]
+        },
+        {
+          "rva": 22064,
+          "size": 63,
+          "names": [
+            "SetMessageColor"
+          ],
+          "demangled": [
+            "SetMessageColor"
+          ]
+        },
+        {
+          "rva": 22128,
+          "size": 63,
+          "names": [
+            "SetSenderColor"
+          ],
+          "demangled": [
+            "SetSenderColor"
+          ]
+        },
+        {
+          "rva": 22192,
+          "size": 21,
+          "names": [
+            "WriteChat"
+          ],
+          "demangled": [
+            "WriteChat"
+          ]
+        },
+        {
+          "rva": 22208,
+          "size": 22,
+          "names": [
+            "WriteChatEnc"
+          ],
+          "demangled": [
+            "WriteChatEnc"
+          ]
+        },
+        {
+          "rva": 23792,
+          "size": 9,
+          "names": [
+            "DropBuff"
+          ],
+          "demangled": [
+            "DropBuff"
+          ]
+        },
+        {
+          "rva": 92800,
+          "size": 62,
+          "names": [
+            "?GetDecodedLabel@MultiLineTextLabelFrame@GW@@QAEPB_WXZ"
+          ],
+          "demangled": [
+            "MultiLineTextLabelFrame::GetDecodedLabel"
+          ]
+        },
+        {
+          "rva": 92928,
+          "size": 25,
+          "names": [
+            "?GetEncodedLabel@MultiLineTextLabelFrame@GW@@QAEPB_WXZ"
+          ],
+          "demangled": [
+            "MultiLineTextLabelFrame::GetEncodedLabel"
+          ]
+        },
+        {
+          "rva": 96368,
+          "size": 40,
+          "names": [
+            "?SetLabel@MultiLineTextLabelFrame@GW@@QAE_NPB_W@Z"
+          ],
+          "demangled": [
+            "MultiLineTextLabelFrame::SetLabel"
+          ]
+        },
+        {
+          "rva": 101856,
+          "size": 151,
+          "names": [
+            "GetFriendByName"
+          ],
+          "demangled": [
+            "GetFriendByName"
+          ]
+        },
+        {
+          "rva": 102016,
+          "size": 9,
+          "names": [
+            "GetFriendByUuid"
+          ],
+          "demangled": [
+            "GetFriendByUuid"
+          ]
+        },
+        {
+          "rva": 102032,
+          "size": 137,
+          "names": [
+            "GetNumberOfFriends"
+          ],
+          "demangled": [
+            "GetNumberOfFriends"
+          ]
+        },
+        {
+          "rva": 107632,
+          "size": 361,
+          "names": [
+            "Enqueue"
+          ],
+          "demangled": [
+            "Enqueue"
+          ]
+        },
+        {
+          "rva": 107904,
+          "size": 89,
+          "names": [
+            "RegisterGameThreadCallback"
+          ],
+          "demangled": [
+            "RegisterGameThreadCallback"
+          ]
+        },
+        {
+          "rva": 108000,
+          "size": 99,
+          "names": [
+            "RemoveGameThreadCallback"
+          ],
+          "demangled": [
+            "RemoveGameThreadCallback"
+          ]
+        },
+        {
+          "rva": 108480,
+          "size": 101,
+          "names": [
+            "GetCurrentGH"
+          ],
+          "demangled": [
+            "GetCurrentGH"
+          ]
+        },
+        {
+          "rva": 113312,
+          "size": 36,
+          "names": [
+            "?GetIsMaterial@Item@GW@@QBE_NXZ"
+          ],
+          "demangled": [
+            "Item::GetIsMaterial"
+          ]
+        },
+        {
+          "rva": 113392,
+          "size": 29,
+          "names": [
+            "?GetIsZcoin@Item@GW@@QBE_NXZ"
+          ],
+          "demangled": [
+            "Item::GetIsZcoin"
+          ]
+        },
+        {
+          "rva": 118832,
+          "size": 9,
+          "names": [
+            "CountItemByModelId"
+          ],
+          "demangled": [
+            "CountItemByModelId"
+          ]
+        },
+        {
+          "rva": 118848,
+          "size": 9,
+          "names": [
+            "DepositGold"
+          ],
+          "demangled": [
+            "DepositGold"
+          ]
+        },
+        {
+          "rva": 118864,
+          "size": 9,
+          "names": [
+            "DestroyItem"
+          ],
+          "demangled": [
+            "DestroyItem"
+          ]
+        },
+        {
+          "rva": 118880,
+          "size": 9,
+          "names": [
+            "DropGold"
+          ],
+          "demangled": [
+            "DropGold"
+          ]
+        },
+        {
+          "rva": 118896,
+          "size": 9,
+          "names": [
+            "DropItem"
+          ],
+          "demangled": [
+            "DropItem"
+          ]
+        },
+        {
+          "rva": 118912,
+          "size": 156,
+          "names": [
+            "EquipItem"
+          ],
+          "demangled": [
+            "EquipItem"
+          ]
+        },
+        {
+          "rva": 119072,
+          "size": 9,
+          "names": [
+            "GetItemById"
+          ],
+          "demangled": [
+            "GetItemById"
+          ]
+        },
+        {
+          "rva": 119088,
+          "size": 9,
+          "names": [
+            "GetItemByModelId"
+          ],
+          "demangled": [
+            "GetItemByModelId"
+          ]
+        },
+        {
+          "rva": 119104,
+          "size": 50,
+          "names": [
+            "GetItemBySlot"
+          ],
+          "demangled": [
+            "GetItemBySlot"
+          ]
+        },
+        {
+          "rva": 119168,
+          "size": 14,
+          "names": [
+            "GetStoragePage"
+          ],
+          "demangled": [
+            "GetStoragePage"
+          ]
+        },
+        {
+          "rva": 119184,
+          "size": 9,
+          "names": [
+            "IdentifyItem"
+          ],
+          "demangled": [
+            "IdentifyItem"
+          ]
+        },
+        {
+          "rva": 119200,
+          "size": 25,
+          "names": [
+            "SalvageMaterials"
+          ],
+          "demangled": [
+            "SalvageMaterials"
+          ]
+        },
+        {
+          "rva": 119216,
+          "size": 9,
+          "names": [
+            "SalvageStart"
+          ],
+          "demangled": [
+            "SalvageStart"
+          ]
+        },
+        {
+          "rva": 119232,
+          "size": 9,
+          "names": [
+            "UseItem"
+          ],
+          "demangled": [
+            "UseItem"
+          ]
+        },
+        {
+          "rva": 119248,
+          "size": 9,
+          "names": [
+            "WithdrawGold"
+          ],
+          "demangled": [
+            "WithdrawGold"
+          ]
+        },
+        {
+          "rva": 121408,
+          "size": 105,
+          "names": [
+            "CreateMapContext"
+          ],
+          "demangled": [
+            "CreateMapContext"
+          ]
+        },
+        {
+          "rva": 121520,
+          "size": 27,
+          "names": [
+            "GetIsInCinematic"
+          ],
+          "demangled": [
+            "GetIsInCinematic"
+          ]
+        },
+        {
+          "rva": 121552,
+          "size": 70,
+          "names": [
+            "GetIsMapUnlocked"
+          ],
+          "demangled": [
+            "GetIsMapUnlocked"
+          ]
+        },
+        {
+          "rva": 121632,
+          "size": 28,
+          "names": [
+            "GetIsObserving"
+          ],
+          "demangled": [
+            "GetIsObserving"
+          ]
+        },
+        {
+          "rva": 121664,
+          "size": 25,
+          "names": [
+            "GetWorldMapContext"
+          ],
+          "demangled": [
+            "GetWorldMapContext"
+          ]
+        },
+        {
+          "rva": 121680,
+          "size": 9,
+          "names": [
+            "LanguageFromDistrict"
+          ],
+          "demangled": [
+            "LanguageFromDistrict"
+          ]
+        },
+        {
+          "rva": 121696,
+          "size": 265,
+          "names": [
+            "QueryAltitude"
+          ],
+          "demangled": [
+            "QueryAltitude"
+          ]
+        },
+        {
+          "rva": 121968,
+          "size": 9,
+          "names": [
+            "RegionFromDistrict"
+          ],
+          "demangled": [
+            "RegionFromDistrict"
+          ]
+        },
+        {
+          "rva": 133568,
+          "size": 25,
+          "names": [
+            "GetActiveTitleId"
+          ],
+          "demangled": [
+            "GetActiveTitleId"
+          ]
+        },
+        {
+          "rva": 133584,
+          "size": 9,
+          "names": [
+            "SetPlayerName"
+          ],
+          "demangled": [
+            "SetPlayerName"
+          ]
+        },
+        {
+          "rva": 135168,
+          "size": 25,
+          "names": [
+            "GetActiveQuest"
+          ],
+          "demangled": [
+            "GetActiveQuest"
+          ]
+        },
+        {
+          "rva": 135184,
+          "size": 9,
+          "names": [
+            "GetQuestEntryGroupName"
+          ],
+          "demangled": [
+            "GetQuestEntryGroupName"
+          ]
+        },
+        {
+          "rva": 135200,
+          "size": 56,
+          "names": [
+            "GetQuestLog"
+          ],
+          "demangled": [
+            "GetQuestLog"
+          ]
+        },
+        {
+          "rva": 140624,
+          "size": 24,
+          "names": [
+            "?GetRecharge@SkillbarSkill@GW@@QBEIXZ"
+          ],
+          "demangled": [
+            "SkillbarSkill::GetRecharge"
+          ]
+        },
+        {
+          "rva": 140656,
+          "size": 44,
+          "names": [
+            "?GetSkillById@Skillbar@GW@@QAEPAUSkillbarSkill@2@W4SkillID@Constants@2@PAI@Z"
+          ],
+          "demangled": [
+            "Skillbar::GetSkillById"
+          ]
+        },
+        {
+          "rva": 140704,
+          "size": 13,
+          "names": [
+            "?GetTimeElapsed@Effect@GW@@QBEKXZ"
+          ],
+          "demangled": [
+            "Effect::GetTimeElapsed"
+          ]
+        },
+        {
+          "rva": 140720,
+          "size": 41,
+          "names": [
+            "?GetTimeRemaining@Effect@GW@@QBEKXZ"
+          ],
+          "demangled": [
+            "Effect::GetTimeRemaining"
+          ]
+        },
+        {
+          "rva": 147200,
+          "size": 9,
+          "names": [
+            "GetHeroSkillbar"
+          ],
+          "demangled": [
+            "GetHeroSkillbar"
+          ]
+        },
+        {
+          "rva": 147216,
+          "size": 9,
+          "names": [
+            "GetIsSkillLearnt"
+          ],
+          "demangled": [
+            "GetIsSkillLearnt"
+          ]
+        },
+        {
+          "rva": 147232,
+          "size": 9,
+          "names": [
+            "GetIsSkillUnlocked"
+          ],
+          "demangled": [
+            "GetIsSkillUnlocked"
+          ]
+        },
+        {
+          "rva": 147248,
+          "size": 25,
+          "names": [
+            "GetPlayerSkillbar"
+          ],
+          "demangled": [
+            "GetPlayerSkillbar"
+          ]
+        },
+        {
+          "rva": 147264,
+          "size": 9,
+          "names": [
+            "LoadSkillTemplateForAgent"
+          ],
+          "demangled": [
+            "LoadSkillTemplateForAgent"
+          ]
+        },
+        {
+          "rva": 147280,
+          "size": 9,
+          "names": [
+            "UseSkill"
+          ],
+          "demangled": [
+            "UseSkill"
+          ]
+        },
+        {
+          "rva": 151648,
+          "size": 9,
+          "names": [
+            "IsItemOffered"
+          ],
+          "demangled": [
+            "IsItemOffered"
+          ]
+        },
+        {
+          "rva": 151664,
+          "size": 9,
+          "names": [
+            "OfferItem"
+          ],
+          "demangled": [
+            "OfferItem"
+          ]
+        },
+        {
+          "rva": 151680,
+          "size": 9,
+          "names": [
+            "RemoveOfferedItem"
+          ],
+          "demangled": [
+            "RemoveOfferedItem"
+          ]
+        },
+        {
+          "rva": 171344,
+          "size": 9,
+          "names": [
+            "EncStrToUInt32"
+          ],
+          "demangled": [
+            "EncStrToUInt32"
+          ]
+        },
+        {
+          "rva": 171360,
+          "size": 9,
+          "names": [
+            "GetFrameById"
+          ],
+          "demangled": [
+            "GetFrameById"
+          ]
+        },
+        {
+          "rva": 171376,
+          "size": 86,
+          "names": [
+            "GetFrameByLabel"
+          ],
+          "demangled": [
+            "GetFrameByLabel"
+          ]
+        },
+        {
+          "rva": 171472,
+          "size": 9,
+          "names": [
+            "GetFrameContext"
+          ],
+          "demangled": [
+            "GetFrameContext"
+          ]
+        },
+        {
+          "rva": 171488,
+          "size": 87,
+          "names": [
+            "IsInControllerCursorMode"
+          ],
+          "demangled": [
+            "IsInControllerCursorMode"
+          ]
+        },
+        {
+          "rva": 171504,
+          "size": 71,
+          "names": [
+            "IsValidEncStr"
+          ],
+          "demangled": [
+            "IsValidEncStr"
+          ]
+        },
+        {
+          "rva": 171584,
+          "size": 9,
+          "names": [
+            "SendUIMessage"
+          ],
+          "demangled": [
+            "SendUIMessage"
+          ]
+        },
+        {
+          "rva": 171600,
+          "size": 9,
+          "names": [
+            "SetPreference_Enum"
+          ],
+          "demangled": [
+            "SetPreference_Enum"
+          ]
+        },
+        {
+          "rva": 171616,
+          "size": 9,
+          "names": [
+            "SetPreference_Flag"
+          ],
+          "demangled": [
+            "SetPreference_Flag"
+          ]
+        },
+        {
+          "rva": 171632,
+          "size": 9,
+          "names": [
+            "SetPreference_Number"
+          ],
+          "demangled": [
+            "SetPreference_Number"
+          ]
+        },
+        {
+          "rva": 171648,
+          "size": 9,
+          "names": [
+            "SetPreference_String"
+          ],
+          "demangled": [
+            "SetPreference_String"
+          ]
+        },
+        {
+          "rva": 171664,
+          "size": 9,
+          "names": [
+            "SetWindowVisible"
+          ],
+          "demangled": [
+            "SetWindowVisible"
+          ]
+        },
+        {
+          "rva": 171680,
+          "size": 9,
+          "names": [
+            "UInt32ToEncStr"
+          ],
+          "demangled": [
+            "UInt32ToEncStr"
+          ]
+        }
+      ]
+    },
+    "GWCA": {
+      "function_count": 29,
+      "total_bytes": 2945,
+      "functions": [
+        {
+          "rva": 13184,
+          "size": 3,
+          "names": [
+            "?LogMessage@GW@@YAXW4LogLevel@1@PBDI11ZZ",
+            "?RegisterLogHandler@GW@@YAXP6AXPAXW4LogLevel@1@PBD2I2@Z0@Z"
+          ],
+          "demangled": [
+            "GW::LogMessage",
+            "GW::RegisterLogHandler"
+          ]
+        },
+        {
+          "rva": 22640,
+          "size": 40,
+          "names": [
+            "?FatalAssert@GW@@YAXPBD0I0@Z"
+          ],
+          "demangled": [
+            "GW::FatalAssert"
+          ]
+        },
+        {
+          "rva": 22688,
+          "size": 21,
+          "names": [
+            "?RegisterPanicHandler@GW@@YAXP6AXPAXPBD1I1@Z0@Z"
+          ],
+          "demangled": [
+            "GW::RegisterPanicHandler"
+          ]
+        },
+        {
+          "rva": 102112,
+          "size": 57,
+          "names": [
+            "?DisableHooks@GW@@YAXXZ"
+          ],
+          "demangled": [
+            "GW::DisableHooks"
+          ]
+        },
+        {
+          "rva": 102176,
+          "size": 63,
+          "names": [
+            "?EnableHooks@GW@@YAXXZ"
+          ],
+          "demangled": [
+            "GW::EnableHooks"
+          ]
+        },
+        {
+          "rva": 102240,
+          "size": 23,
+          "names": [
+            "?GetAccountContext@GW@@YAPAUAccountContext@1@XZ"
+          ],
+          "demangled": [
+            "GW::GetAccountContext"
+          ]
+        },
+        {
+          "rva": 102272,
+          "size": 23,
+          "names": [
+            "?GetAgentContext@GW@@YAPAUAgentContext@1@XZ"
+          ],
+          "demangled": [
+            "GW::GetAgentContext"
+          ]
+        },
+        {
+          "rva": 102304,
+          "size": 6,
+          "names": [
+            "?GetAvailableChars@GW@@YAPAV?$Array@UCharacterInformation@GW@@@1@XZ",
+            "GetAvailableChars"
+          ],
+          "demangled": [
+            "GW::GetAvailableChars",
+            "GetAvailableChars"
+          ]
+        },
+        {
+          "rva": 102320,
+          "size": 23,
+          "names": [
+            "?GetCharContext@GW@@YAPAUCharContext@1@XZ"
+          ],
+          "demangled": [
+            "GW::GetCharContext"
+          ]
+        },
+        {
+          "rva": 102352,
+          "size": 31,
+          "names": [
+            "?GetGameContext@GW@@YAPAUGameContext@1@XZ"
+          ],
+          "demangled": [
+            "GW::GetGameContext"
+          ]
+        },
+        {
+          "rva": 102368,
+          "size": 15,
+          "names": [
+            "?GetGameplayContext@GW@@YAPAUGameplayContext@1@XZ"
+          ],
+          "demangled": [
+            "GW::GetGameplayContext"
+          ]
+        },
+        {
+          "rva": 102384,
+          "size": 23,
+          "names": [
+            "?GetGuildContext@GW@@YAPAUGuildContext@1@XZ"
+          ],
+          "demangled": [
+            "GW::GetGuildContext"
+          ]
+        },
+        {
+          "rva": 102416,
+          "size": 23,
+          "names": [
+            "?GetItemContext@GW@@YAPAUItemContext@1@XZ"
+          ],
+          "demangled": [
+            "GW::GetItemContext"
+          ]
+        },
+        {
+          "rva": 102448,
+          "size": 23,
+          "names": [
+            "?GetMapContext@GW@@YAPAUMapContext@1@XZ"
+          ],
+          "demangled": [
+            "GW::GetMapContext"
+          ]
+        },
+        {
+          "rva": 102480,
+          "size": 23,
+          "names": [
+            "?GetPartyContext@GW@@YAPAUPartyContext@1@XZ"
+          ],
+          "demangled": [
+            "GW::GetPartyContext"
+          ]
+        },
+        {
+          "rva": 102512,
+          "size": 15,
+          "names": [
+            "?GetPreGameContext@GW@@YAPAUPreGameContext@1@XZ"
+          ],
+          "demangled": [
+            "GW::GetPreGameContext"
+          ]
+        },
+        {
+          "rva": 102560,
+          "size": 23,
+          "names": [
+            "?GetWorldContext@GW@@YAPAUWorldContext@1@XZ"
+          ],
+          "demangled": [
+            "GW::GetWorldContext"
+          ]
+        },
+        {
+          "rva": 102592,
+          "size": 1391,
+          "names": [
+            "?Initialize@GW@@YA_NXZ"
+          ],
+          "demangled": [
+            "GW::Initialize"
+          ]
+        },
+        {
+          "rva": 104048,
+          "size": 135,
+          "names": [
+            "?Terminate@GW@@YAXXZ"
+          ],
+          "demangled": [
+            "GW::Terminate"
+          ]
+        },
+        {
+          "rva": 104304,
+          "size": 102,
+          "names": [
+            "?GetDistance@GW@@YAMABUVec2f@1@0@Z"
+          ],
+          "demangled": [
+            "GW::GetDistance"
+          ]
+        },
+        {
+          "rva": 104416,
+          "size": 116,
+          "names": [
+            "?GetDistance@GW@@YAMUVec3f@1@0@Z"
+          ],
+          "demangled": [
+            "GW::GetDistance"
+          ]
+        },
+        {
+          "rva": 104544,
+          "size": 88,
+          "names": [
+            "?GetNorm@GW@@YAMUVec2f@1@@Z"
+          ],
+          "demangled": [
+            "GW::GetNorm"
+          ]
+        },
+        {
+          "rva": 104640,
+          "size": 101,
+          "names": [
+            "?GetNorm@GW@@YAMUVec3f@1@@Z"
+          ],
+          "demangled": [
+            "GW::GetNorm"
+          ]
+        },
+        {
+          "rva": 104752,
+          "size": 101,
+          "names": [
+            "?Rotate@GW@@YA?AUVec2f@1@U21@M@Z"
+          ],
+          "demangled": [
+            "GW::Rotate"
+          ]
+        },
+        {
+          "rva": 108496,
+          "size": 85,
+          "names": [
+            "?Hash16@GW@@YAIG@Z"
+          ],
+          "demangled": [
+            "GW::Hash16"
+          ]
+        },
+        {
+          "rva": 108592,
+          "size": 155,
+          "names": [
+            "?Hash32@GW@@YAII@Z"
+          ],
+          "demangled": [
+            "GW::Hash32"
+          ]
+        },
+        {
+          "rva": 108752,
+          "size": 47,
+          "names": [
+            "?Hash8@GW@@YAIE@Z"
+          ],
+          "demangled": [
+            "GW::Hash8"
+          ]
+        },
+        {
+          "rva": 108800,
+          "size": 65,
+          "names": [
+            "?Hash@GW@@YAIPBXI@Z"
+          ],
+          "demangled": [
+            "GW::Hash"
+          ]
+        },
+        {
+          "rva": 108880,
+          "size": 124,
+          "names": [
+            "?HashWString@GW@@YAIPB_WI@Z"
+          ],
+          "demangled": [
+            "GW::HashWString"
+          ]
+        }
+      ]
+    },
+    "CameraMgr": {
+      "function_count": 10,
+      "total_bytes": 608,
+      "functions": [
+        {
+          "rva": 13232,
+          "size": 291,
+          "names": [
+            "?ComputeCamPos@CameraMgr@GW@@YA?AUVec3f@2@M@Z"
+          ],
+          "demangled": [
+            "CameraMgr::ComputeCamPos"
+          ]
+        },
+        {
+          "rva": 13536,
+          "size": 6,
+          "names": [
+            "?GetCamera@CameraMgr@GW@@YAPAUCamera@2@XZ",
+            "GetCamera"
+          ],
+          "demangled": [
+            "CameraMgr::GetCamera",
+            "GetCamera"
+          ]
+        },
+        {
+          "rva": 13552,
+          "size": 6,
+          "names": [
+            "?GetCameraUnlock@CameraMgr@GW@@YA_NXZ",
+            "GetCameraUnlock"
+          ],
+          "demangled": [
+            "CameraMgr::GetCameraUnlock",
+            "GetCameraUnlock"
+          ]
+        },
+        {
+          "rva": 13568,
+          "size": 47,
+          "names": [
+            "?GetFieldOfView@CameraMgr@GW@@YAMXZ",
+            "GetFieldOfView"
+          ],
+          "demangled": [
+            "CameraMgr::GetFieldOfView",
+            "GetFieldOfView"
+          ]
+        },
+        {
+          "rva": 13616,
+          "size": 44,
+          "names": [
+            "?GetYaw@CameraMgr@GW@@YAMXZ",
+            "GetYaw"
+          ],
+          "demangled": [
+            "CameraMgr::GetYaw",
+            "GetYaw"
+          ]
+        },
+        {
+          "rva": 13664,
+          "size": 33,
+          "names": [
+            "?SetFieldOfView@CameraMgr@GW@@YA_NM@Z",
+            "SetFieldOfView"
+          ],
+          "demangled": [
+            "CameraMgr::SetFieldOfView",
+            "SetFieldOfView"
+          ]
+        },
+        {
+          "rva": 13712,
+          "size": 9,
+          "names": [
+            "?SetFog@CameraMgr@GW@@YA_N_N@Z",
+            "SetFog"
+          ],
+          "demangled": [
+            "CameraMgr::SetFog",
+            "SetFog"
+          ]
+        },
+        {
+          "rva": 13728,
+          "size": 30,
+          "names": [
+            "?SetMaxDist@CameraMgr@GW@@YA_NM@Z",
+            "SetMaxDist"
+          ],
+          "demangled": [
+            "CameraMgr::SetMaxDist",
+            "SetMaxDist"
+          ]
+        },
+        {
+          "rva": 13760,
+          "size": 43,
+          "names": [
+            "?UnlockCam@CameraMgr@GW@@YA_N_N@Z",
+            "UnlockCam"
+          ],
+          "demangled": [
+            "CameraMgr::UnlockCam",
+            "UnlockCam"
+          ]
+        },
+        {
+          "rva": 13808,
+          "size": 99,
+          "names": [
+            "?UpdateCameraPos@CameraMgr@GW@@YA_NXZ",
+            "UpdateCameraPos"
+          ],
+          "demangled": [
+            "CameraMgr::UpdateCameraPos",
+            "UpdateCameraPos"
+          ]
+        }
+      ]
+    },
+    "ChatMgr": {
+      "function_count": 20,
+      "total_bytes": 3552,
+      "functions": [
+        {
+          "rva": 17296,
+          "size": 66,
+          "names": [
+            "?AddToChatLog@Chat@GW@@YA_NPA_WI@Z",
+            "AddToChatLog"
+          ],
+          "demangled": [
+            "Chat::AddToChatLog",
+            "AddToChatLog"
+          ]
+        },
+        {
+          "rva": 17376,
+          "size": 708,
+          "names": [
+            "?CreateCommand@Chat@GW@@YAXPAUHookEntry@2@PB_WP6AXPAUHookStatus@2@1HPBQA_W@Z@Z"
+          ],
+          "demangled": [
+            "Chat::CreateCommand"
+          ]
+        },
+        {
+          "rva": 17856,
+          "size": 228,
+          "names": [
+            "?DeleteCommand@Chat@GW@@YAXPAUHookEntry@2@PB_W@Z"
+          ],
+          "demangled": [
+            "Chat::DeleteCommand"
+          ]
+        },
+        {
+          "rva": 18096,
+          "size": 153,
+          "names": [
+            "?GetChannel@Chat@GW@@YA?AW4Channel@12@D@Z"
+          ],
+          "demangled": [
+            "Chat::GetChannel"
+          ]
+        },
+        {
+          "rva": 18240,
+          "size": 9,
+          "names": [
+            "?GetChannel@Chat@GW@@YA?AW4Channel@12@_W@Z",
+            "GetChannelFromChar",
+            "GetChannelFromWChar"
+          ],
+          "demangled": [
+            "Chat::GetChannel",
+            "GetChannelFromChar",
+            "GetChannelFromWChar"
+          ]
+        },
+        {
+          "rva": 18256,
+          "size": 57,
+          "names": [
+            "?GetChannelColors@Chat@GW@@YAXW4Channel@12@PAI1@Z",
+            "GetChannelColors"
+          ],
+          "demangled": [
+            "Chat::GetChannelColors",
+            "GetChannelColors"
+          ]
+        },
+        {
+          "rva": 18320,
+          "size": 15,
+          "names": [
+            "?GetChatLog@Chat@GW@@YAPAUChatBuffer@12@XZ",
+            "GetChatLog"
+          ],
+          "demangled": [
+            "Chat::GetChatLog",
+            "GetChatLog"
+          ]
+        },
+        {
+          "rva": 18336,
+          "size": 57,
+          "names": [
+            "?GetDefaultColors@Chat@GW@@YAXW4Channel@12@PAI1@Z",
+            "GetDefaultColors"
+          ],
+          "demangled": [
+            "Chat::GetDefaultColors",
+            "GetDefaultColors"
+          ]
+        },
+        {
+          "rva": 18400,
+          "size": 20,
+          "names": [
+            "?GetIsTyping@Chat@GW@@YA_NXZ",
+            "GetIsTyping"
+          ],
+          "demangled": [
+            "Chat::GetIsTyping",
+            "GetIsTyping"
+          ]
+        },
+        {
+          "rva": 20336,
+          "size": 602,
+          "names": [
+            "?SendChat@Chat@GW@@YA_NDPBD@Z"
+          ],
+          "demangled": [
+            "Chat::SendChat"
+          ]
+        },
+        {
+          "rva": 20480,
+          "size": 458,
+          "names": [
+            "?SendChat@Chat@GW@@YA_NDPB_W@Z"
+          ],
+          "demangled": [
+            "Chat::SendChat"
+          ]
+        },
+        {
+          "rva": 20704,
+          "size": 234,
+          "names": [
+            "?SendChat@Chat@GW@@YA_NPB_W0@Z"
+          ],
+          "demangled": [
+            "Chat::SendChat"
+          ]
+        },
+        {
+          "rva": 20880,
+          "size": 58,
+          "names": [
+            "?SetMessageColor@Chat@GW@@YAIW4Channel@12@I@Z"
+          ],
+          "demangled": [
+            "Chat::SetMessageColor"
+          ]
+        },
+        {
+          "rva": 20944,
+          "size": 58,
+          "names": [
+            "?SetSenderColor@Chat@GW@@YAIW4Channel@12@I@Z"
+          ],
+          "demangled": [
+            "Chat::SetSenderColor"
+          ]
+        },
+        {
+          "rva": 21008,
+          "size": 37,
+          "names": [
+            "?SetTimestampsColor@Chat@GW@@YAXI@Z",
+            "SetTimestampsColor"
+          ],
+          "demangled": [
+            "Chat::SetTimestampsColor",
+            "SetTimestampsColor"
+          ]
+        },
+        {
+          "rva": 21056,
+          "size": 45,
+          "names": [
+            "?SetTimestampsFormat@Chat@GW@@YAX_N0@Z",
+            "SetTimestampsFormat"
+          ],
+          "demangled": [
+            "Chat::SetTimestampsFormat",
+            "SetTimestampsFormat"
+          ]
+        },
+        {
+          "rva": 21104,
+          "size": 18,
+          "names": [
+            "?ToggleTimestamps@Chat@GW@@YAX_N@Z",
+            "ToggleTimestamps"
+          ],
+          "demangled": [
+            "Chat::ToggleTimestamps",
+            "ToggleTimestamps"
+          ]
+        },
+        {
+          "rva": 21136,
+          "size": 264,
+          "names": [
+            "?WriteChat@Chat@GW@@YAXW4Channel@12@PB_W1_N@Z"
+          ],
+          "demangled": [
+            "Chat::WriteChat"
+          ]
+        },
+        {
+          "rva": 21408,
+          "size": 347,
+          "names": [
+            "?WriteChatEnc@Chat@GW@@YAXW4Channel@12@PB_W1_N@Z"
+          ],
+          "demangled": [
+            "Chat::WriteChatEnc"
+          ]
+        },
+        {
+          "rva": 21760,
+          "size": 118,
+          "names": [
+            "?WriteChatF@Chat@GW@@YAXW4Channel@12@PB_WZZ"
+          ],
+          "demangled": [
+            "Chat::WriteChatF"
+          ]
+        }
+      ]
+    },
+    "EffectMgr": {
+      "function_count": 12,
+      "total_bytes": 772,
+      "functions": [
+        {
+          "rva": 22928,
+          "size": 210,
+          "names": [
+            "?DropBuff@Effects@GW@@YA_NI@Z"
+          ],
+          "demangled": [
+            "Effects::DropBuff"
+          ]
+        },
+        {
+          "rva": 23152,
+          "size": 80,
+          "names": [
+            "?GetAgentBuffs@Effects@GW@@YAPAV?$Array@UBuff@GW@@@2@I@Z"
+          ],
+          "demangled": [
+            "Effects::GetAgentBuffs"
+          ]
+        },
+        {
+          "rva": 23232,
+          "size": 80,
+          "names": [
+            "?GetAgentEffects@Effects@GW@@YAPAV?$Array@UEffect@GW@@@2@I@Z"
+          ],
+          "demangled": [
+            "Effects::GetAgentEffects"
+          ]
+        },
+        {
+          "rva": 23312,
+          "size": 64,
+          "names": [
+            "?GetAgentEffectsArray@Effects@GW@@YAPAUAgentEffects@2@I@Z",
+            "GetAgentEffectsArray"
+          ],
+          "demangled": [
+            "Effects::GetAgentEffectsArray",
+            "GetAgentEffectsArray"
+          ]
+        },
+        {
+          "rva": 23376,
+          "size": 57,
+          "names": [
+            "?GetAlcoholLevel@Effects@GW@@YAIXZ",
+            "GetAlcoholLevel"
+          ],
+          "demangled": [
+            "Effects::GetAlcoholLevel",
+            "GetAlcoholLevel"
+          ]
+        },
+        {
+          "rva": 23440,
+          "size": 45,
+          "names": [
+            "?GetDrunkAf@Effects@GW@@YAXMI@Z",
+            "GetDrunkAf"
+          ],
+          "demangled": [
+            "Effects::GetDrunkAf",
+            "GetDrunkAf"
+          ]
+        },
+        {
+          "rva": 23488,
+          "size": 22,
+          "names": [
+            "?GetPartyEffectsArray@Effects@GW@@YAPAV?$Array@UAgentEffects@GW@@@2@XZ"
+          ],
+          "demangled": [
+            "Effects::GetPartyEffectsArray"
+          ]
+        },
+        {
+          "rva": 23520,
+          "size": 55,
+          "names": [
+            "?GetPlayerBuffBySkillId@Effects@GW@@YAPAUBuff@2@W4SkillID@Constants@2@@Z",
+            "GetPlayerBuffBySkillId"
+          ],
+          "demangled": [
+            "Effects::GetPlayerBuffBySkillId",
+            "GetPlayerBuffBySkillId"
+          ]
+        },
+        {
+          "rva": 23584,
+          "size": 15,
+          "names": [
+            "?GetPlayerBuffs@Effects@GW@@YAPAV?$Array@UBuff@GW@@@2@XZ"
+          ],
+          "demangled": [
+            "Effects::GetPlayerBuffs"
+          ]
+        },
+        {
+          "rva": 23600,
+          "size": 63,
+          "names": [
+            "?GetPlayerEffectBySkillId@Effects@GW@@YAPAUEffect@2@W4SkillID@Constants@2@@Z",
+            "GetPlayerEffectBySkillId"
+          ],
+          "demangled": [
+            "Effects::GetPlayerEffectBySkillId",
+            "GetPlayerEffectBySkillId"
+          ]
+        },
+        {
+          "rva": 23664,
+          "size": 15,
+          "names": [
+            "?GetPlayerEffects@Effects@GW@@YAPAV?$Array@UEffect@GW@@@2@XZ"
+          ],
+          "demangled": [
+            "Effects::GetPlayerEffects"
+          ]
+        },
+        {
+          "rva": 23680,
+          "size": 66,
+          "names": [
+            "?GetPlayerEffectsArray@Effects@GW@@YAPAUAgentEffects@2@XZ",
+            "GetPlayerEffectsArray"
+          ],
+          "demangled": [
+            "Effects::GetPlayerEffectsArray",
+            "GetPlayerEffectsArray"
+          ]
+        }
+      ]
+    },
+    "EventMgr": {
+      "function_count": 2,
+      "total_bytes": 839,
+      "functions": [
+        {
+          "rva": 27600,
+          "size": 471,
+          "names": [
+            "?RegisterEventCallback@EventMgr@GW@@YAXPAUHookEntry@2@W4EventID@12@ABV?$function@$$A6AXPAUHookStatus@GW@@W4EventID@EventMgr@2@PAXI@Z@std@@H@Z"
+          ],
+          "demangled": [
+            "EventMgr::RegisterEventCallback"
+          ]
+        },
+        {
+          "rva": 28080,
+          "size": 368,
+          "names": [
+            "?RemoveEventCallback@EventMgr@GW@@YAXPAUHookEntry@2@W4EventID@12@@Z"
+          ],
+          "demangled": [
+            "EventMgr::RemoveEventCallback"
+          ]
+        }
+      ]
+    },
+    "Frame": {
+      "function_count": 72,
+      "total_bytes": 5712,
+      "functions": [
+        {
+          "rva": 91552,
+          "size": 59,
+          "names": [
+            "?AddItem@ScrollableFrame@GW@@QAE_NIIP6AXPAUInteractionMessage@UI@2@PAX1@Z@Z"
+          ],
+          "demangled": [
+            "ScrollableFrame::AddItem"
+          ]
+        },
+        {
+          "rva": 91616,
+          "size": 68,
+          "names": [
+            "?AddOption@DropdownFrame@GW@@QAE_NPB_WI@Z"
+          ],
+          "demangled": [
+            "DropdownFrame::AddOption"
+          ]
+        },
+        {
+          "rva": 91696,
+          "size": 76,
+          "names": [
+            "?AddTab@TabsFrame@GW@@QAEPAUFrame@UI@2@PB_WIIP6AXPAUInteractionMessage@42@PAX2@Z2@Z"
+          ],
+          "demangled": [
+            "TabsFrame::AddTab"
+          ]
+        },
+        {
+          "rva": 91776,
+          "size": 66,
+          "names": [
+            "?ChooseTab@TabsFrame@GW@@QAE_NI@Z"
+          ],
+          "demangled": [
+            "TabsFrame::ChooseTab"
+          ]
+        },
+        {
+          "rva": 91856,
+          "size": 81,
+          "names": [
+            "?ChooseTab@TabsFrame@GW@@QAE_NPAUFrame@UI@2@@Z"
+          ],
+          "demangled": [
+            "TabsFrame::ChooseTab"
+          ]
+        },
+        {
+          "rva": 91952,
+          "size": 51,
+          "names": [
+            "?ClearItems@ScrollableFrame@GW@@QAE_NXZ"
+          ],
+          "demangled": [
+            "ScrollableFrame::ClearItems"
+          ]
+        },
+        {
+          "rva": 91968,
+          "size": 35,
+          "names": [
+            "?Click@ButtonFrame@GW@@QAE_NXZ"
+          ],
+          "demangled": [
+            "ButtonFrame::Click"
+          ]
+        },
+        {
+          "rva": 92016,
+          "size": 126,
+          "names": [
+            "?Create@ButtonFrame@GW@@SAPAU12@IIIPB_W0@Z"
+          ],
+          "demangled": [
+            "ButtonFrame::Create"
+          ]
+        },
+        {
+          "rva": 92144,
+          "size": 43,
+          "names": [
+            "?Create@CheckboxFrame@GW@@SAPAU12@IIIPB_W0@Z"
+          ],
+          "demangled": [
+            "CheckboxFrame::Create"
+          ]
+        },
+        {
+          "rva": 92192,
+          "size": 184,
+          "names": [
+            "?Create@ScrollableFrame@GW@@SAPAU12@IIIPAUScrollablePageContext@12@PB_W@Z"
+          ],
+          "demangled": [
+            "ScrollableFrame::Create"
+          ]
+        },
+        {
+          "rva": 92384,
+          "size": 126,
+          "names": [
+            "?Create@TextLabelFrame@GW@@SAPAU12@IIIPB_W0@Z"
+          ],
+          "demangled": [
+            "TextLabelFrame::Create"
+          ]
+        },
+        {
+          "rva": 92512,
+          "size": 23,
+          "names": [
+            "?DisableTab@TabsFrame@GW@@QAE_NI@Z"
+          ],
+          "demangled": [
+            "TabsFrame::DisableTab"
+          ]
+        },
+        {
+          "rva": 92544,
+          "size": 8,
+          "names": [
+            "?DoubleClick@ButtonFrame@GW@@QAE_NXZ"
+          ],
+          "demangled": [
+            "ButtonFrame::DoubleClick"
+          ]
+        },
+        {
+          "rva": 92560,
+          "size": 23,
+          "names": [
+            "?EnableTab@TabsFrame@GW@@QAE_NI@Z",
+            "?RemoveItem@ScrollableFrame@GW@@QAE_NI@Z"
+          ],
+          "demangled": [
+            "TabsFrame::EnableTab",
+            "ScrollableFrame::RemoveItem"
+          ]
+        },
+        {
+          "rva": 92592,
+          "size": 45,
+          "names": [
+            "?GetCount@DropdownFrame@GW@@QAE_NPAI@Z"
+          ],
+          "demangled": [
+            "DropdownFrame::GetCount"
+          ]
+        },
+        {
+          "rva": 92640,
+          "size": 26,
+          "names": [
+            "?GetCount@ScrollableFrame@GW@@QAE_NPAI@Z"
+          ],
+          "demangled": [
+            "ScrollableFrame::GetCount"
+          ]
+        },
+        {
+          "rva": 92672,
+          "size": 89,
+          "names": [
+            "?GetCurrentTab@TabsFrame@GW@@QAEPAUFrame@UI@2@XZ"
+          ],
+          "demangled": [
+            "TabsFrame::GetCurrentTab"
+          ]
+        },
+        {
+          "rva": 92768,
+          "size": 23,
+          "names": [
+            "?GetCurrentTabIndex@TabsFrame@GW@@QAE_NPAI@Z"
+          ],
+          "demangled": [
+            "TabsFrame::GetCurrentTabIndex"
+          ]
+        },
+        {
+          "rva": 92864,
+          "size": 62,
+          "names": [
+            "?GetDecodedLabel@TextLabelFrame@GW@@QAEPB_WXZ"
+          ],
+          "demangled": [
+            "TextLabelFrame::GetDecodedLabel"
+          ]
+        },
+        {
+          "rva": 92960,
+          "size": 26,
+          "names": [
+            "?GetEncodedLabel@TextLabelFrame@GW@@QAEPB_WXZ"
+          ],
+          "demangled": [
+            "TextLabelFrame::GetEncodedLabel"
+          ]
+        },
+        {
+          "rva": 92992,
+          "size": 74,
+          "names": [
+            "?GetFirstChildFrameId@ScrollableFrame@GW@@QAEIPAI@Z"
+          ],
+          "demangled": [
+            "ScrollableFrame::GetFirstChildFrameId"
+          ]
+        },
+        {
+          "rva": 93072,
+          "size": 24,
+          "names": [
+            "?GetIsTabEnabled@TabsFrame@GW@@QAE_NIPAI@Z",
+            "?GetItemRect@ScrollableFrame@GW@@QAE_NIQAM@Z"
+          ],
+          "demangled": [
+            "TabsFrame::GetIsTabEnabled",
+            "ScrollableFrame::GetItemRect"
+          ]
+        },
+        {
+          "rva": 93104,
+          "size": 38,
+          "names": [
+            "?GetItemFrameId@ScrollableFrame@GW@@QAEII@Z"
+          ],
+          "demangled": [
+            "ScrollableFrame::GetItemFrameId"
+          ]
+        },
+        {
+          "rva": 93152,
+          "size": 216,
+          "names": [
+            "?GetItems@ScrollableFrame@GW@@QAEIPAII@Z"
+          ],
+          "demangled": [
+            "ScrollableFrame::GetItems"
+          ]
+        },
+        {
+          "rva": 93376,
+          "size": 42,
+          "names": [
+            "?GetLabel@ButtonFrame@GW@@QAE_NPAPB_W@Z"
+          ],
+          "demangled": [
+            "ButtonFrame::GetLabel"
+          ]
+        },
+        {
+          "rva": 93424,
+          "size": 74,
+          "names": [
+            "?GetLastChildFrameId@ScrollableFrame@GW@@QAEIPAI@Z"
+          ],
+          "demangled": [
+            "ScrollableFrame::GetLastChildFrameId"
+          ]
+        },
+        {
+          "rva": 93504,
+          "size": 73,
+          "names": [
+            "?GetNextChildFrameId@ScrollableFrame@GW@@QAEIIPAI@Z"
+          ],
+          "demangled": [
+            "ScrollableFrame::GetNextChildFrameId"
+          ]
+        },
+        {
+          "rva": 93584,
+          "size": 201,
+          "names": [
+            "?GetOptionIndex@DropdownFrame@GW@@QAE_NIPAI@Z"
+          ],
+          "demangled": [
+            "DropdownFrame::GetOptionIndex"
+          ]
+        },
+        {
+          "rva": 93792,
+          "size": 177,
+          "names": [
+            "?GetOptionValue@DropdownFrame@GW@@QAE_NIPAI@Z"
+          ],
+          "demangled": [
+            "DropdownFrame::GetOptionValue"
+          ]
+        },
+        {
+          "rva": 93984,
+          "size": 307,
+          "names": [
+            "?GetOptions@DropdownFrame@GW@@QAE?AV?$vector@IV?$allocator@I@std@@@std@@XZ"
+          ],
+          "demangled": [
+            "DropdownFrame::GetOptions"
+          ]
+        },
+        {
+          "rva": 94304,
+          "size": 20,
+          "names": [
+            "?GetPage@ScrollableFrame@GW@@QAEPAUFrame@UI@2@XZ"
+          ],
+          "demangled": [
+            "ScrollableFrame::GetPage"
+          ]
+        },
+        {
+          "rva": 94336,
+          "size": 73,
+          "names": [
+            "?GetPrevChildFrameId@ScrollableFrame@GW@@QAEIIPAI@Z"
+          ],
+          "demangled": [
+            "ScrollableFrame::GetPrevChildFrameId"
+          ]
+        },
+        {
+          "rva": 94416,
+          "size": 45,
+          "names": [
+            "?GetSelectedIndex@DropdownFrame@GW@@QAE_NPAI@Z"
+          ],
+          "demangled": [
+            "DropdownFrame::GetSelectedIndex"
+          ]
+        },
+        {
+          "rva": 94464,
+          "size": 65,
+          "names": [
+            "?GetSelectedValue@ScrollableFrame@GW@@QAE_NPAI@Z"
+          ],
+          "demangled": [
+            "ScrollableFrame::GetSelectedValue"
+          ]
+        },
+        {
+          "rva": 94544,
+          "size": 36,
+          "names": [
+            "?GetSortHandler@ScrollableFrame@GW@@QAEP6AHII@ZXZ"
+          ],
+          "demangled": [
+            "ScrollableFrame::GetSortHandler"
+          ]
+        },
+        {
+          "rva": 94592,
+          "size": 65,
+          "names": [
+            "?GetTabButton@TabsFrame@GW@@QAEPAUButtonFrame@2@PAUFrame@UI@2@@Z"
+          ],
+          "demangled": [
+            "TabsFrame::GetTabButton"
+          ]
+        },
+        {
+          "rva": 94672,
+          "size": 234,
+          "names": [
+            "?GetTabByLabel@TabsFrame@GW@@QAEPAUFrame@UI@2@PB_W@Z"
+          ],
+          "demangled": [
+            "TabsFrame::GetTabByLabel"
+          ]
+        },
+        {
+          "rva": 94912,
+          "size": 24,
+          "names": [
+            "?GetTabFrameId@TabsFrame@GW@@QAE_NIPAI@Z"
+          ],
+          "demangled": [
+            "TabsFrame::GetTabFrameId"
+          ]
+        },
+        {
+          "rva": 94944,
+          "size": 50,
+          "names": [
+            "?GetValue@CheckboxFrame@GW@@UAEIXZ"
+          ],
+          "demangled": [
+            "CheckboxFrame::GetValue"
+          ]
+        },
+        {
+          "rva": 95008,
+          "size": 71,
+          "names": [
+            "?GetValue@DropdownFrame@GW@@UAEIXZ"
+          ],
+          "demangled": [
+            "DropdownFrame::GetValue"
+          ]
+        },
+        {
+          "rva": 95088,
+          "size": 20,
+          "names": [
+            "?GetValue@EditableTextFrame@GW@@QAEPB_WXZ"
+          ],
+          "demangled": [
+            "EditableTextFrame::GetValue"
+          ]
+        },
+        {
+          "rva": 95120,
+          "size": 44,
+          "names": [
+            "?GetValue@ProgressBar@GW@@UAEIXZ"
+          ],
+          "demangled": [
+            "ProgressBar::GetValue"
+          ]
+        },
+        {
+          "rva": 95168,
+          "size": 32,
+          "names": [
+            "?GetValue@SliderFrame@GW@@QAE_NPAI@Z",
+            "?SetValue@ProgressBar@GW@@UAE_NI@Z"
+          ],
+          "demangled": [
+            "SliderFrame::GetValue",
+            "ProgressBar::SetValue"
+          ]
+        },
+        {
+          "rva": 95200,
+          "size": 53,
+          "names": [
+            "?GetValue@SliderFrame@GW@@UAEIXZ"
+          ],
+          "demangled": [
+            "SliderFrame::GetValue"
+          ]
+        },
+        {
+          "rva": 95264,
+          "size": 55,
+          "names": [
+            "?HasValueMapping@DropdownFrame@GW@@QAE_NXZ"
+          ],
+          "demangled": [
+            "DropdownFrame::HasValueMapping"
+          ]
+        },
+        {
+          "rva": 95328,
+          "size": 48,
+          "names": [
+            "?IsChecked@CheckboxFrame@GW@@QAE_NXZ"
+          ],
+          "demangled": [
+            "CheckboxFrame::IsChecked"
+          ]
+        },
+        {
+          "rva": 95376,
+          "size": 32,
+          "names": [
+            "?IsReadOnly@EditableTextFrame@GW@@QAE_NXZ"
+          ],
+          "demangled": [
+            "EditableTextFrame::IsReadOnly"
+          ]
+        },
+        {
+          "rva": 95408,
+          "size": 177,
+          "names": [
+            "?MouseAction@ButtonFrame@GW@@QAE_NW4ActionState@UIPacket@UI@2@@Z"
+          ],
+          "demangled": [
+            "ButtonFrame::MouseAction"
+          ]
+        },
+        {
+          "rva": 95648,
+          "size": 110,
+          "names": [
+            "?RemoveTab@TabsFrame@GW@@QAE_NI@Z"
+          ],
+          "demangled": [
+            "TabsFrame::RemoveTab"
+          ]
+        },
+        {
+          "rva": 95760,
+          "size": 142,
+          "names": [
+            "?SelectIndex@DropdownFrame@GW@@QAE_NI@Z"
+          ],
+          "demangled": [
+            "DropdownFrame::SelectIndex"
+          ]
+        },
+        {
+          "rva": 95904,
+          "size": 117,
+          "names": [
+            "?SelectOption@DropdownFrame@GW@@QAE_NI@Z",
+            "?SetValue@DropdownFrame@GW@@UAE_NI@Z"
+          ],
+          "demangled": [
+            "DropdownFrame::SelectOption",
+            "DropdownFrame::SetValue"
+          ]
+        },
+        {
+          "rva": 96032,
+          "size": 91,
+          "names": [
+            "?SetChecked@CheckboxFrame@GW@@QAE_N_N@Z"
+          ],
+          "demangled": [
+            "CheckboxFrame::SetChecked"
+          ]
+        },
+        {
+          "rva": 96128,
+          "size": 50,
+          "names": [
+            "?SetColorId@ProgressBar@GW@@QAE_NI@Z"
+          ],
+          "demangled": [
+            "ProgressBar::SetColorId"
+          ]
+        },
+        {
+          "rva": 96192,
+          "size": 56,
+          "names": [
+            "?SetFont@TextLabelFrame@GW@@QAE_NI@Z"
+          ],
+          "demangled": [
+            "TextLabelFrame::SetFont"
+          ]
+        },
+        {
+          "rva": 96320,
+          "size": 40,
+          "names": [
+            "?SetLabel@ButtonFrame@GW@@QAE_NPB_W@Z",
+            "?SetLabel@TextLabelFrame@GW@@QAE_NPB_W@Z"
+          ],
+          "demangled": [
+            "ButtonFrame::SetLabel",
+            "TextLabelFrame::SetLabel"
+          ]
+        },
+        {
+          "rva": 96416,
+          "size": 32,
+          "names": [
+            "?SetMax@ProgressBar@GW@@QAE_NI@Z"
+          ],
+          "demangled": [
+            "ProgressBar::SetMax"
+          ]
+        },
+        {
+          "rva": 96448,
+          "size": 40,
+          "names": [
+            "?SetMaxLength@EditableTextFrame@GW@@QAE_NI@Z"
+          ],
+          "demangled": [
+            "EditableTextFrame::SetMaxLength"
+          ]
+        },
+        {
+          "rva": 96496,
+          "size": 46,
+          "names": [
+            "?SetPage@ScrollableFrame@GW@@QAEPAUFrame@UI@2@PAUScrollablePageContext@12@@Z"
+          ],
+          "demangled": [
+            "ScrollableFrame::SetPage"
+          ]
+        },
+        {
+          "rva": 96544,
+          "size": 25,
+          "names": [
+            "?SetReadOnly@EditableTextFrame@GW@@QAE_N_N@Z"
+          ],
+          "demangled": [
+            "EditableTextFrame::SetReadOnly"
+          ]
+        },
+        {
+          "rva": 96576,
+          "size": 23,
+          "names": [
+            "?SetSortHandler@ScrollableFrame@GW@@QAE_NP6AHII@Z@Z"
+          ],
+          "demangled": [
+            "ScrollableFrame::SetSortHandler"
+          ]
+        },
+        {
+          "rva": 96608,
+          "size": 70,
+          "names": [
+            "?SetStyle@ProgressBar@GW@@QAE_NW4ProgressBarStyle@12@@Z"
+          ],
+          "demangled": [
+            "ProgressBar::SetStyle"
+          ]
+        },
+        {
+          "rva": 96688,
+          "size": 93,
+          "names": [
+            "?SetValue@CheckboxFrame@GW@@UAE_NI@Z"
+          ],
+          "demangled": [
+            "CheckboxFrame::SetValue"
+          ]
+        },
+        {
+          "rva": 96784,
+          "size": 114,
+          "names": [
+            "?SetValue@EditableTextFrame@GW@@QAE_NPB_W@Z"
+          ],
+          "demangled": [
+            "EditableTextFrame::SetValue"
+          ]
+        },
+        {
+          "rva": 96912,
+          "size": 153,
+          "names": [
+            "?SetValue@SliderFrame@GW@@UAE_NI@Z"
+          ],
+          "demangled": [
+            "SliderFrame::SetValue"
+          ]
+        },
+        {
+          "rva": 156496,
+          "size": 146,
+          "names": [
+            "?GetBottomRightOnScreen@FramePosition@UI@GW@@QBE?AUVec2f@3@PBUFrame@23@@Z"
+          ],
+          "demangled": [
+            "FramePosition::GetBottomRightOnScreen"
+          ]
+        },
+        {
+          "rva": 157088,
+          "size": 146,
+          "names": [
+            "?GetContentBottomRight@FramePosition@UI@GW@@QBE?AUVec2f@3@PBUFrame@23@@Z"
+          ],
+          "demangled": [
+            "FramePosition::GetContentBottomRight"
+          ]
+        },
+        {
+          "rva": 157248,
+          "size": 146,
+          "names": [
+            "?GetContentTopLeft@FramePosition@UI@GW@@QBE?AUVec2f@3@PBUFrame@23@@Z"
+          ],
+          "demangled": [
+            "FramePosition::GetContentTopLeft"
+          ]
+        },
+        {
+          "rva": 157440,
+          "size": 7,
+          "names": [
+            "?GetFrame@FrameRelation@UI@GW@@QAEPAUFrame@23@XZ"
+          ],
+          "demangled": [
+            "FrameRelation::GetFrame"
+          ]
+        },
+        {
+          "rva": 157952,
+          "size": 15,
+          "names": [
+            "?GetParent@FrameRelation@UI@GW@@QBEPAUFrame@23@XZ"
+          ],
+          "demangled": [
+            "FrameRelation::GetParent"
+          ]
+        },
+        {
+          "rva": 158288,
+          "size": 161,
+          "names": [
+            "?GetSizeOnScreen@FramePosition@UI@GW@@QBE?AUVec2f@3@PBUFrame@23@@Z"
+          ],
+          "demangled": [
+            "FramePosition::GetSizeOnScreen"
+          ]
+        },
+        {
+          "rva": 158512,
+          "size": 146,
+          "names": [
+            "?GetTopLeftOnScreen@FramePosition@UI@GW@@QBE?AUVec2f@3@PBUFrame@23@@Z"
+          ],
+          "demangled": [
+            "FramePosition::GetTopLeftOnScreen"
+          ]
+        },
+        {
+          "rva": 158672,
+          "size": 133,
+          "names": [
+            "?GetViewportScale@FramePosition@UI@GW@@QBE?AUVec2f@3@PBUFrame@23@@Z"
+          ],
+          "demangled": [
+            "FramePosition::GetViewportScale"
+          ]
+        }
+      ]
+    },
+    "UIMgr": {
+      "function_count": 64,
+      "total_bytes": 12968,
+      "functions": [
+        {
+          "rva": 96256,
+          "size": 51,
+          "names": [
+            "?SetFrameMargins@UI@GW@@YA_NPAUFrame@12@IQAM1I@Z"
+          ],
+          "demangled": [
+            "UI::SetFrameMargins"
+          ]
+        },
+        {
+          "rva": 154592,
+          "size": 50,
+          "names": [
+            "?AddFrameUIInteractionCallback@UI@GW@@YA_NPAUFrame@12@P6AXPAUInteractionMessage@12@PAX2@Z2@Z"
+          ],
+          "demangled": [
+            "UI::AddFrameUIInteractionCallback"
+          ]
+        },
+        {
+          "rva": 155136,
+          "size": 557,
+          "names": [
+            "?AsyncDecodeStr@UI@GW@@YAXPB_WP6AXPAX0@Z1W4Language@Constants@2@@Z"
+          ],
+          "demangled": [
+            "UI::AsyncDecodeStr"
+          ]
+        },
+        {
+          "rva": 155648,
+          "size": 45,
+          "names": [
+            "?AsyncDecodeStr@UI@GW@@YAXPB_WPA_WI@Z"
+          ],
+          "demangled": [
+            "UI::AsyncDecodeStr"
+          ]
+        },
+        {
+          "rva": 155696,
+          "size": 20,
+          "names": [
+            "?ButtonClick@UI@GW@@YA_NPAUFrame@12@@Z",
+            "ButtonClick"
+          ],
+          "demangled": [
+            "UI::ButtonClick",
+            "ButtonClick"
+          ]
+        },
+        {
+          "rva": 155728,
+          "size": 19,
+          "names": [
+            "?CreateUIComponent@UI@GW@@YAIIIIP6AXPAUInteractionMessage@12@PAX1@Z1PB_W@Z"
+          ],
+          "demangled": [
+            "UI::CreateUIComponent"
+          ]
+        },
+        {
+          "rva": 155760,
+          "size": 34,
+          "names": [
+            "?Default_UICallback@UI@GW@@YA_NPAUInteractionMessage@12@PAX1@Z"
+          ],
+          "demangled": [
+            "UI::Default_UICallback"
+          ]
+        },
+        {
+          "rva": 155808,
+          "size": 39,
+          "names": [
+            "?DestroyUIComponent@UI@GW@@YA_NPAUFrame@12@@Z"
+          ],
+          "demangled": [
+            "UI::DestroyUIComponent"
+          ]
+        },
+        {
+          "rva": 155856,
+          "size": 34,
+          "names": [
+            "?DrawOnCompass@UI@GW@@YA_NIIPAUCompassPoint@12@@Z"
+          ],
+          "demangled": [
+            "UI::DrawOnCompass"
+          ]
+        },
+        {
+          "rva": 155904,
+          "size": 92,
+          "names": [
+            "?EncStrToUInt32@UI@GW@@YAIPB_W@Z"
+          ],
+          "demangled": [
+            "UI::EncStrToUInt32"
+          ]
+        },
+        {
+          "rva": 156656,
+          "size": 45,
+          "names": [
+            "?GetChildFrame@UI@GW@@YAPAUFrame@12@PAU312@I@Z",
+            "GetChildFrame"
+          ],
+          "demangled": [
+            "UI::GetChildFrame",
+            "GetChildFrame"
+          ]
+        },
+        {
+          "rva": 156704,
+          "size": 58,
+          "names": [
+            "?GetCommandLinePref@UI@GW@@YA_NPB_WPAI@Z",
+            "GetCommandLinePref_UInt"
+          ],
+          "demangled": [
+            "UI::GetCommandLinePref",
+            "GetCommandLinePref_UInt"
+          ]
+        },
+        {
+          "rva": 156768,
+          "size": 56,
+          "names": [
+            "?GetCommandLinePref@UI@GW@@YA_NPB_WPAPA_W@Z",
+            "GetCommandLinePref_String"
+          ],
+          "demangled": [
+            "UI::GetCommandLinePref",
+            "GetCommandLinePref_String"
+          ]
+        },
+        {
+          "rva": 157408,
+          "size": 30,
+          "names": [
+            "?GetCurrentTooltip@UI@GW@@YAPAUTooltipInfo@12@XZ"
+          ],
+          "demangled": [
+            "UI::GetCurrentTooltip"
+          ]
+        },
+        {
+          "rva": 157456,
+          "size": 99,
+          "names": [
+            "?GetFrameById@UI@GW@@YAPAUFrame@12@I@Z"
+          ],
+          "demangled": [
+            "UI::GetFrameById"
+          ]
+        },
+        {
+          "rva": 157568,
+          "size": 82,
+          "names": [
+            "?GetFrameByLabel@UI@GW@@YAPAUFrame@12@PB_W@Z"
+          ],
+          "demangled": [
+            "UI::GetFrameByLabel"
+          ]
+        },
+        {
+          "rva": 157664,
+          "size": 105,
+          "names": [
+            "?GetFrameContext@UI@GW@@YAPAXPAUFrame@12@@Z"
+          ],
+          "demangled": [
+            "UI::GetFrameContext"
+          ]
+        },
+        {
+          "rva": 157872,
+          "size": 19,
+          "names": [
+            "?GetIsShiftScreenShot@UI@GW@@YA_NXZ",
+            "GetIsShiftScreenShot"
+          ],
+          "demangled": [
+            "UI::GetIsShiftScreenShot",
+            "GetIsShiftScreenShot"
+          ]
+        },
+        {
+          "rva": 157904,
+          "size": 19,
+          "names": [
+            "?GetIsUIDrawn@UI@GW@@YA_NXZ",
+            "GetIsUIDrawn"
+          ],
+          "demangled": [
+            "UI::GetIsUIDrawn",
+            "GetIsUIDrawn"
+          ]
+        },
+        {
+          "rva": 157936,
+          "size": 11,
+          "names": [
+            "?GetIsWorldMapShowing@UI@GW@@YA_NXZ",
+            "GetIsWorldMapShowing"
+          ],
+          "demangled": [
+            "UI::GetIsWorldMapShowing",
+            "GetIsWorldMapShowing"
+          ]
+        },
+        {
+          "rva": 157968,
+          "size": 34,
+          "names": [
+            "?GetParentFrame@UI@GW@@YAPAUFrame@12@PAU312@@Z",
+            "GetParentFrame"
+          ],
+          "demangled": [
+            "UI::GetParentFrame",
+            "GetParentFrame"
+          ]
+        },
+        {
+          "rva": 158016,
+          "size": 45,
+          "names": [
+            "?GetPreference@UI@GW@@YAIW4EnumPreference@12@@Z",
+            "GetPreference_Enum"
+          ],
+          "demangled": [
+            "UI::GetPreference",
+            "GetPreference_Enum"
+          ]
+        },
+        {
+          "rva": 158064,
+          "size": 45,
+          "names": [
+            "?GetPreference@UI@GW@@YAIW4NumberPreference@12@@Z",
+            "GetPreference_Number"
+          ],
+          "demangled": [
+            "UI::GetPreference",
+            "GetPreference_Number"
+          ]
+        },
+        {
+          "rva": 158112,
+          "size": 45,
+          "names": [
+            "?GetPreference@UI@GW@@YAPA_WW4StringPreference@12@@Z",
+            "GetPreference_String"
+          ],
+          "demangled": [
+            "UI::GetPreference",
+            "GetPreference_String"
+          ]
+        },
+        {
+          "rva": 158160,
+          "size": 45,
+          "names": [
+            "?GetPreference@UI@GW@@YA_NW4FlagPreference@12@@Z",
+            "GetPreference_Flag"
+          ],
+          "demangled": [
+            "UI::GetPreference",
+            "GetPreference_Flag"
+          ]
+        },
+        {
+          "rva": 158208,
+          "size": 62,
+          "names": [
+            "?GetPreferenceOptions@UI@GW@@YAIW4EnumPreference@12@PAPAI@Z"
+          ],
+          "demangled": [
+            "UI::GetPreferenceOptions"
+          ]
+        },
+        {
+          "rva": 158256,
+          "size": 14,
+          "names": [
+            "?GetRootFrame@UI@GW@@YAPAUFrame@12@XZ",
+            "GetRootFrame"
+          ],
+          "demangled": [
+            "UI::GetRootFrame",
+            "GetRootFrame"
+          ]
+        },
+        {
+          "rva": 158272,
+          "size": 6,
+          "names": [
+            "?GetSettings@UI@GW@@YAPAV?$Array@E@2@XZ"
+          ],
+          "demangled": [
+            "UI::GetSettings"
+          ]
+        },
+        {
+          "rva": 158464,
+          "size": 35,
+          "names": [
+            "?GetTextLanguage@UI@GW@@YA?AW4Language@Constants@2@XZ",
+            "GetTextLanguage"
+          ],
+          "demangled": [
+            "UI::GetTextLanguage",
+            "GetTextLanguage"
+          ]
+        },
+        {
+          "rva": 158816,
+          "size": 33,
+          "names": [
+            "?GetWindowPosition@UI@GW@@YAPAUWindowPosition@12@W4WindowID@12@@Z",
+            "GetWindowPosition"
+          ],
+          "demangled": [
+            "UI::GetWindowPosition",
+            "GetWindowPosition"
+          ]
+        },
+        {
+          "rva": 158864,
+          "size": 87,
+          "names": [
+            "?IsInControllerCursorMode@UI@GW@@YA_NXZ"
+          ],
+          "demangled": [
+            "UI::IsInControllerCursorMode"
+          ]
+        },
+        {
+          "rva": 158960,
+          "size": 21,
+          "names": [
+            "?IsInControllerMode@UI@GW@@YA_NXZ",
+            "IsInControllerMode"
+          ],
+          "demangled": [
+            "UI::IsInControllerMode",
+            "IsInControllerMode"
+          ]
+        },
+        {
+          "rva": 158992,
+          "size": 69,
+          "names": [
+            "?IsValidEncStr@UI@GW@@YA_NPB_W@Z"
+          ],
+          "demangled": [
+            "UI::IsValidEncStr"
+          ]
+        },
+        {
+          "rva": 159072,
+          "size": 96,
+          "names": [
+            "?Keydown@UI@GW@@YA_NW4ControlAction@12@PAUFrame@12@@Z"
+          ],
+          "demangled": [
+            "UI::Keydown"
+          ]
+        },
+        {
+          "rva": 159168,
+          "size": 146,
+          "names": [
+            "?Keypress@UI@GW@@YA_NW4ControlAction@12@PAUFrame@12@@Z"
+          ],
+          "demangled": [
+            "UI::Keypress"
+          ]
+        },
+        {
+          "rva": 159328,
+          "size": 96,
+          "names": [
+            "?Keyup@UI@GW@@YA_NW4ControlAction@12@PAUFrame@12@@Z"
+          ],
+          "demangled": [
+            "UI::Keyup"
+          ]
+        },
+        {
+          "rva": 160576,
+          "size": 230,
+          "names": [
+            "?RegisterCreateUIComponentCallback@UI@GW@@YAXPAUHookEntry@2@ABV?$function@$$A6AXPAUCreateUIComponentPacket@UI@GW@@@Z@std@@H@Z"
+          ],
+          "demangled": [
+            "UI::RegisterCreateUIComponentCallback"
+          ]
+        },
+        {
+          "rva": 160816,
+          "size": 467,
+          "names": [
+            "?RegisterFrameUIMessageCallback@UI@GW@@YAXPAUHookEntry@2@W4UIMessage@12@ABV?$function@$$A6AXPAUHookStatus@GW@@PBUFrame@UI@2@W4UIMessage@42@PAX3@Z@std@@H@Z"
+          ],
+          "demangled": [
+            "UI::RegisterFrameUIMessageCallback"
+          ]
+        },
+        {
+          "rva": 161296,
+          "size": 255,
+          "names": [
+            "?RegisterKeydownCallback@UI@GW@@YAXPAUHookEntry@2@ABV?$function@$$A6AXPAUHookStatus@GW@@I@Z@std@@@Z"
+          ],
+          "demangled": [
+            "UI::RegisterKeydownCallback"
+          ]
+        },
+        {
+          "rva": 161552,
+          "size": 255,
+          "names": [
+            "?RegisterKeyupCallback@UI@GW@@YAXPAUHookEntry@2@ABV?$function@$$A6AXPAUHookStatus@GW@@I@Z@std@@@Z"
+          ],
+          "demangled": [
+            "UI::RegisterKeyupCallback"
+          ]
+        },
+        {
+          "rva": 161808,
+          "size": 467,
+          "names": [
+            "?RegisterUIMessageCallback@UI@GW@@YAXPAUHookEntry@2@W4UIMessage@12@ABV?$function@$$A6AXPAUHookStatus@GW@@W4UIMessage@UI@2@PAX2@Z@std@@H@Z"
+          ],
+          "demangled": [
+            "UI::RegisterUIMessageCallback"
+          ]
+        },
+        {
+          "rva": 162288,
+          "size": 243,
+          "names": [
+            "?RemoveCreateUIComponentCallback@UI@GW@@YAXPAUHookEntry@2@@Z"
+          ],
+          "demangled": [
+            "UI::RemoveCreateUIComponentCallback"
+          ]
+        },
+        {
+          "rva": 162544,
+          "size": 296,
+          "names": [
+            "?RemoveFrameUIMessageCallback@UI@GW@@YAXPAUHookEntry@2@@Z"
+          ],
+          "demangled": [
+            "UI::RemoveFrameUIMessageCallback"
+          ]
+        },
+        {
+          "rva": 162848,
+          "size": 368,
+          "names": [
+            "?RemoveKeydownCallback@UI@GW@@YAXPAUHookEntry@2@@Z",
+            "?RemoveKeyupCallback@UI@GW@@YAXPAUHookEntry@2@@Z"
+          ],
+          "demangled": [
+            "UI::RemoveKeydownCallback",
+            "UI::RemoveKeyupCallback"
+          ]
+        },
+        {
+          "rva": 162864,
+          "size": 352,
+          "names": [
+            "?RemoveUIMessageCallback@UI@GW@@YAXPAUHookEntry@2@W4UIMessage@12@@Z"
+          ],
+          "demangled": [
+            "UI::RemoveUIMessageCallback"
+          ]
+        },
+        {
+          "rva": 163216,
+          "size": 27,
+          "names": [
+            "?SelectDropdownOption@UI@GW@@YA_NPAUFrame@12@I@Z",
+            "SelectDropdownOption"
+          ],
+          "demangled": [
+            "UI::SelectDropdownOption",
+            "SelectDropdownOption"
+          ]
+        },
+        {
+          "rva": 163616,
+          "size": 892,
+          "names": [
+            "?SendFrameUIMessage@UI@GW@@YA_NPAUFrame@12@W4UIMessage@12@PAX2@Z"
+          ],
+          "demangled": [
+            "UI::SendFrameUIMessage"
+          ]
+        },
+        {
+          "rva": 164048,
+          "size": 460,
+          "names": [
+            "?SendUIMessage@UI@GW@@YA_NW4UIMessage@12@PAX1@Z"
+          ],
+          "demangled": [
+            "UI::SendUIMessage"
+          ]
+        },
+        {
+          "rva": 164448,
+          "size": 60,
+          "names": [
+            "?SetCommandLinePref@UI@GW@@YA_NPB_WI@Z",
+            "SetCommandLinePref_UInt"
+          ],
+          "demangled": [
+            "UI::SetCommandLinePref",
+            "SetCommandLinePref_UInt"
+          ]
+        },
+        {
+          "rva": 164512,
+          "size": 72,
+          "names": [
+            "?SetCommandLinePref@UI@GW@@YA_NPB_WPA_W@Z",
+            "SetCommandLinePref_String"
+          ],
+          "demangled": [
+            "UI::SetCommandLinePref",
+            "SetCommandLinePref_String"
+          ]
+        },
+        {
+          "rva": 164592,
+          "size": 55,
+          "names": [
+            "?SetFrameDisabled@UI@GW@@YA_NPAUFrame@12@_N@Z",
+            "SetFrameDisabled"
+          ],
+          "demangled": [
+            "UI::SetFrameDisabled",
+            "SetFrameDisabled"
+          ]
+        },
+        {
+          "rva": 164656,
+          "size": 53,
+          "names": [
+            "?SetFrameTitle@UI@GW@@YA_NPAUFrame@12@PB_W@Z",
+            "SetFrameTitle"
+          ],
+          "demangled": [
+            "UI::SetFrameTitle",
+            "SetFrameTitle"
+          ]
+        },
+        {
+          "rva": 164720,
+          "size": 60,
+          "names": [
+            "?SetFrameVisible@UI@GW@@YA_NPAUFrame@12@_N@Z",
+            "SetFrameVisible"
+          ],
+          "demangled": [
+            "UI::SetFrameVisible",
+            "SetFrameVisible"
+          ]
+        },
+        {
+          "rva": 164784,
+          "size": 13,
+          "names": [
+            "?SetOpenLinks@UI@GW@@YAX_N@Z"
+          ],
+          "demangled": [
+            "UI::SetOpenLinks"
+          ]
+        },
+        {
+          "rva": 165040,
+          "size": 1888,
+          "names": [
+            "?SetPreference@UI@GW@@YA_NW4EnumPreference@12@I@Z"
+          ],
+          "demangled": [
+            "UI::SetPreference"
+          ]
+        },
+        {
+          "rva": 165344,
+          "size": 1584,
+          "names": [
+            "?SetPreference@UI@GW@@YA_NW4FlagPreference@12@_N@Z"
+          ],
+          "demangled": [
+            "UI::SetPreference"
+          ]
+        },
+        {
+          "rva": 165792,
+          "size": 1136,
+          "names": [
+            "?SetPreference@UI@GW@@YA_NW4NumberPreference@12@I@Z"
+          ],
+          "demangled": [
+            "UI::SetPreference"
+          ]
+        },
+        {
+          "rva": 166816,
+          "size": 112,
+          "names": [
+            "?SetPreference@UI@GW@@YA_NW4StringPreference@12@PA_W@Z"
+          ],
+          "demangled": [
+            "UI::SetPreference"
+          ]
+        },
+        {
+          "rva": 166928,
+          "size": 39,
+          "names": [
+            "?SetWindowPosition@UI@GW@@YA_NW4WindowID@12@PAUWindowPosition@12@@Z",
+            "SetWindowPosition"
+          ],
+          "demangled": [
+            "UI::SetWindowPosition",
+            "SetWindowPosition"
+          ]
+        },
+        {
+          "rva": 166976,
+          "size": 114,
+          "names": [
+            "?SetWindowVisible@UI@GW@@YA_NW4WindowID@12@_N@Z"
+          ],
+          "demangled": [
+            "UI::SetWindowVisible"
+          ]
+        },
+        {
+          "rva": 167104,
+          "size": 39,
+          "names": [
+            "?TriggerFrameRedraw@UI@GW@@YA_NPAUFrame@12@@Z"
+          ],
+          "demangled": [
+            "UI::TriggerFrameRedraw"
+          ]
+        },
+        {
+          "rva": 167152,
+          "size": 183,
+          "names": [
+            "?UInt32ToEncStr@UI@GW@@YA_NIPA_WI@Z"
+          ],
+          "demangled": [
+            "UI::UInt32ToEncStr"
+          ]
+        },
+        {
+          "rva": 170288,
+          "size": 503,
+          "names": [
+            "?xAxis@WindowPosition@UI@GW@@QBE?AUVec2f@3@M_N@Z"
+          ],
+          "demangled": [
+            "WindowPosition::xAxis"
+          ]
+        },
+        {
+          "rva": 170864,
+          "size": 401,
+          "names": [
+            "?yAxis@WindowPosition@UI@GW@@QBE?AUVec2f@3@M_N@Z"
+          ],
+          "demangled": [
+            "WindowPosition::yAxis"
+          ]
+        }
+      ]
+    },
+    "FriendListMgr": {
+      "function_count": 16,
+      "total_bytes": 1265,
+      "functions": [
+        {
+          "rva": 98624,
+          "size": 168,
+          "names": [
+            "?AddFriend@FriendListMgr@GW@@YA_NPB_W0@Z",
+            "AddFriend"
+          ],
+          "demangled": [
+            "FriendListMgr::AddFriend",
+            "AddFriend"
+          ]
+        },
+        {
+          "rva": 98800,
+          "size": 168,
+          "names": [
+            "?AddIgnore@FriendListMgr@GW@@YA_NPB_W0@Z",
+            "AddIgnore"
+          ],
+          "demangled": [
+            "FriendListMgr::AddIgnore",
+            "AddIgnore"
+          ]
+        },
+        {
+          "rva": 98976,
+          "size": 39,
+          "names": [
+            "?ChangeFriendType@FriendListMgr@GW@@YA_NPAUFriend@2@W4FriendType@2@@Z",
+            "ChangeFriendType"
+          ],
+          "demangled": [
+            "FriendListMgr::ChangeFriendType",
+            "ChangeFriendType"
+          ]
+        },
+        {
+          "rva": 99024,
+          "size": 68,
+          "names": [
+            "?GetFriend@FriendListMgr@GW@@YAPAUFriend@2@I@Z",
+            "GetFriendByIndex"
+          ],
+          "demangled": [
+            "FriendListMgr::GetFriend",
+            "GetFriendByIndex"
+          ]
+        },
+        {
+          "rva": 99104,
+          "size": 94,
+          "names": [
+            "?GetFriend@FriendListMgr@GW@@YAPAUFriend@2@PBE@Z"
+          ],
+          "demangled": [
+            "FriendListMgr::GetFriend"
+          ]
+        },
+        {
+          "rva": 99200,
+          "size": 147,
+          "names": [
+            "?GetFriend@FriendListMgr@GW@@YAPAUFriend@2@PB_W0W4FriendType@2@@Z"
+          ],
+          "demangled": [
+            "FriendListMgr::GetFriend"
+          ]
+        },
+        {
+          "rva": 99360,
+          "size": 6,
+          "names": [
+            "?GetFriendList@FriendListMgr@GW@@YAPAUFriendList@2@XZ",
+            "GetFriendList"
+          ],
+          "demangled": [
+            "FriendListMgr::GetFriendList",
+            "GetFriendList"
+          ]
+        },
+        {
+          "rva": 99376,
+          "size": 19,
+          "names": [
+            "?GetMyStatus@FriendListMgr@GW@@YA?AW4FriendStatus@2@XZ",
+            "GetMyStatus"
+          ],
+          "demangled": [
+            "FriendListMgr::GetMyStatus",
+            "GetMyStatus"
+          ]
+        },
+        {
+          "rva": 99408,
+          "size": 94,
+          "names": [
+            "?GetNumberOfFriends@FriendListMgr@GW@@YAIW4FriendType@2@@Z"
+          ],
+          "demangled": [
+            "FriendListMgr::GetNumberOfFriends"
+          ]
+        },
+        {
+          "rva": 99488,
+          "size": 14,
+          "names": [
+            "?GetNumberOfIgnores@FriendListMgr@GW@@YAIXZ",
+            "GetNumberOfIgnores"
+          ],
+          "demangled": [
+            "FriendListMgr::GetNumberOfIgnores",
+            "GetNumberOfIgnores"
+          ]
+        },
+        {
+          "rva": 99504,
+          "size": 14,
+          "names": [
+            "?GetNumberOfPartners@FriendListMgr@GW@@YAIXZ",
+            "GetNumberOfPartners"
+          ],
+          "demangled": [
+            "FriendListMgr::GetNumberOfPartners",
+            "GetNumberOfPartners"
+          ]
+        },
+        {
+          "rva": 99520,
+          "size": 14,
+          "names": [
+            "?GetNumberOfTraders@FriendListMgr@GW@@YAIXZ",
+            "GetNumberOfTraders"
+          ],
+          "demangled": [
+            "FriendListMgr::GetNumberOfTraders",
+            "GetNumberOfTraders"
+          ]
+        },
+        {
+          "rva": 100224,
+          "size": 52,
+          "names": [
+            "?RegisterFriendStatusCallback@FriendListMgr@GW@@YAXPAUHookEntry@2@ABV?$function@$$A6AXPAUHookStatus@GW@@PBUFriend@2@1@Z@std@@@Z"
+          ],
+          "demangled": [
+            "FriendListMgr::RegisterFriendStatusCallback"
+          ]
+        },
+        {
+          "rva": 100288,
+          "size": 38,
+          "names": [
+            "?RemoveFriend@FriendListMgr@GW@@YA_NPAUFriend@2@@Z",
+            "RemoveFriend"
+          ],
+          "demangled": [
+            "FriendListMgr::RemoveFriend",
+            "RemoveFriend"
+          ]
+        },
+        {
+          "rva": 100336,
+          "size": 277,
+          "names": [
+            "?RemoveFriendStatusCallback@FriendListMgr@GW@@YAXPAUHookEntry@2@@Z"
+          ],
+          "demangled": [
+            "FriendListMgr::RemoveFriendStatusCallback"
+          ]
+        },
+        {
+          "rva": 100624,
+          "size": 53,
+          "names": [
+            "?SetFriendListStatus@FriendListMgr@GW@@YA_NW4FriendStatus@2@@Z",
+            "SetFriendListStatus"
+          ],
+          "demangled": [
+            "FriendListMgr::SetFriendListStatus",
+            "SetFriendListStatus"
+          ]
+        }
+      ]
+    },
+    "GameThreadMgr": {
+      "function_count": 6,
+      "total_bytes": 1008,
+      "functions": [
+        {
+          "rva": 104864,
+          "size": 46,
+          "names": [
+            "?EnableHooks@GameThread@GW@@YAXXZ"
+          ],
+          "demangled": [
+            "GameThread::EnableHooks"
+          ]
+        },
+        {
+          "rva": 106400,
+          "size": 156,
+          "names": [
+            "?ClearCalls@GameThread@GW@@YAXXZ"
+          ],
+          "demangled": [
+            "GameThread::ClearCalls"
+          ]
+        },
+        {
+          "rva": 106560,
+          "size": 237,
+          "names": [
+            "?Enqueue@GameThread@GW@@YAXV?$function@$$A6AXXZ@std@@_N@Z"
+          ],
+          "demangled": [
+            "GameThread::Enqueue"
+          ]
+        },
+        {
+          "rva": 106752,
+          "size": 45,
+          "names": [
+            "?IsInGameThread@GameThread@GW@@YA_NXZ",
+            "IsInGameThread"
+          ],
+          "demangled": [
+            "GameThread::IsInGameThread",
+            "IsInGameThread"
+          ]
+        },
+        {
+          "rva": 106848,
+          "size": 238,
+          "names": [
+            "?RegisterGameThreadCallback@GameThread@GW@@YAXPAUHookEntry@2@ABV?$function@$$A6AXPAUHookStatus@GW@@@Z@std@@H@Z"
+          ],
+          "demangled": [
+            "GameThread::RegisterGameThreadCallback"
+          ]
+        },
+        {
+          "rva": 107088,
+          "size": 286,
+          "names": [
+            "?RemoveGameThreadCallback@GameThread@GW@@YAXPAUHookEntry@2@@Z"
+          ],
+          "demangled": [
+            "GameThread::RemoveGameThreadCallback"
+          ]
+        }
+      ]
+    },
+    "GuildMgr": {
+      "function_count": 10,
+      "total_bytes": 397,
+      "functions": [
+        {
+          "rva": 108016,
+          "size": 83,
+          "names": [
+            "?GetCurrentGH@GuildMgr@GW@@YAPAUGuild@2@XZ"
+          ],
+          "demangled": [
+            "GuildMgr::GetCurrentGH"
+          ]
+        },
+        {
+          "rva": 108112,
+          "size": 22,
+          "names": [
+            "?GetGuildArray@GuildMgr@GW@@YAPAV?$Array@PAUGuild@GW@@@2@XZ"
+          ],
+          "demangled": [
+            "GuildMgr::GetGuildArray"
+          ]
+        },
+        {
+          "rva": 108144,
+          "size": 45,
+          "names": [
+            "?GetGuildInfo@GuildMgr@GW@@YAPAUGuild@2@I@Z",
+            "GetGuildInfo"
+          ],
+          "demangled": [
+            "GuildMgr::GetGuildInfo",
+            "GetGuildInfo"
+          ]
+        },
+        {
+          "rva": 108192,
+          "size": 56,
+          "names": [
+            "?GetPlayerGuild@GuildMgr@GW@@YAPAUGuild@2@XZ",
+            "GetPlayerGuild"
+          ],
+          "demangled": [
+            "GuildMgr::GetPlayerGuild",
+            "GetPlayerGuild"
+          ]
+        },
+        {
+          "rva": 108256,
+          "size": 15,
+          "names": [
+            "?GetPlayerGuildAnnouncement@GuildMgr@GW@@YAPA_WXZ",
+            "GetPlayerGuildAnnouncement"
+          ],
+          "demangled": [
+            "GuildMgr::GetPlayerGuildAnnouncement",
+            "GetPlayerGuildAnnouncement"
+          ]
+        },
+        {
+          "rva": 108272,
+          "size": 18,
+          "names": [
+            "?GetPlayerGuildAnnouncer@GuildMgr@GW@@YAPA_WXZ",
+            "GetPlayerGuildAnnouncer"
+          ],
+          "demangled": [
+            "GuildMgr::GetPlayerGuildAnnouncer",
+            "GetPlayerGuildAnnouncer"
+          ]
+        },
+        {
+          "rva": 108304,
+          "size": 34,
+          "names": [
+            "?GetPlayerGuildIndex@GuildMgr@GW@@YAIXZ",
+            "GetPlayerGuildIndex"
+          ],
+          "demangled": [
+            "GuildMgr::GetPlayerGuildIndex",
+            "GetPlayerGuildIndex"
+          ]
+        },
+        {
+          "rva": 108320,
+          "size": 18,
+          "names": [
+            "?LeaveGH@GuildMgr@GW@@YA_NXZ",
+            "LeaveGH"
+          ],
+          "demangled": [
+            "GuildMgr::LeaveGH",
+            "LeaveGH"
+          ]
+        },
+        {
+          "rva": 108352,
+          "size": 24,
+          "names": [
+            "?TravelGH@GuildMgr@GW@@YA_NUGHKey@2@@Z"
+          ],
+          "demangled": [
+            "GuildMgr::TravelGH"
+          ]
+        },
+        {
+          "rva": 108384,
+          "size": 82,
+          "names": [
+            "?TravelGH@GuildMgr@GW@@YA_NXZ",
+            "TravelGH"
+          ],
+          "demangled": [
+            "GuildMgr::TravelGH",
+            "TravelGH"
+          ]
+        }
+      ]
+    },
+    "Hooker": {
+      "function_count": 9,
+      "total_bytes": 162,
+      "functions": [
+        {
+          "rva": 109008,
+          "size": 56,
+          "names": [
+            "?CreateHook@Hook@GW@@YAHPAPAXPAX0@Z"
+          ],
+          "demangled": [
+            "Hook::CreateHook"
+          ]
+        },
+        {
+          "rva": 109072,
+          "size": 27,
+          "names": [
+            "?Deinitialize@Hook@GW@@YAXXZ"
+          ],
+          "demangled": [
+            "Hook::Deinitialize"
+          ]
+        },
+        {
+          "rva": 109104,
+          "size": 13,
+          "names": [
+            "?DisableHooks@Hook@GW@@YAXPAX@Z"
+          ],
+          "demangled": [
+            "Hook::DisableHooks"
+          ]
+        },
+        {
+          "rva": 109120,
+          "size": 13,
+          "names": [
+            "?EnableHooks@Hook@GW@@YAXPAX@Z"
+          ],
+          "demangled": [
+            "Hook::EnableHooks"
+          ]
+        },
+        {
+          "rva": 109136,
+          "size": 8,
+          "names": [
+            "?EnterHook@Hook@GW@@YAXXZ"
+          ],
+          "demangled": [
+            "Hook::EnterHook"
+          ]
+        },
+        {
+          "rva": 109152,
+          "size": 7,
+          "names": [
+            "?GetInHookCount@Hook@GW@@YAHXZ"
+          ],
+          "demangled": [
+            "Hook::GetInHookCount"
+          ]
+        },
+        {
+          "rva": 109168,
+          "size": 12,
+          "names": [
+            "?Initialize@Hook@GW@@YAXXZ"
+          ],
+          "demangled": [
+            "Hook::Initialize"
+          ]
+        },
+        {
+          "rva": 109184,
+          "size": 8,
+          "names": [
+            "?LeaveHook@Hook@GW@@YAXXZ"
+          ],
+          "demangled": [
+            "Hook::LeaveHook"
+          ]
+        },
+        {
+          "rva": 109200,
+          "size": 18,
+          "names": [
+            "?RemoveHook@Hook@GW@@YAXPAX@Z"
+          ],
+          "demangled": [
+            "Hook::RemoveHook"
+          ]
+        }
+      ]
+    },
+    "ItemMgr": {
+      "function_count": 50,
+      "total_bytes": 5301,
+      "functions": [
+        {
+          "rva": 111568,
+          "size": 59,
+          "names": [
+            "?CanAccessXunlaiChest@Items@GW@@YA_NXZ",
+            "CanAccessXunlaiChest"
+          ],
+          "demangled": [
+            "Items::CanAccessXunlaiChest",
+            "CanAccessXunlaiChest"
+          ]
+        },
+        {
+          "rva": 111632,
+          "size": 83,
+          "names": [
+            "?CanInteractWithItem@Items@GW@@YA_NPBUItem@2@@Z",
+            "CanInteractWithItem"
+          ],
+          "demangled": [
+            "Items::CanInteractWithItem",
+            "CanInteractWithItem"
+          ]
+        },
+        {
+          "rva": 111728,
+          "size": 117,
+          "names": [
+            "?CountItemByModelId@Items@GW@@YAIIHH@Z"
+          ],
+          "demangled": [
+            "Items::CountItemByModelId"
+          ]
+        },
+        {
+          "rva": 111856,
+          "size": 244,
+          "names": [
+            "?DepositGold@Items@GW@@YAII@Z"
+          ],
+          "demangled": [
+            "Items::DepositGold"
+          ]
+        },
+        {
+          "rva": 112112,
+          "size": 178,
+          "names": [
+            "?DestroyItem@Items@GW@@YA_NI@Z"
+          ],
+          "demangled": [
+            "Items::DestroyItem"
+          ]
+        },
+        {
+          "rva": 112304,
+          "size": 111,
+          "names": [
+            "?DropGold@Items@GW@@YA_NI@Z"
+          ],
+          "demangled": [
+            "Items::DropGold"
+          ]
+        },
+        {
+          "rva": 112416,
+          "size": 315,
+          "names": [
+            "?DropItem@Items@GW@@YA_NPBUItem@2@I@Z"
+          ],
+          "demangled": [
+            "Items::DropItem"
+          ]
+        },
+        {
+          "rva": 112736,
+          "size": 156,
+          "names": [
+            "?EquipItem@Items@GW@@YA_NPBUItem@2@I@Z"
+          ],
+          "demangled": [
+            "Items::EquipItem"
+          ]
+        },
+        {
+          "rva": 112896,
+          "size": 47,
+          "names": [
+            "?GetBag@Items@GW@@YAPAUBag@2@W43Constants@2@@Z",
+            "GetBag"
+          ],
+          "demangled": [
+            "Items::GetBag",
+            "GetBag"
+          ]
+        },
+        {
+          "rva": 112944,
+          "size": 19,
+          "names": [
+            "?GetBagArray@Items@GW@@YAPAPAUBag@2@XZ",
+            "?GetInventory@Items@GW@@YAPAUInventory@2@XZ",
+            "GetInventory"
+          ],
+          "demangled": [
+            "Items::GetBagArray",
+            "Items::GetInventory",
+            "GetInventory"
+          ]
+        },
+        {
+          "rva": 112976,
+          "size": 47,
+          "names": [
+            "?GetBagByIndex@Items@GW@@YAPAUBag@2@I@Z",
+            "GetBagByIndex"
+          ],
+          "demangled": [
+            "Items::GetBagByIndex",
+            "GetBagByIndex"
+          ]
+        },
+        {
+          "rva": 113024,
+          "size": 67,
+          "names": [
+            "?GetCompositeModelInfo@Items@GW@@YAPBUCompositeModelInfo@2@I@Z",
+            "GetCompositeModelInfo"
+          ],
+          "demangled": [
+            "Items::GetCompositeModelInfo",
+            "GetCompositeModelInfo"
+          ]
+        },
+        {
+          "rva": 113104,
+          "size": 6,
+          "names": [
+            "?GetCompositeModelInfoArray@Items@GW@@YAABV?$BaseArray@UCompositeModelInfo@GW@@@2@XZ"
+          ],
+          "demangled": [
+            "Items::GetCompositeModelInfoArray"
+          ]
+        },
+        {
+          "rva": 113120,
+          "size": 40,
+          "names": [
+            "?GetEquipmentVisibility@Items@GW@@YA?AW4EquipmentStatus@2@W4EquipmentType@2@@Z",
+            "GetEquipmentVisibility"
+          ],
+          "demangled": [
+            "Items::GetEquipmentVisibility",
+            "GetEquipmentVisibility"
+          ]
+        },
+        {
+          "rva": 113168,
+          "size": 29,
+          "names": [
+            "?GetGoldAmountInStorage@Items@GW@@YAIXZ",
+            "GetGoldAmountInStorage"
+          ],
+          "demangled": [
+            "Items::GetGoldAmountInStorage",
+            "GetGoldAmountInStorage"
+          ]
+        },
+        {
+          "rva": 113200,
+          "size": 29,
+          "names": [
+            "?GetGoldAmountOnCharacter@Items@GW@@YAIXZ",
+            "GetGoldAmountOnCharacter"
+          ],
+          "demangled": [
+            "Items::GetGoldAmountOnCharacter",
+            "GetGoldAmountOnCharacter"
+          ]
+        },
+        {
+          "rva": 113232,
+          "size": 79,
+          "names": [
+            "?GetHoveredItem@Items@GW@@YAPAUItem@2@XZ",
+            "GetHoveredItem"
+          ],
+          "demangled": [
+            "Items::GetHoveredItem",
+            "GetHoveredItem"
+          ]
+        },
+        {
+          "rva": 113360,
+          "size": 19,
+          "names": [
+            "?GetIsStorageOpen@Items@GW@@YA_NXZ",
+            "GetIsStorageOpen"
+          ],
+          "demangled": [
+            "Items::GetIsStorageOpen",
+            "GetIsStorageOpen"
+          ]
+        },
+        {
+          "rva": 113424,
+          "size": 22,
+          "names": [
+            "?GetItemArray@Items@GW@@YAPAV?$Array@PAUItem@GW@@@2@XZ"
+          ],
+          "demangled": [
+            "Items::GetItemArray"
+          ]
+        },
+        {
+          "rva": 113456,
+          "size": 92,
+          "names": [
+            "?GetItemById@Items@GW@@YAPAUItem@2@I@Z"
+          ],
+          "demangled": [
+            "Items::GetItemById"
+          ]
+        },
+        {
+          "rva": 113552,
+          "size": 117,
+          "names": [
+            "?GetItemByModelId@Items@GW@@YAPAUItem@2@IHH@Z"
+          ],
+          "demangled": [
+            "Items::GetItemByModelId"
+          ]
+        },
+        {
+          "rva": 113680,
+          "size": 265,
+          "names": [
+            "?GetItemByModelIdAndModifiers@Items@GW@@YAPAUItem@2@IPBUItemModifier@2@IHH@Z"
+          ],
+          "demangled": [
+            "Items::GetItemByModelIdAndModifiers"
+          ]
+        },
+        {
+          "rva": 113952,
+          "size": 48,
+          "names": [
+            "?GetItemBySlot@Items@GW@@YAPAUItem@2@PBUBag@2@I@Z"
+          ],
+          "demangled": [
+            "Items::GetItemBySlot"
+          ]
+        },
+        {
+          "rva": 114000,
+          "size": 78,
+          "names": [
+            "?GetItemFormula@Items@GW@@YAPBUItemFormula@2@PBUItem@2@@Z",
+            "GetItemFormula"
+          ],
+          "demangled": [
+            "Items::GetItemFormula",
+            "GetItemFormula"
+          ]
+        },
+        {
+          "rva": 114080,
+          "size": 85,
+          "names": [
+            "?GetMaterialSlot@Items@GW@@YA?AW4MaterialSlot@Constants@2@PBUItem@2@@Z",
+            "GetMaterialSlot"
+          ],
+          "demangled": [
+            "Items::GetMaterialSlot",
+            "GetMaterialSlot"
+          ]
+        },
+        {
+          "rva": 114176,
+          "size": 64,
+          "names": [
+            "?GetMaterialStorageStackSize@Items@GW@@YAIXZ",
+            "GetMaterialStorageStackSize"
+          ],
+          "demangled": [
+            "Items::GetMaterialStorageStackSize",
+            "GetMaterialStorageStackSize"
+          ]
+        },
+        {
+          "rva": 114240,
+          "size": 70,
+          "names": [
+            "?GetPvPItemInfo@Items@GW@@YAPBUPvPItemInfo@2@I@Z",
+            "GetPvPItemInfo"
+          ],
+          "demangled": [
+            "Items::GetPvPItemInfo",
+            "GetPvPItemInfo"
+          ]
+        },
+        {
+          "rva": 114320,
+          "size": 6,
+          "names": [
+            "?GetPvPItemInfoArray@Items@GW@@YAABV?$BaseArray@UPvPItemInfo@GW@@@2@XZ"
+          ],
+          "demangled": [
+            "Items::GetPvPItemInfoArray"
+          ]
+        },
+        {
+          "rva": 114336,
+          "size": 70,
+          "names": [
+            "?GetPvPItemUpgrade@Items@GW@@YAPBUPvPItemUpgradeInfo@2@I@Z",
+            "GetPvPItemUpgrade"
+          ],
+          "demangled": [
+            "Items::GetPvPItemUpgrade",
+            "GetPvPItemUpgrade"
+          ]
+        },
+        {
+          "rva": 114416,
+          "size": 118,
+          "names": [
+            "?GetPvPItemUpgradeEncodedDescription@Items@GW@@YA_NIPAPA_W@Z",
+            "GetPvPItemUpgradeEncodedDescription"
+          ],
+          "demangled": [
+            "Items::GetPvPItemUpgradeEncodedDescription",
+            "GetPvPItemUpgradeEncodedDescription"
+          ]
+        },
+        {
+          "rva": 114544,
+          "size": 118,
+          "names": [
+            "?GetPvPItemUpgradeEncodedName@Items@GW@@YA_NIPAPA_W@Z",
+            "GetPvPItemUpgradeEncodedName"
+          ],
+          "demangled": [
+            "Items::GetPvPItemUpgradeEncodedName",
+            "GetPvPItemUpgradeEncodedName"
+          ]
+        },
+        {
+          "rva": 114672,
+          "size": 6,
+          "names": [
+            "?GetPvPItemUpgradesArray@Items@GW@@YAABV?$BaseArray@UPvPItemUpgradeInfo@GW@@@2@XZ"
+          ],
+          "demangled": [
+            "Items::GetPvPItemUpgradesArray"
+          ]
+        },
+        {
+          "rva": 114688,
+          "size": 6,
+          "names": [
+            "?GetSalvageSessionInfo@Items@GW@@YAPAUSalvageSessionInfo@2@XZ",
+            "GetSalvageSessionInfo"
+          ],
+          "demangled": [
+            "Items::GetSalvageSessionInfo",
+            "GetSalvageSessionInfo"
+          ]
+        },
+        {
+          "rva": 114704,
+          "size": 11,
+          "names": [
+            "?GetStoragePage@Items@GW@@YA?AW4StoragePane@Constants@2@XZ"
+          ],
+          "demangled": [
+            "Items::GetStoragePage"
+          ]
+        },
+        {
+          "rva": 114720,
+          "size": 345,
+          "names": [
+            "?IdentifyItem@Items@GW@@YA_NII@Z"
+          ],
+          "demangled": [
+            "Items::IdentifyItem"
+          ]
+        },
+        {
+          "rva": 115072,
+          "size": 82,
+          "names": [
+            "?MoveItem@Items@GW@@YA_NPBUItem@2@0I@Z",
+            "MoveItemToItem"
+          ],
+          "demangled": [
+            "Items::MoveItem",
+            "MoveItemToItem"
+          ]
+        },
+        {
+          "rva": 115168,
+          "size": 78,
+          "names": [
+            "?MoveItem@Items@GW@@YA_NPBUItem@2@PBUBag@2@II@Z"
+          ],
+          "demangled": [
+            "Items::MoveItem"
+          ]
+        },
+        {
+          "rva": 115248,
+          "size": 119,
+          "names": [
+            "?MoveItem@Items@GW@@YA_NPBUItem@2@W4Bag@Constants@2@II@Z",
+            "MoveItemToBag"
+          ],
+          "demangled": [
+            "Items::MoveItem",
+            "MoveItemToBag"
+          ]
+        },
+        {
+          "rva": 116880,
+          "size": 48,
+          "names": [
+            "?OpenXunlaiWindow@Items@GW@@YA_N_N0@Z",
+            "OpenXunlaiWindow"
+          ],
+          "demangled": [
+            "Items::OpenXunlaiWindow",
+            "OpenXunlaiWindow"
+          ]
+        },
+        {
+          "rva": 116928,
+          "size": 73,
+          "names": [
+            "?PickUpItem@Items@GW@@YA_NPBUItem@2@I@Z",
+            "PickUpItem"
+          ],
+          "demangled": [
+            "Items::PickUpItem",
+            "PickUpItem"
+          ]
+        },
+        {
+          "rva": 117008,
+          "size": 39,
+          "names": [
+            "?PingWeaponSet@Items@GW@@YA_NIII@Z",
+            "PingWeaponSet"
+          ],
+          "demangled": [
+            "Items::PingWeaponSet",
+            "PingWeaponSet"
+          ]
+        },
+        {
+          "rva": 117056,
+          "size": 161,
+          "names": [
+            "?RegisterItemClickCallback@Items@GW@@YAXPAUHookEntry@2@ABV?$function@$$A6AXPAUHookStatus@GW@@PAUkMouseAction@UIPacket@UI@2@PAUItem@2@@Z@std@@@Z"
+          ],
+          "demangled": [
+            "Items::RegisterItemClickCallback"
+          ]
+        },
+        {
+          "rva": 117232,
+          "size": 277,
+          "names": [
+            "?RemoveItemClickCallback@Items@GW@@YAXPAUHookEntry@2@@Z"
+          ],
+          "demangled": [
+            "Items::RemoveItemClickCallback"
+          ]
+        },
+        {
+          "rva": 117520,
+          "size": 152,
+          "names": [
+            "?SalvageMaterials@Items@GW@@YA_NXZ"
+          ],
+          "demangled": [
+            "Items::SalvageMaterials"
+          ]
+        },
+        {
+          "rva": 117680,
+          "size": 38,
+          "names": [
+            "?SalvageSessionCancel@Items@GW@@YA_NXZ",
+            "SalvageSessionCancel"
+          ],
+          "demangled": [
+            "Items::SalvageSessionCancel",
+            "SalvageSessionCancel"
+          ]
+        },
+        {
+          "rva": 117728,
+          "size": 345,
+          "names": [
+            "?SalvageStart@Items@GW@@YA_NII@Z"
+          ],
+          "demangled": [
+            "Items::SalvageStart"
+          ]
+        },
+        {
+          "rva": 118080,
+          "size": 78,
+          "names": [
+            "?SetEquipmentVisibility@Items@GW@@YA_NW4EquipmentType@2@W4EquipmentStatus@2@@Z",
+            "SetEquipmentVisibility"
+          ],
+          "demangled": [
+            "Items::SetEquipmentVisibility",
+            "SetEquipmentVisibility"
+          ]
+        },
+        {
+          "rva": 118160,
+          "size": 374,
+          "names": [
+            "?UseItem@Items@GW@@YA_NPBUItem@2@@Z"
+          ],
+          "demangled": [
+            "Items::UseItem"
+          ]
+        },
+        {
+          "rva": 118544,
+          "size": 28,
+          "names": [
+            "?UseItemByModelId@Items@GW@@YA_NIHH@Z",
+            "UseItemByModelId"
+          ],
+          "demangled": [
+            "Items::UseItemByModelId",
+            "UseItemByModelId"
+          ]
+        },
+        {
+          "rva": 118576,
+          "size": 243,
+          "names": [
+            "?WithdrawGold@Items@GW@@YAII@Z"
+          ],
+          "demangled": [
+            "Items::WithdrawGold"
+          ]
+        }
+      ]
+    },
+    "MapMgr": {
+      "function_count": 27,
+      "total_bytes": 1628,
+      "functions": [
+        {
+          "rva": 119536,
+          "size": 44,
+          "names": [
+            "?CancelEnterChallenge@Map@GW@@YA_NXZ",
+            "CancelEnterChallenge"
+          ],
+          "demangled": [
+            "Map::CancelEnterChallenge",
+            "CancelEnterChallenge"
+          ]
+        },
+        {
+          "rva": 119584,
+          "size": 105,
+          "names": [
+            "?CreateMapContext@Map@GW@@YAPAUMapContext@2@I@Z"
+          ],
+          "demangled": [
+            "Map::CreateMapContext"
+          ]
+        },
+        {
+          "rva": 119696,
+          "size": 28,
+          "names": [
+            "?DestroyMapContext@Map@GW@@YA_NPAUMapContext@2@@Z",
+            "DestroyMapContext"
+          ],
+          "demangled": [
+            "Map::DestroyMapContext",
+            "DestroyMapContext"
+          ]
+        },
+        {
+          "rva": 119728,
+          "size": 36,
+          "names": [
+            "?EnterChallenge@Map@GW@@YA_NXZ",
+            "EnterChallenge"
+          ],
+          "demangled": [
+            "Map::EnterChallenge",
+            "EnterChallenge"
+          ]
+        },
+        {
+          "rva": 119776,
+          "size": 19,
+          "names": [
+            "?GetDistrict@Map@GW@@YAHXZ",
+            "GetDistrict"
+          ],
+          "demangled": [
+            "Map::GetDistrict",
+            "GetDistrict"
+          ]
+        },
+        {
+          "rva": 119808,
+          "size": 19,
+          "names": [
+            "?GetFoesKilled@Map@GW@@YAIXZ",
+            "GetFoesKilled"
+          ],
+          "demangled": [
+            "Map::GetFoesKilled",
+            "GetFoesKilled"
+          ]
+        },
+        {
+          "rva": 119840,
+          "size": 19,
+          "names": [
+            "?GetFoesToKill@Map@GW@@YAIXZ",
+            "GetFoesToKill"
+          ],
+          "demangled": [
+            "Map::GetFoesToKill",
+            "GetFoesToKill"
+          ]
+        },
+        {
+          "rva": 119872,
+          "size": 19,
+          "names": [
+            "?GetInstanceTime@Map@GW@@YAIXZ",
+            "GetInstanceTime"
+          ],
+          "demangled": [
+            "Map::GetInstanceTime",
+            "GetInstanceTime"
+          ]
+        },
+        {
+          "rva": 119904,
+          "size": 73,
+          "names": [
+            "?GetInstanceType@Map@GW@@YA?AW4InstanceType@Constants@2@XZ",
+            "GetInstanceType"
+          ],
+          "demangled": [
+            "Map::GetInstanceType",
+            "GetInstanceType"
+          ]
+        },
+        {
+          "rva": 119984,
+          "size": 28,
+          "names": [
+            "?GetIsInCinematic@Map@GW@@YA_NXZ"
+          ],
+          "demangled": [
+            "Map::GetIsInCinematic"
+          ]
+        },
+        {
+          "rva": 120016,
+          "size": 56,
+          "names": [
+            "?GetIsMapLoaded@Map@GW@@YA_NXZ",
+            "GetIsMapLoaded"
+          ],
+          "demangled": [
+            "Map::GetIsMapLoaded",
+            "GetIsMapLoaded"
+          ]
+        },
+        {
+          "rva": 120080,
+          "size": 66,
+          "names": [
+            "?GetIsMapUnlocked@Map@GW@@YA_NW4MapID@Constants@2@@Z"
+          ],
+          "demangled": [
+            "Map::GetIsMapUnlocked"
+          ]
+        },
+        {
+          "rva": 120160,
+          "size": 51,
+          "names": [
+            "?GetIsObserving@Map@GW@@YA_NXZ"
+          ],
+          "demangled": [
+            "Map::GetIsObserving"
+          ]
+        },
+        {
+          "rva": 120192,
+          "size": 19,
+          "names": [
+            "?GetLanguage@Map@GW@@YA?AW4Language@Constants@2@XZ",
+            "GetLanguage"
+          ],
+          "demangled": [
+            "Map::GetLanguage",
+            "GetLanguage"
+          ]
+        },
+        {
+          "rva": 120224,
+          "size": 19,
+          "names": [
+            "?GetMapID@Map@GW@@YA?AW4MapID@Constants@2@XZ",
+            "GetMapID"
+          ],
+          "demangled": [
+            "Map::GetMapID",
+            "GetMapID"
+          ]
+        },
+        {
+          "rva": 120256,
+          "size": 59,
+          "names": [
+            "?GetMapInfo@Map@GW@@YAPAUAreaInfo@2@W4MapID@Constants@2@@Z",
+            "GetMapInfo"
+          ],
+          "demangled": [
+            "Map::GetMapInfo",
+            "GetMapInfo"
+          ]
+        },
+        {
+          "rva": 120320,
+          "size": 20,
+          "names": [
+            "?GetMissionMapContext@Map@GW@@YAPAUMissionMapContext@2@XZ",
+            "GetMissionMapContext"
+          ],
+          "demangled": [
+            "Map::GetMissionMapContext",
+            "GetMissionMapContext"
+          ]
+        },
+        {
+          "rva": 120352,
+          "size": 22,
+          "names": [
+            "?GetMissionMapIconArray@Map@GW@@YAPAV?$Array@UMissionMapIcon@GW@@@2@XZ"
+          ],
+          "demangled": [
+            "Map::GetMissionMapIconArray"
+          ]
+        },
+        {
+          "rva": 120384,
+          "size": 31,
+          "names": [
+            "?GetPathingMap@Map@GW@@YAPAV?$Array@UPathingMap@GW@@@2@XZ"
+          ],
+          "demangled": [
+            "Map::GetPathingMap"
+          ]
+        },
+        {
+          "rva": 120416,
+          "size": 11,
+          "names": [
+            "?GetRegion@Map@GW@@YA?AW4ServerRegion@Constants@2@XZ",
+            "GetRegion"
+          ],
+          "demangled": [
+            "Map::GetRegion",
+            "GetRegion"
+          ]
+        },
+        {
+          "rva": 120432,
+          "size": 175,
+          "names": [
+            "?GetWorldMapContext@Map@GW@@YAPAUWorldMapContext@2@XZ"
+          ],
+          "demangled": [
+            "Map::GetWorldMapContext"
+          ]
+        },
+        {
+          "rva": 120608,
+          "size": 226,
+          "names": [
+            "?LanguageFromDistrict@Map@GW@@YA?AW4Language@Constants@2@W4District@42@@Z"
+          ],
+          "demangled": [
+            "Map::LanguageFromDistrict"
+          ]
+        },
+        {
+          "rva": 120848,
+          "size": 208,
+          "names": [
+            "?QueryAltitude@Map@GW@@YAMPBUGamePos@2@MPAUMapContext@2@@Z"
+          ],
+          "demangled": [
+            "Map::QueryAltitude"
+          ]
+        },
+        {
+          "rva": 121056,
+          "size": 71,
+          "names": [
+            "?RegionFromDistrict@Map@GW@@YA?AW4ServerRegion@Constants@2@W4District@42@@Z"
+          ],
+          "demangled": [
+            "Map::RegionFromDistrict"
+          ]
+        },
+        {
+          "rva": 121184,
+          "size": 44,
+          "names": [
+            "?SkipCinematic@Map@GW@@YA_NXZ",
+            "SkipCinematic"
+          ],
+          "demangled": [
+            "Map::SkipCinematic",
+            "SkipCinematic"
+          ]
+        },
+        {
+          "rva": 121232,
+          "size": 87,
+          "names": [
+            "?Travel@Map@GW@@YA_NW4MapID@Constants@2@W4District@42@H@Z",
+            "TravelByDistrict"
+          ],
+          "demangled": [
+            "Map::Travel",
+            "TravelByDistrict"
+          ]
+        },
+        {
+          "rva": 121328,
+          "size": 73,
+          "names": [
+            "?Travel@Map@GW@@YA_NW4MapID@Constants@2@W4ServerRegion@42@HW4Language@42@@Z",
+            "TravelByRegion"
+          ],
+          "demangled": [
+            "Map::Travel",
+            "TravelByRegion"
+          ]
+        }
+      ]
+    },
+    "MemoryMgr": {
+      "function_count": 7,
+      "total_bytes": 261,
+      "functions": [
+        {
+          "rva": 123024,
+          "size": 14,
+          "names": [
+            "?GetGWVersion@MemoryMgr@GW@@YAIXZ"
+          ],
+          "demangled": [
+            "MemoryMgr::GetGWVersion"
+          ]
+        },
+        {
+          "rva": 123040,
+          "size": 80,
+          "names": [
+            "?GetGWWindowHandle@MemoryMgr@GW@@YAPAUHWND__@@XZ"
+          ],
+          "demangled": [
+            "MemoryMgr::GetGWWindowHandle"
+          ]
+        },
+        {
+          "rva": 123120,
+          "size": 45,
+          "names": [
+            "?GetPersonalDir@MemoryMgr@GW@@YA_NIPA_W@Z"
+          ],
+          "demangled": [
+            "MemoryMgr::GetPersonalDir"
+          ]
+        },
+        {
+          "rva": 123168,
+          "size": 14,
+          "names": [
+            "?GetSkillTimer@MemoryMgr@GW@@YAKXZ"
+          ],
+          "demangled": [
+            "MemoryMgr::GetSkillTimer"
+          ]
+        },
+        {
+          "rva": 123184,
+          "size": 33,
+          "names": [
+            "?MemAlloc@MemoryMgr@GW@@YAPAXI@Z"
+          ],
+          "demangled": [
+            "MemoryMgr::MemAlloc"
+          ]
+        },
+        {
+          "rva": 123232,
+          "size": 39,
+          "names": [
+            "?MemFree@MemoryMgr@GW@@YAXPAX@Z"
+          ],
+          "demangled": [
+            "MemoryMgr::MemFree"
+          ]
+        },
+        {
+          "rva": 123280,
+          "size": 36,
+          "names": [
+            "?MemRealloc@MemoryMgr@GW@@YAPAXPAXI@Z"
+          ],
+          "demangled": [
+            "MemoryMgr::MemRealloc"
+          ]
+        }
+      ]
+    },
+    "MemoryPatcher": {
+      "function_count": 6,
+      "total_bytes": 873,
+      "functions": [
+        {
+          "rva": 124176,
+          "size": 128,
+          "names": [
+            "?DisableHooks@MemoryPatcher@GW@@SAXXZ"
+          ],
+          "demangled": [
+            "MemoryPatcher::DisableHooks"
+          ]
+        },
+        {
+          "rva": 124304,
+          "size": 128,
+          "names": [
+            "?EnableHooks@MemoryPatcher@GW@@SAXXZ"
+          ],
+          "demangled": [
+            "MemoryPatcher::EnableHooks"
+          ]
+        },
+        {
+          "rva": 124528,
+          "size": 245,
+          "names": [
+            "?Reset@MemoryPatcher@GW@@QAEXXZ"
+          ],
+          "demangled": [
+            "MemoryPatcher::Reset"
+          ]
+        },
+        {
+          "rva": 124784,
+          "size": 174,
+          "names": [
+            "?SetPatch@MemoryPatcher@GW@@QAEXIPBDI@Z"
+          ],
+          "demangled": [
+            "MemoryPatcher::SetPatch"
+          ]
+        },
+        {
+          "rva": 124960,
+          "size": 164,
+          "names": [
+            "?SetRedirect@MemoryPatcher@GW@@QAE_NIPAX@Z"
+          ],
+          "demangled": [
+            "MemoryPatcher::SetRedirect"
+          ]
+        },
+        {
+          "rva": 125136,
+          "size": 34,
+          "names": [
+            "?TogglePatch@MemoryPatcher@GW@@QAE_N_N@Z"
+          ],
+          "demangled": [
+            "MemoryPatcher::TogglePatch"
+          ]
+        }
+      ]
+    },
+    "MerchantMgr": {
+      "function_count": 3,
+      "total_bytes": 1161,
+      "functions": [
+        {
+          "rva": 125504,
+          "size": 627,
+          "names": [
+            "?GetMerchantItems@Merchant@GW@@YAIW4TransactionType@12@IPAI@Z"
+          ],
+          "demangled": [
+            "Merchant::GetMerchantItems"
+          ]
+        },
+        {
+          "rva": 126272,
+          "size": 459,
+          "names": [
+            "?RequestQuote@Merchant@GW@@YA_NW4TransactionType@12@I@Z"
+          ],
+          "demangled": [
+            "Merchant::RequestQuote"
+          ]
+        },
+        {
+          "rva": 126736,
+          "size": 75,
+          "names": [
+            "?TransactItems@Merchant@GW@@YA_NXZ"
+          ],
+          "demangled": [
+            "Merchant::TransactItems"
+          ]
+        }
+      ]
+    },
+    "PartyMgr": {
+      "function_count": 42,
+      "total_bytes": 4048,
+      "functions": [
+        {
+          "rva": 127408,
+          "size": 83,
+          "names": [
+            "?AddHenchman@PartyMgr@GW@@YA_NI@Z"
+          ],
+          "demangled": [
+            "PartyMgr::AddHenchman"
+          ]
+        },
+        {
+          "rva": 127504,
+          "size": 83,
+          "names": [
+            "?AddHero@PartyMgr@GW@@YA_NW4HeroID@Constants@2@@Z"
+          ],
+          "demangled": [
+            "PartyMgr::AddHero"
+          ]
+        },
+        {
+          "rva": 127600,
+          "size": 99,
+          "names": [
+            "?FlagAll@PartyMgr@GW@@YA_NUGamePos@2@@Z"
+          ],
+          "demangled": [
+            "PartyMgr::FlagAll"
+          ]
+        },
+        {
+          "rva": 127712,
+          "size": 93,
+          "names": [
+            "?FlagHero@PartyMgr@GW@@YA_NIUGamePos@2@@Z"
+          ],
+          "demangled": [
+            "PartyMgr::FlagHero"
+          ]
+        },
+        {
+          "rva": 128016,
+          "size": 71,
+          "names": [
+            "?GetAgentAttributes@PartyMgr@GW@@YAPAUAttribute@2@I@Z"
+          ],
+          "demangled": [
+            "PartyMgr::GetAgentAttributes"
+          ]
+        },
+        {
+          "rva": 128096,
+          "size": 70,
+          "names": [
+            "?GetHeroAgentID@PartyMgr@GW@@YAII@Z"
+          ],
+          "demangled": [
+            "PartyMgr::GetHeroAgentID"
+          ]
+        },
+        {
+          "rva": 128176,
+          "size": 30,
+          "names": [
+            "?GetHeroConstData@PartyMgr@GW@@YAPAUHeroConstData@2@W4HeroID@Constants@2@@Z"
+          ],
+          "demangled": [
+            "PartyMgr::GetHeroConstData"
+          ]
+        },
+        {
+          "rva": 128208,
+          "size": 65,
+          "names": [
+            "?GetHeroInfo@PartyMgr@GW@@YAPAUHeroInfo@2@W4HeroID@Constants@2@@Z"
+          ],
+          "demangled": [
+            "PartyMgr::GetHeroInfo"
+          ]
+        },
+        {
+          "rva": 128416,
+          "size": 26,
+          "names": [
+            "?GetIsHardModeUnlocked@PartyMgr@GW@@YA_NXZ"
+          ],
+          "demangled": [
+            "PartyMgr::GetIsHardModeUnlocked"
+          ]
+        },
+        {
+          "rva": 128448,
+          "size": 74,
+          "names": [
+            "?GetIsLeader@PartyMgr@GW@@YA_NXZ"
+          ],
+          "demangled": [
+            "PartyMgr::GetIsLeader"
+          ]
+        },
+        {
+          "rva": 128528,
+          "size": 20,
+          "names": [
+            "?GetIsPartyDefeated@PartyMgr@GW@@YA_NXZ"
+          ],
+          "demangled": [
+            "PartyMgr::GetIsPartyDefeated"
+          ]
+        },
+        {
+          "rva": 128560,
+          "size": 20,
+          "names": [
+            "?GetIsPartyInHardMode@PartyMgr@GW@@YA_NXZ"
+          ],
+          "demangled": [
+            "PartyMgr::GetIsPartyInHardMode"
+          ]
+        },
+        {
+          "rva": 128592,
+          "size": 67,
+          "names": [
+            "?GetIsPartyLoaded@PartyMgr@GW@@YA_NXZ"
+          ],
+          "demangled": [
+            "PartyMgr::GetIsPartyLoaded"
+          ]
+        },
+        {
+          "rva": 128672,
+          "size": 67,
+          "names": [
+            "?GetIsPartyTicked@PartyMgr@GW@@YA_NXZ"
+          ],
+          "demangled": [
+            "PartyMgr::GetIsPartyTicked"
+          ]
+        },
+        {
+          "rva": 128752,
+          "size": 115,
+          "names": [
+            "?GetIsPlayerTicked@PartyMgr@GW@@YA_NI@Z"
+          ],
+          "demangled": [
+            "PartyMgr::GetIsPlayerTicked"
+          ]
+        },
+        {
+          "rva": 128880,
+          "size": 29,
+          "names": [
+            "?GetPartyHenchmanCount@PartyMgr@GW@@YAIXZ"
+          ],
+          "demangled": [
+            "PartyMgr::GetPartyHenchmanCount"
+          ]
+        },
+        {
+          "rva": 128912,
+          "size": 29,
+          "names": [
+            "?GetPartyHeroCount@PartyMgr@GW@@YAIXZ"
+          ],
+          "demangled": [
+            "PartyMgr::GetPartyHeroCount"
+          ]
+        },
+        {
+          "rva": 128944,
+          "size": 92,
+          "names": [
+            "?GetPartyInfo@PartyMgr@GW@@YAPAUPartyInfo@2@I@Z"
+          ],
+          "demangled": [
+            "PartyMgr::GetPartyInfo"
+          ]
+        },
+        {
+          "rva": 129040,
+          "size": 29,
+          "names": [
+            "?GetPartyPlayerCount@PartyMgr@GW@@YAIXZ"
+          ],
+          "demangled": [
+            "PartyMgr::GetPartyPlayerCount"
+          ]
+        },
+        {
+          "rva": 129072,
+          "size": 57,
+          "names": [
+            "?GetPartySearch@PartyMgr@GW@@YAPAUPartySearch@2@I@Z"
+          ],
+          "demangled": [
+            "PartyMgr::GetPartySearch"
+          ]
+        },
+        {
+          "rva": 129136,
+          "size": 35,
+          "names": [
+            "?GetPartySize@PartyMgr@GW@@YAIXZ"
+          ],
+          "demangled": [
+            "PartyMgr::GetPartySize"
+          ]
+        },
+        {
+          "rva": 129184,
+          "size": 85,
+          "names": [
+            "?GetPetInfo@PartyMgr@GW@@YAPAUPetInfo@2@I@Z"
+          ],
+          "demangled": [
+            "PartyMgr::GetPetInfo"
+          ]
+        },
+        {
+          "rva": 129280,
+          "size": 38,
+          "names": [
+            "?InvitePlayer@PartyMgr@GW@@YA_NI@Z"
+          ],
+          "demangled": [
+            "PartyMgr::InvitePlayer"
+          ]
+        },
+        {
+          "rva": 129328,
+          "size": 99,
+          "names": [
+            "?InvitePlayer@PartyMgr@GW@@YA_NPB_W@Z"
+          ],
+          "demangled": [
+            "PartyMgr::InvitePlayer"
+          ]
+        },
+        {
+          "rva": 129440,
+          "size": 91,
+          "names": [
+            "?KickAllHeroes@PartyMgr@GW@@YA_NXZ"
+          ],
+          "demangled": [
+            "PartyMgr::KickAllHeroes"
+          ]
+        },
+        {
+          "rva": 129536,
+          "size": 90,
+          "names": [
+            "?KickHenchman@PartyMgr@GW@@YA_NI@Z"
+          ],
+          "demangled": [
+            "PartyMgr::KickHenchman"
+          ]
+        },
+        {
+          "rva": 129632,
+          "size": 181,
+          "names": [
+            "?KickHero@PartyMgr@GW@@YA_NW4HeroID@Constants@2@@Z"
+          ],
+          "demangled": [
+            "PartyMgr::KickHero"
+          ]
+        },
+        {
+          "rva": 129824,
+          "size": 90,
+          "names": [
+            "?KickPlayer@PartyMgr@GW@@YA_NI@Z"
+          ],
+          "demangled": [
+            "PartyMgr::KickPlayer"
+          ]
+        },
+        {
+          "rva": 129920,
+          "size": 42,
+          "names": [
+            "?LeaveParty@PartyMgr@GW@@YA_NXZ"
+          ],
+          "demangled": [
+            "PartyMgr::LeaveParty"
+          ]
+        },
+        {
+          "rva": 130176,
+          "size": 100,
+          "names": [
+            "?RespondToPartyRequest@PartyMgr@GW@@YA_NI_N@Z"
+          ],
+          "demangled": [
+            "PartyMgr::RespondToPartyRequest"
+          ]
+        },
+        {
+          "rva": 130288,
+          "size": 28,
+          "names": [
+            "?ReturnToOutpost@PartyMgr@GW@@YA_NXZ"
+          ],
+          "demangled": [
+            "PartyMgr::ReturnToOutpost"
+          ]
+        },
+        {
+          "rva": 130320,
+          "size": 45,
+          "names": [
+            "?SearchParty@PartyMgr@GW@@YA_NIPB_W@Z"
+          ],
+          "demangled": [
+            "PartyMgr::SearchParty"
+          ]
+        },
+        {
+          "rva": 130368,
+          "size": 73,
+          "names": [
+            "?SearchPartyCancel@PartyMgr@GW@@YA_NXZ"
+          ],
+          "demangled": [
+            "PartyMgr::SearchPartyCancel"
+          ]
+        },
+        {
+          "rva": 130448,
+          "size": 88,
+          "names": [
+            "?SearchPartyReply@PartyMgr@GW@@YA_NI_N@Z"
+          ],
+          "demangled": [
+            "PartyMgr::SearchPartyReply"
+          ]
+        },
+        {
+          "rva": 130544,
+          "size": 148,
+          "names": [
+            "?SetHardMode@PartyMgr@GW@@YA_N_N@Z"
+          ],
+          "demangled": [
+            "PartyMgr::SetHardMode"
+          ]
+        },
+        {
+          "rva": 130704,
+          "size": 291,
+          "names": [
+            "?SetHeroBehavior@PartyMgr@GW@@YA_NIW4HeroBehavior@2@@Z"
+          ],
+          "demangled": [
+            "PartyMgr::SetHeroBehavior"
+          ]
+        },
+        {
+          "rva": 131008,
+          "size": 431,
+          "names": [
+            "?SetHeroTarget@PartyMgr@GW@@YA_NII@Z"
+          ],
+          "demangled": [
+            "PartyMgr::SetHeroTarget"
+          ]
+        },
+        {
+          "rva": 131440,
+          "size": 390,
+          "names": [
+            "?SetPetBehavior@PartyMgr@GW@@YA_NIW4HeroBehavior@2@@Z"
+          ],
+          "demangled": [
+            "PartyMgr::SetPetBehavior"
+          ]
+        },
+        {
+          "rva": 131840,
+          "size": 13,
+          "names": [
+            "?SetTickToggle@PartyMgr@GW@@YAX_N@Z"
+          ],
+          "demangled": [
+            "PartyMgr::SetTickToggle"
+          ]
+        },
+        {
+          "rva": 131856,
+          "size": 272,
+          "names": [
+            "?Tick@PartyMgr@GW@@YA_N_N@Z"
+          ],
+          "demangled": [
+            "PartyMgr::Tick"
+          ]
+        },
+        {
+          "rva": 132128,
+          "size": 156,
+          "names": [
+            "?UnflagAll@PartyMgr@GW@@YA_NXZ"
+          ],
+          "demangled": [
+            "PartyMgr::UnflagAll"
+          ]
+        },
+        {
+          "rva": 132288,
+          "size": 43,
+          "names": [
+            "?UnflagHero@PartyMgr@GW@@YA_NI@Z"
+          ],
+          "demangled": [
+            "PartyMgr::UnflagHero"
+          ]
+        }
+      ]
+    },
+    "PlayerMgr": {
+      "function_count": 14,
+      "total_bytes": 1069,
+      "functions": [
+        {
+          "rva": 132496,
+          "size": 28,
+          "names": [
+            "?ChangeSecondProfession@PlayerMgr@GW@@YA_NW4Profession@Constants@2@I@Z",
+            "ChangeSecondProfession"
+          ],
+          "demangled": [
+            "PlayerMgr::ChangeSecondProfession",
+            "ChangeSecondProfession"
+          ]
+        },
+        {
+          "rva": 132528,
+          "size": 52,
+          "names": [
+            "?GetActiveTitle@PlayerMgr@GW@@YAPAUTitle@2@XZ",
+            "GetActiveTitle"
+          ],
+          "demangled": [
+            "PlayerMgr::GetActiveTitle",
+            "GetActiveTitle"
+          ]
+        },
+        {
+          "rva": 132592,
+          "size": 208,
+          "names": [
+            "?GetActiveTitleId@PlayerMgr@GW@@YA?AW4TitleID@Constants@2@XZ"
+          ],
+          "demangled": [
+            "PlayerMgr::GetActiveTitleId"
+          ]
+        },
+        {
+          "rva": 132800,
+          "size": 94,
+          "names": [
+            "?GetAmountOfPlayersInInstance@PlayerMgr@GW@@YAIXZ"
+          ],
+          "demangled": [
+            "PlayerMgr::GetAmountOfPlayersInInstance"
+          ]
+        },
+        {
+          "rva": 132816,
+          "size": 78,
+          "names": [
+            "?GetPlayerAgentId@PlayerMgr@GW@@YAII@Z",
+            "GetPlayerAgentId"
+          ],
+          "demangled": [
+            "PlayerMgr::GetPlayerAgentId",
+            "GetPlayerAgentId"
+          ]
+        },
+        {
+          "rva": 132896,
+          "size": 79,
+          "names": [
+            "?GetPlayerByID@PlayerMgr@GW@@YAPAUPlayer@2@I@Z"
+          ],
+          "demangled": [
+            "PlayerMgr::GetPlayerByID"
+          ]
+        },
+        {
+          "rva": 132976,
+          "size": 213,
+          "names": [
+            "?GetPlayerByName@PlayerMgr@GW@@YAPAUPlayer@2@PB_W@Z"
+          ],
+          "demangled": [
+            "PlayerMgr::GetPlayerByName"
+          ]
+        },
+        {
+          "rva": 133200,
+          "size": 79,
+          "names": [
+            "?GetPlayerName@PlayerMgr@GW@@YAPA_WI@Z"
+          ],
+          "demangled": [
+            "PlayerMgr::GetPlayerName"
+          ]
+        },
+        {
+          "rva": 133280,
+          "size": 19,
+          "names": [
+            "?GetPlayerNumber@PlayerMgr@GW@@YAIXZ",
+            "GetPlayerNumber"
+          ],
+          "demangled": [
+            "PlayerMgr::GetPlayerNumber",
+            "GetPlayerNumber"
+          ]
+        },
+        {
+          "rva": 133312,
+          "size": 28,
+          "names": [
+            "?GetTitleData@PlayerMgr@GW@@YAPAUTitleClientData@2@W4TitleID@Constants@2@@Z",
+            "GetTitleData"
+          ],
+          "demangled": [
+            "PlayerMgr::GetTitleData",
+            "GetTitleData"
+          ]
+        },
+        {
+          "rva": 133344,
+          "size": 50,
+          "names": [
+            "?GetTitleTrack@PlayerMgr@GW@@YAPAUTitle@2@W4TitleID@Constants@2@@Z",
+            "GetTitleTrack"
+          ],
+          "demangled": [
+            "PlayerMgr::GetTitleTrack",
+            "GetTitleTrack"
+          ]
+        },
+        {
+          "rva": 133408,
+          "size": 17,
+          "names": [
+            "?RemoveActiveTitle@PlayerMgr@GW@@YA_NXZ",
+            "RemoveActiveTitle"
+          ],
+          "demangled": [
+            "PlayerMgr::RemoveActiveTitle",
+            "RemoveActiveTitle"
+          ]
+        },
+        {
+          "rva": 133440,
+          "size": 28,
+          "names": [
+            "?SetActiveTitle@PlayerMgr@GW@@YA_NW4TitleID@Constants@2@@Z",
+            "SetActiveTitle"
+          ],
+          "demangled": [
+            "PlayerMgr::SetActiveTitle",
+            "SetActiveTitle"
+          ]
+        },
+        {
+          "rva": 133472,
+          "size": 96,
+          "names": [
+            "?SetPlayerName@PlayerMgr@GW@@YAPA_WIPB_W@Z"
+          ],
+          "demangled": [
+            "PlayerMgr::SetPlayerName"
+          ]
+        }
+      ]
+    },
+    "QuestMgr": {
+      "function_count": 11,
+      "total_bytes": 693,
+      "functions": [
+        {
+          "rva": 134176,
+          "size": 55,
+          "names": [
+            "?AbandonQuest@QuestMgr@GW@@YA_NPAUQuest@2@@Z",
+            "AbandonQuest"
+          ],
+          "demangled": [
+            "QuestMgr::AbandonQuest",
+            "AbandonQuest"
+          ]
+        },
+        {
+          "rva": 134240,
+          "size": 47,
+          "names": [
+            "?AbandonQuestId@QuestMgr@GW@@YA_NW4QuestID@Constants@2@@Z",
+            "AbandonQuestId"
+          ],
+          "demangled": [
+            "QuestMgr::AbandonQuestId",
+            "AbandonQuestId"
+          ]
+        },
+        {
+          "rva": 134288,
+          "size": 79,
+          "names": [
+            "?GetActiveQuest@QuestMgr@GW@@YAPAUQuest@2@XZ"
+          ],
+          "demangled": [
+            "QuestMgr::GetActiveQuest"
+          ]
+        },
+        {
+          "rva": 134368,
+          "size": 19,
+          "names": [
+            "?GetActiveQuestId@QuestMgr@GW@@YA?AW4QuestID@Constants@2@XZ",
+            "GetActiveQuestId"
+          ],
+          "demangled": [
+            "QuestMgr::GetActiveQuestId",
+            "GetActiveQuestId"
+          ]
+        },
+        {
+          "rva": 134400,
+          "size": 67,
+          "names": [
+            "?GetQuest@QuestMgr@GW@@YAPAUQuest@2@W4QuestID@Constants@2@@Z",
+            "GetQuest"
+          ],
+          "demangled": [
+            "QuestMgr::GetQuest",
+            "GetQuest"
+          ]
+        },
+        {
+          "rva": 134480,
+          "size": 178,
+          "names": [
+            "?GetQuestEntryGroupName@QuestMgr@GW@@YA_NW4QuestID@Constants@2@PA_WI@Z"
+          ],
+          "demangled": [
+            "QuestMgr::GetQuestEntryGroupName"
+          ]
+        },
+        {
+          "rva": 134672,
+          "size": 22,
+          "names": [
+            "?GetQuestLog@QuestMgr@GW@@YAPAV?$Array@UQuest@GW@@@2@XZ"
+          ],
+          "demangled": [
+            "QuestMgr::GetQuestLog"
+          ]
+        },
+        {
+          "rva": 134912,
+          "size": 65,
+          "names": [
+            "?RequestQuestInfo@QuestMgr@GW@@YA_NPBUQuest@2@_N@Z",
+            "RequestQuestInfo"
+          ],
+          "demangled": [
+            "QuestMgr::RequestQuestInfo",
+            "RequestQuestInfo"
+          ]
+        },
+        {
+          "rva": 134992,
+          "size": 59,
+          "names": [
+            "?RequestQuestInfoId@QuestMgr@GW@@YA_NW4QuestID@Constants@2@_N@Z",
+            "RequestQuestInfoId"
+          ],
+          "demangled": [
+            "QuestMgr::RequestQuestInfoId",
+            "RequestQuestInfoId"
+          ]
+        },
+        {
+          "rva": 135056,
+          "size": 55,
+          "names": [
+            "?SetActiveQuest@QuestMgr@GW@@YA_NPAUQuest@2@@Z",
+            "SetActiveQuest"
+          ],
+          "demangled": [
+            "QuestMgr::SetActiveQuest",
+            "SetActiveQuest"
+          ]
+        },
+        {
+          "rva": 135120,
+          "size": 47,
+          "names": [
+            "?SetActiveQuestId@QuestMgr@GW@@YA_NW4QuestID@Constants@2@@Z",
+            "SetActiveQuestId"
+          ],
+          "demangled": [
+            "QuestMgr::SetActiveQuestId",
+            "SetActiveQuestId"
+          ]
+        }
+      ]
+    },
+    "RenderMgr": {
+      "function_count": 17,
+      "total_bytes": 1178,
+      "functions": [
+        {
+          "rva": 135680,
+          "size": 35,
+          "names": [
+            "?EnableHooks@Render@GW@@YAXXZ"
+          ],
+          "demangled": [
+            "Render::EnableHooks"
+          ]
+        },
+        {
+          "rva": 135904,
+          "size": 19,
+          "names": [
+            "?GetDevice@Render@GW@@YAPAUIDirect3DDevice9@@XZ"
+          ],
+          "demangled": [
+            "Render::GetDevice"
+          ]
+        },
+        {
+          "rva": 135936,
+          "size": 91,
+          "names": [
+            "?GetFieldOfView@Render@GW@@YAMXZ"
+          ],
+          "demangled": [
+            "Render::GetFieldOfView"
+          ]
+        },
+        {
+          "rva": 136032,
+          "size": 250,
+          "names": [
+            "?GetFrameLimit@Render@GW@@YAIXZ"
+          ],
+          "demangled": [
+            "Render::GetFrameLimit"
+          ]
+        },
+        {
+          "rva": 136288,
+          "size": 74,
+          "names": [
+            "?GetGraphicsRendererValue@Render@GW@@YAIW4Metric@12@I@Z"
+          ],
+          "demangled": [
+            "Render::GetGraphicsRendererValue"
+          ]
+        },
+        {
+          "rva": 136368,
+          "size": 49,
+          "names": [
+            "?GetIsFullscreen@Render@GW@@YAHXZ"
+          ],
+          "demangled": [
+            "Render::GetIsFullscreen"
+          ]
+        },
+        {
+          "rva": 136432,
+          "size": 33,
+          "names": [
+            "?GetIsInRenderLoop@Render@GW@@YA_NXZ"
+          ],
+          "demangled": [
+            "Render::GetIsInRenderLoop"
+          ]
+        },
+        {
+          "rva": 136480,
+          "size": 6,
+          "names": [
+            "?GetRenderCallback@Render@GW@@YAP6AXPAUIDirect3DDevice9@@@ZXZ"
+          ],
+          "demangled": [
+            "Render::GetRenderCallback"
+          ]
+        },
+        {
+          "rva": 136496,
+          "size": 67,
+          "names": [
+            "?GetTransform@Render@GW@@YAPAUMat4x3f@12@W4Transform@12@@Z"
+          ],
+          "demangled": [
+            "Render::GetTransform"
+          ]
+        },
+        {
+          "rva": 136544,
+          "size": 19,
+          "names": [
+            "?GetViewportHeight@Render@GW@@YAIXZ"
+          ],
+          "demangled": [
+            "Render::GetViewportHeight"
+          ]
+        },
+        {
+          "rva": 136576,
+          "size": 19,
+          "names": [
+            "?GetViewportWidth@Render@GW@@YAIXZ"
+          ],
+          "demangled": [
+            "Render::GetViewportWidth"
+          ]
+        },
+        {
+          "rva": 136608,
+          "size": 27,
+          "names": [
+            "?GetWindowHandle@Render@GW@@YAPAUHWND__@@XZ"
+          ],
+          "demangled": [
+            "Render::GetWindowHandle"
+          ]
+        },
+        {
+          "rva": 137088,
+          "size": 13,
+          "names": [
+            "?SetFog@Render@GW@@YA_N_N@Z"
+          ],
+          "demangled": [
+            "Render::SetFog"
+          ]
+        },
+        {
+          "rva": 137104,
+          "size": 21,
+          "names": [
+            "?SetFrameLimit@Render@GW@@YA_NI@Z"
+          ],
+          "demangled": [
+            "Render::SetFrameLimit"
+          ]
+        },
+        {
+          "rva": 137136,
+          "size": 429,
+          "names": [
+            "?SetGraphicsRendererValue@Render@GW@@YA_NW4Metric@12@II@Z"
+          ],
+          "demangled": [
+            "Render::SetGraphicsRendererValue"
+          ]
+        },
+        {
+          "rva": 137552,
+          "size": 13,
+          "names": [
+            "?SetRenderCallback@Render@GW@@YAXP6AXPAUIDirect3DDevice9@@@Z@Z"
+          ],
+          "demangled": [
+            "Render::SetRenderCallback"
+          ]
+        },
+        {
+          "rva": 137568,
+          "size": 13,
+          "names": [
+            "?SetResetCallback@Render@GW@@YAXP6AXPAUIDirect3DDevice9@@@Z@Z"
+          ],
+          "demangled": [
+            "Render::SetResetCallback"
+          ]
+        }
+      ]
+    },
+    "Scanner": {
+      "function_count": 14,
+      "total_bytes": 2530,
+      "functions": [
+        {
+          "rva": 138512,
+          "size": 72,
+          "names": [
+            "?Find@Scanner@GW@@YAIPBD0HW4ScannerSection@2@@Z"
+          ],
+          "demangled": [
+            "Scanner::Find"
+          ]
+        },
+        {
+          "rva": 138592,
+          "size": 44,
+          "names": [
+            "?FindAssertion@Scanner@GW@@YAIPBD0IH@Z"
+          ],
+          "demangled": [
+            "Scanner::FindAssertion"
+          ]
+        },
+        {
+          "rva": 138640,
+          "size": 61,
+          "names": [
+            "?FindInRange@Scanner@GW@@YAIPBD0HKK@Z"
+          ],
+          "demangled": [
+            "Scanner::FindInRange"
+          ]
+        },
+        {
+          "rva": 138704,
+          "size": 872,
+          "names": [
+            "?FindNthUseOfString@Scanner@GW@@YAIPBDIHW4ScannerSection@2@@Z"
+          ],
+          "demangled": [
+            "Scanner::FindNthUseOfString"
+          ]
+        },
+        {
+          "rva": 139120,
+          "size": 456,
+          "names": [
+            "?FindNthUseOfString@Scanner@GW@@YAIPB_WIHW4ScannerSection@2@@Z"
+          ],
+          "demangled": [
+            "Scanner::FindNthUseOfString"
+          ]
+        },
+        {
+          "rva": 139552,
+          "size": 24,
+          "names": [
+            "?FindUseOfString@Scanner@GW@@YAIPBDHW4ScannerSection@2@@Z"
+          ],
+          "demangled": [
+            "Scanner::FindUseOfString"
+          ]
+        },
+        {
+          "rva": 139584,
+          "size": 24,
+          "names": [
+            "?FindUseOfString@Scanner@GW@@YAIPB_WHW4ScannerSection@2@@Z"
+          ],
+          "demangled": [
+            "Scanner::FindUseOfString"
+          ]
+        },
+        {
+          "rva": 139616,
+          "size": 120,
+          "names": [
+            "?FunctionFromNearCall@Scanner@GW@@YAII_N@Z"
+          ],
+          "demangled": [
+            "Scanner::FunctionFromNearCall"
+          ]
+        },
+        {
+          "rva": 139744,
+          "size": 6,
+          "names": [
+            "?GetGameTlsIndex@Scanner@GW@@YAKXZ"
+          ],
+          "demangled": [
+            "Scanner::GetGameTlsIndex"
+          ]
+        },
+        {
+          "rva": 139760,
+          "size": 24,
+          "names": [
+            "?GetSectionAddressRange@Scanner@GW@@YAXW4ScannerSection@2@PAI1@Z"
+          ],
+          "demangled": [
+            "Scanner::GetSectionAddressRange"
+          ]
+        },
+        {
+          "rva": 139792,
+          "size": 693,
+          "names": [
+            "?Initialize@Scanner@GW@@YAXPAUHINSTANCE__@@@Z"
+          ],
+          "demangled": [
+            "Scanner::Initialize"
+          ]
+        },
+        {
+          "rva": 140464,
+          "size": 21,
+          "names": [
+            "?Initialize@Scanner@GW@@YAXPBD@Z"
+          ],
+          "demangled": [
+            "Scanner::Initialize"
+          ]
+        },
+        {
+          "rva": 140496,
+          "size": 40,
+          "names": [
+            "?IsValidPtr@Scanner@GW@@YA_NIW4ScannerSection@2@@Z"
+          ],
+          "demangled": [
+            "Scanner::IsValidPtr"
+          ]
+        },
+        {
+          "rva": 140544,
+          "size": 73,
+          "names": [
+            "?ToFunctionStart@Scanner@GW@@YAIII@Z"
+          ],
+          "demangled": [
+            "Scanner::ToFunctionStart"
+          ]
+        }
+      ]
+    },
+    "SkillbarMgr": {
+      "function_count": 21,
+      "total_bytes": 5108,
+      "functions": [
+        {
+          "rva": 141088,
+          "size": 173,
+          "names": [
+            "?ChangeSecondProfession@SkillbarMgr@GW@@YA_NIW4Profession@Constants@2@@Z"
+          ],
+          "demangled": [
+            "SkillbarMgr::ChangeSecondProfession"
+          ]
+        },
+        {
+          "rva": 141264,
+          "size": 1216,
+          "names": [
+            "?DecodeSkillTemplate@SkillbarMgr@GW@@YA_NAAUSkillTemplate@12@PBD@Z"
+          ],
+          "demangled": [
+            "SkillbarMgr::DecodeSkillTemplate"
+          ]
+        },
+        {
+          "rva": 142480,
+          "size": 1462,
+          "names": [
+            "?EncodeSkillTemplate@SkillbarMgr@GW@@YA_NABUSkillTemplate@12@PADI@Z"
+          ],
+          "demangled": [
+            "SkillbarMgr::EncodeSkillTemplate"
+          ]
+        },
+        {
+          "rva": 143952,
+          "size": 36,
+          "names": [
+            "?GetAttributeConstantData@SkillbarMgr@GW@@YAPAUAttributeInfo@2@W4Attribute@Constants@2@@Z",
+            "GetAttributeConstantData"
+          ],
+          "demangled": [
+            "SkillbarMgr::GetAttributeConstantData",
+            "GetAttributeConstantData"
+          ]
+        },
+        {
+          "rva": 144144,
+          "size": 82,
+          "names": [
+            "?GetHeroSkillbar@SkillbarMgr@GW@@YAPAUSkillbar@2@I@Z"
+          ],
+          "demangled": [
+            "SkillbarMgr::GetHeroSkillbar"
+          ]
+        },
+        {
+          "rva": 144240,
+          "size": 40,
+          "names": [
+            "?GetHoveredSkill@SkillbarMgr@GW@@YAPAUSkill@2@XZ",
+            "GetHoveredSkill"
+          ],
+          "demangled": [
+            "SkillbarMgr::GetHoveredSkill",
+            "GetHoveredSkill"
+          ]
+        },
+        {
+          "rva": 144288,
+          "size": 96,
+          "names": [
+            "?GetIsSkillLearnt@SkillbarMgr@GW@@YA_NW4SkillID@Constants@2@@Z"
+          ],
+          "demangled": [
+            "SkillbarMgr::GetIsSkillLearnt"
+          ]
+        },
+        {
+          "rva": 144384,
+          "size": 168,
+          "names": [
+            "?GetIsSkillUnlocked@SkillbarMgr@GW@@YA_NW4SkillID@Constants@2@@Z"
+          ],
+          "demangled": [
+            "SkillbarMgr::GetIsSkillUnlocked"
+          ]
+        },
+        {
+          "rva": 144480,
+          "size": 72,
+          "names": [
+            "?GetPlayerSkillbar@SkillbarMgr@GW@@YAPAUSkillbar@2@XZ"
+          ],
+          "demangled": [
+            "SkillbarMgr::GetPlayerSkillbar"
+          ]
+        },
+        {
+          "rva": 144560,
+          "size": 28,
+          "names": [
+            "?GetSkillConstantData@SkillbarMgr@GW@@YAPAUSkill@2@W4SkillID@Constants@2@@Z",
+            "GetSkillConstantData"
+          ],
+          "demangled": [
+            "SkillbarMgr::GetSkillConstantData",
+            "GetSkillConstantData"
+          ]
+        },
+        {
+          "rva": 144592,
+          "size": 50,
+          "names": [
+            "?GetSkillSlot@SkillbarMgr@GW@@YAHW4SkillID@Constants@2@@Z",
+            "GetSkillSlot"
+          ],
+          "demangled": [
+            "SkillbarMgr::GetSkillSlot",
+            "GetSkillSlot"
+          ]
+        },
+        {
+          "rva": 144656,
+          "size": 22,
+          "names": [
+            "?GetSkillTemplate@SkillbarMgr@GW@@YA_NAAUSkillTemplate@12@@Z"
+          ],
+          "demangled": [
+            "SkillbarMgr::GetSkillTemplate"
+          ]
+        },
+        {
+          "rva": 144688,
+          "size": 584,
+          "names": [
+            "?GetSkillTemplate@SkillbarMgr@GW@@YA_NIAAUSkillTemplate@12@@Z"
+          ],
+          "demangled": [
+            "SkillbarMgr::GetSkillTemplate"
+          ]
+        },
+        {
+          "rva": 145280,
+          "size": 66,
+          "names": [
+            "?GetSkillbar@SkillbarMgr@GW@@YAPAUSkillbar@2@I@Z",
+            "GetSkillbar"
+          ],
+          "demangled": [
+            "SkillbarMgr::GetSkillbar",
+            "GetSkillbar"
+          ]
+        },
+        {
+          "rva": 145360,
+          "size": 22,
+          "names": [
+            "?GetSkillbarArray@SkillbarMgr@GW@@YAPAV?$Array@USkillbar@GW@@@2@XZ"
+          ],
+          "demangled": [
+            "SkillbarMgr::GetSkillbarArray"
+          ]
+        },
+        {
+          "rva": 145520,
+          "size": 22,
+          "names": [
+            "?LoadSkillTemplate@SkillbarMgr@GW@@YA_NAAUSkillTemplate@12@@Z"
+          ],
+          "demangled": [
+            "SkillbarMgr::LoadSkillTemplate"
+          ]
+        },
+        {
+          "rva": 145552,
+          "size": 647,
+          "names": [
+            "?LoadSkillTemplate@SkillbarMgr@GW@@YA_NIAAUSkillTemplate@12@@Z"
+          ],
+          "demangled": [
+            "SkillbarMgr::LoadSkillTemplate"
+          ]
+        },
+        {
+          "rva": 146080,
+          "size": 119,
+          "names": [
+            "?LoadSkillTemplate@SkillbarMgr@GW@@YA_NIPBD@Z"
+          ],
+          "demangled": [
+            "SkillbarMgr::LoadSkillTemplate"
+          ]
+        },
+        {
+          "rva": 146208,
+          "size": 22,
+          "names": [
+            "?LoadSkillTemplate@SkillbarMgr@GW@@YA_NPBD@Z",
+            "LoadSkillTemplateString"
+          ],
+          "demangled": [
+            "SkillbarMgr::LoadSkillTemplate",
+            "LoadSkillTemplateString"
+          ]
+        },
+        {
+          "rva": 146320,
+          "size": 123,
+          "names": [
+            "?UseSkill@SkillbarMgr@GW@@YA_NII@Z"
+          ],
+          "demangled": [
+            "SkillbarMgr::UseSkill"
+          ]
+        },
+        {
+          "rva": 146448,
+          "size": 58,
+          "names": [
+            "?UseSkillByID@SkillbarMgr@GW@@YA_NII@Z",
+            "UseSkillByID"
+          ],
+          "demangled": [
+            "SkillbarMgr::UseSkillByID",
+            "UseSkillByID"
+          ]
+        }
+      ]
+    },
+    "StoCMgr": {
+      "function_count": 6,
+      "total_bytes": 1439,
+      "functions": [
+        {
+          "rva": 148768,
+          "size": 74,
+          "names": [
+            "?EmulatePacket@StoC@GW@@YA_NPAUPacketBase@1Packet@2@@Z"
+          ],
+          "demangled": [
+            "StoC::EmulatePacket"
+          ]
+        },
+        {
+          "rva": 149536,
+          "size": 379,
+          "names": [
+            "?RegisterPacketCallback@StoC@GW@@YA_NPAUHookEntry@2@IABV?$function@$$A6AXPAUHookStatus@GW@@PAUPacketBase@StoC@Packet@2@@Z@std@@H@Z"
+          ],
+          "demangled": [
+            "StoC::RegisterPacketCallback"
+          ]
+        },
+        {
+          "rva": 149920,
+          "size": 27,
+          "names": [
+            "?RegisterPostPacketCallback@StoC@GW@@YA_NPAUHookEntry@2@IABV?$function@$$A6AXPAUHookStatus@GW@@PAUPacketBase@StoC@Packet@2@@Z@std@@@Z"
+          ],
+          "demangled": [
+            "StoC::RegisterPostPacketCallback"
+          ]
+        },
+        {
+          "rva": 149952,
+          "size": 159,
+          "names": [
+            "?RemoveCallback@StoC@GW@@YAIIPAUHookEntry@2@@Z"
+          ],
+          "demangled": [
+            "StoC::RemoveCallback"
+          ]
+        },
+        {
+          "rva": 150112,
+          "size": 331,
+          "names": [
+            "?RemoveCallbacks@StoC@GW@@YAIPAUHookEntry@2@@Z"
+          ],
+          "demangled": [
+            "StoC::RemoveCallbacks"
+          ]
+        },
+        {
+          "rva": 150448,
+          "size": 469,
+          "names": [
+            "?RemovePostCallback@StoC@GW@@YAXIPAUHookEntry@2@@Z"
+          ],
+          "demangled": [
+            "StoC::RemovePostCallback"
+          ]
+        }
+      ]
+    },
+    "TradeMgr": {
+      "function_count": 7,
+      "total_bytes": 551,
+      "functions": [
+        {
+          "rva": 151072,
+          "size": 28,
+          "names": [
+            "?AcceptTrade@Trade@GW@@YA_NXZ",
+            "AcceptTrade"
+          ],
+          "demangled": [
+            "Trade::AcceptTrade",
+            "AcceptTrade"
+          ]
+        },
+        {
+          "rva": 151104,
+          "size": 61,
+          "names": [
+            "?CancelTrade@Trade@GW@@YA_NXZ",
+            "CancelTrade"
+          ],
+          "demangled": [
+            "Trade::CancelTrade",
+            "CancelTrade"
+          ]
+        },
+        {
+          "rva": 151168,
+          "size": 28,
+          "names": [
+            "?ChangeOffer@Trade@GW@@YA_NXZ",
+            "?SubmitOffer@Trade@GW@@YA_NI@Z",
+            "ChangeOffer",
+            "SubmitOffer"
+          ],
+          "demangled": [
+            "Trade::ChangeOffer",
+            "Trade::SubmitOffer",
+            "ChangeOffer",
+            "SubmitOffer"
+          ]
+        },
+        {
+          "rva": 151200,
+          "size": 144,
+          "names": [
+            "?IsItemOffered@Trade@GW@@YAPAUTradeItem@2@I@Z"
+          ],
+          "demangled": [
+            "Trade::IsItemOffered"
+          ]
+        },
+        {
+          "rva": 151344,
+          "size": 139,
+          "names": [
+            "?OfferItem@Trade@GW@@YA_NII@Z"
+          ],
+          "demangled": [
+            "Trade::OfferItem"
+          ]
+        },
+        {
+          "rva": 151488,
+          "size": 23,
+          "names": [
+            "?OpenTradeWindow@Trade@GW@@YA_NI@Z",
+            "OpenTradeWindow"
+          ],
+          "demangled": [
+            "Trade::OpenTradeWindow",
+            "OpenTradeWindow"
+          ]
+        },
+        {
+          "rva": 151520,
+          "size": 128,
+          "names": [
+            "?RemoveItem@Trade@GW@@YA_NI@Z"
+          ],
+          "demangled": [
+            "Trade::RemoveItem"
+          ]
+        }
+      ]
+    }
+  }
+}
