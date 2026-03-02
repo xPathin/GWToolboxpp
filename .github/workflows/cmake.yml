@@ -67,7 +67,7 @@ jobs:
 
     - name: Build
       shell: bash
-      run: cmake --build build --target GWToolboxdll
+      run: cmake --build build --target GWToolboxdll GWToolbox
 
     - name: Show sccache stats
       shell: bash
@@ -89,9 +89,10 @@ jobs:
         BIN_DIR="${{ github.workspace }}/bin"
 
         cp "$BIN_DIR/GWToolboxdll.dll" .
+        cp "$BIN_DIR/GWToolbox.exe" .
         gzip -c "$BIN_DIR/GWToolboxdll.pdb" > GWToolboxdll.pdb.gz
 
         gh release create "$VERSION" \
           --title "$VERSION" \
           --notes "Build from $(git rev-parse --short HEAD)" \
-          GWToolboxdll.dll GWToolboxdll.pdb.gz
+          GWToolboxdll.dll GWToolbox.exe GWToolboxdll.pdb.gz

@@ -57,6 +57,6 @@ Write-Host "VCPKG_ROOT: $env:VCPKG_ROOT"
 Write-Host "VS: $vsPath"
 
 cmake $repoRoot --preset=vcpkg-ci -DGWTOOLBOXDLL_VERSION="$version"
-cmake --build "$repoRoot\build" --target GWToolboxdll
+cmake --build "$repoRoot\build" --target GWToolboxdll GWToolbox
 
 Write-Host "Build complete. Output in $repoRoot\bin\"
