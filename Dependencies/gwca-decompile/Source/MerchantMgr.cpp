@@ -101,11 +101,11 @@ namespace {
         GWCA_ASSERT(RequestQuote_func);
 #endif
         if (TransactItem_Func) {
-            Hook::CreateHook(TransactItem_Func, OnTransactItem, (void**)&TransactItem_Ret);
+            Hook::CreateHook((void**)&TransactItem_Func, OnTransactItem, (void**)&TransactItem_Ret);
             UI::RegisterUIMessageCallback(&OnTransactItemEntry, UI::UIMessage::kSendMerchantTransactItem, OnTransactItem_UIMessage, 0x1);
         }
         if (RequestQuote_func) {
-            Hook::CreateHook(RequestQuote_func, OnRequestQuote, (void**)&RequestQuote_Ret);
+            Hook::CreateHook((void**)&RequestQuote_func, OnRequestQuote, (void**)&RequestQuote_Ret);
             UI::RegisterUIMessageCallback(&OnRequestQuoteItemEntry, UI::UIMessage::kSendMerchantRequestQuote, OnRequestQuote_UIMessage, 0x1);
         }
     }

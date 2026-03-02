@@ -4,10 +4,6 @@
 #include <GWCA/Utilities/MemoryPatcher.h>
 
 namespace GW {
-    MemoryPatcher::~MemoryPatcher() {
-        Reset();
-    }
-
     void MemoryPatcher::Reset() {
         if (GetIsActive())
             TogglePatch(false);

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.29)
-project(gwca VERSION 3.2.1.1 LANGUAGES CXX)
+project(gwca VERSION 3.2.2.1 LANGUAGES CXX)
 
 # Require 32-bit build
 if(NOT CMAKE_SIZEOF_VOID_P EQUAL 4)
@@ -30,22 +30,25 @@ target_compile_definitions(gwca PRIVATE
 # Precompiled header (use GWCA's stdafx.h)
 target_precompile_headers(gwca PRIVATE "${GWCA_INCLUDE_DIR}/GWCA/stdafx.h")
 
-# C++ standard
-target_compile_features(gwca PUBLIC cxx_std_23)
+# C++ standard (headers require C++20 for std::integral and concepts)
+target_compile_features(gwca PUBLIC cxx_std_20)
 
-# MSVC-specific flags matching original binary
+# MSVC-specific flags matching original binary (.vcxproj Release|Win32)
 if(MSVC)
     target_compile_options(gwca PRIVATE
         /W4             # Warning level 4
-        /permissive-    # Standard conformance
-        /utf-8          # Source/execution charset
-        /O2             # Optimize for speed
+        /WX             # Warnings as errors
+        /wd4100         # Suppress: unreferenced formal parameter
+        /Ox             # Full optimization (/O2 + /Oi + /Ot)
         /Ob2            # Inline expansion (compiler decides)
         /Gy             # Function-level linking
         /GS             # Buffer security checks
         /EHsc           # C++ exceptions
+        /GR-            # Disable RTTI
+        /GL             # Whole program optimization (LTCG)
         /Zc:inline      # Remove unreferenced COMDAT
         /Gd             # __cdecl calling convention (default)
+        /Qspectre-      # Disable Spectre mitigation
     )
 
     # Linker flags matching original binary
@@ -54,10 +57,12 @@ if(MSVC)
         /INCREMENTAL:NO
         /OPT:REF
         /OPT:ICF
+        /LTCG           # Link-time code generation (pairs with /GL)
         /BASE:0x10000000
         /DYNAMICBASE
         /NXCOMPAT
         /SUBSYSTEM:CONSOLE,6.00
+        /DEBUG          # Generate PDB
     )
 
     # Static CRT

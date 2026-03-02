@@ -15,6 +15,7 @@
 #include <GWCA/Managers/PartyMgr.h>
 #include <GWCA/Managers/AgentMgr.h>
 #include <GWCA/Managers/ItemMgr.h>
+#include <GWCA/Managers/MapMgr.h>
 #include <GWCA/Managers/UIMgr.h>
 
 #include <GWCA/Utilities/Hooker.h>
@@ -158,10 +159,10 @@ namespace {
             // NB: What is UI message 0x100001a0 ?
             InteractGadget_Func = (InteractCallableAgent_pt)Scanner::FunctionFromNearCall(address + 0x120);
         }
-        Hook::CreateHook(CallTarget_Func, OnCallTarget, (void**)&CallTarget_Ret);
-        Hook::CreateHook(InteractNPC_Func, OnInteractNPC, (void**)&InteractNPC_Ret);
-        Hook::CreateHook(SendDialog_Func, OnSendDialog, (void**)&RetSendDialog);
-        Hook::CreateHook(SendSignpostDialog_Func, OnSendDialog, (void**)&RetSendSignpostDialog);
+        Hook::CreateHook((void**)&CallTarget_Func, OnCallTarget, (void**)&CallTarget_Ret);
+        Hook::CreateHook((void**)&InteractNPC_Func, OnInteractNPC, (void**)&InteractNPC_Ret);
+        Hook::CreateHook((void**)&SendDialog_Func, OnSendDialog, (void**)&RetSendDialog);
+        Hook::CreateHook((void**)&SendSignpostDialog_Func, OnSendDialog, (void**)&RetSendSignpostDialog);
         UI::RegisterUIMessageCallback(&OnSendDialog_HookEntry, UI::UIMessage::kDialogBody, OnDialogBody_UIMessage, 0x1);
         UI::RegisterUIMessageCallback(&OnSendDialog_HookEntry, UI::UIMessage::kSendDialog, OnSendDialog_UIMessage, 0x1);
 
@@ -265,7 +266,7 @@ namespace GW {
             auto* agents = (AgentArray*)AgentArrayPtr;
             return agents && agents->valid() ? agents : nullptr;
         }
-        uint32_t GetPlayerId() {
+        uint32_t GetControlledCharacterId() {
             return *(uint32_t*)PlayerAgentIdPtr;
         }
         uint32_t GetTargetId() {
@@ -328,14 +329,14 @@ namespace GW {
             return GetAgentByID(PlayerMgr::GetPlayerAgentId(player_id));
         }
 
-        AgentLiving* GetCharacter() {
+        AgentLiving* GetControlledCharacter() {
             Agent* a = GetPlayerByID(PlayerMgr::GetPlayerNumber());
             return a ? a->GetAsAgentLiving() : nullptr;
         }
 
         AgentLiving* GetPlayerAsAgentLiving()
         {
-            Agent* a = GetPlayer();
+            Agent* a = GetAgentByID(GetControlledCharacterId());
             return a ? a->GetAsAgentLiving() : nullptr;
         }
 
@@ -474,8 +475,141 @@ namespace GW {
         bool AsyncGetAgentName(const Agent* agent, std::wstring& res) {
             wchar_t* str = GetAgentEncName(agent);
             if (!str) return false;
-            UI::AsyncDecodeStr(str, &res);
+            UI::AsyncDecodeStr(str, [](void* param, const wchar_t* s) {
+                if (s) *static_cast<std::wstring*>(param) = s;
+            }, &res);
             return true;
+        }
+
+        uint32_t GetObservingId() {
+            return GetControlledCharacterId();
+        }
+
+        bool IsObserving() {
+            return GW::Map::GetIsObserving();
+        }
+
+        uint32_t GetEvaluatedTargetId() {
+            return GetTargetId();
+        }
+
+        uint32_t CountAllegianceInRange(GW::Constants::Allegiance allegiance, float sqr_range) {
+            const AgentLiving* player = GetPlayerAsAgentLiving();
+            if (!player) return 0;
+            const AgentArray* agents = GetAgentArray();
+            if (!agents) return 0;
+            uint32_t count = 0;
+            for (size_t i = 0; i < agents->size(); i++) {
+                const Agent* a = agents->at(i);
+                if (!a || !a->GetIsLivingType()) continue;
+                const AgentLiving* living = a->GetAsAgentLiving();
+                if (living->allegiance != allegiance) continue;
+                float dx = living->x - player->x;
+                float dy = living->y - player->y;
+                if ((dx * dx + dy * dy) <= sqr_range)
+                    count++;
+            }
+            return count;
+        }
+
+        bool InteractAgent(const Agent* agent, bool call_target) {
+            if (!agent) return false;
+            if (agent->GetIsLivingType()) {
+                const AgentLiving* living = agent->GetAsAgentLiving();
+                if (living->IsPlayer())
+                    return GoPlayer(agent, call_target ? 1U : 0U);
+                return GoNPC(agent, call_target ? 1U : 0U);
+            }
+            if (agent->GetIsItemType())
+                return PickUpItem(agent, call_target ? 1U : 0U);
+            if (agent->GetIsGadgetType())
+                return GoSignpost(agent, call_target ? 1U : 0U);
+            return false;
         }
     }
 } // namespace GW
+
+// ============================================================
+// C Interop API
+// ============================================================
+extern "C" {
+    GWCA_API bool SendDialog(uint32_t dialog_id) {
+        return GW::Agents::SendDialog(dialog_id);
+    }
+    GWCA_API bool GetIsAgentTargettable(const void* agent) {
+        return GW::Agents::GetIsAgentTargettable((const GW::Agent*)agent);
+    }
+
+    GWCA_API uint32_t GetObservingId() {
+        return GW::Agents::GetObservingId();
+    }
+    GWCA_API uint32_t GetControlledCharacterId() {
+        return GW::Agents::GetControlledCharacterId();
+    }
+    GWCA_API uint32_t GetTargetId() {
+        return GW::Agents::GetTargetId();
+    }
+    GWCA_API uint32_t GetEvaluatedTargetId() {
+        return GW::Agents::GetEvaluatedTargetId();
+    }
+
+    GWCA_API void* GetAgentByID(uint32_t agent_id) {
+        return GW::Agents::GetAgentByID(agent_id);
+    }
+    GWCA_API void* GetPlayerByID(uint32_t player_id) {
+        return GW::Agents::GetPlayerByID(player_id);
+    }
+    GWCA_API void* GetControlledCharacter() {
+        return GW::Agents::GetControlledCharacter();
+    }
+    GWCA_API void* GetTargetAsAgentLiving() {
+        return GW::Agents::GetTargetAsAgentLiving();
+    }
+    GWCA_API void* GetMapAgentByID(uint32_t agent_id) {
+        return GW::Agents::GetMapAgentByID(agent_id);
+    }
+    GWCA_API void* GetNPCByID(uint32_t npc_id) {
+        return GW::Agents::GetNPCByID(npc_id);
+    }
+
+    GWCA_API bool IsObserving() {
+        return GW::Agents::IsObserving();
+    }
+    GWCA_API uint32_t GetAmountOfPlayersInInstance() {
+        return GW::Agents::GetAmountOfPlayersInInstance();
+    }
+    GWCA_API uint32_t CountAllegianceInRange(uint32_t allegiance, float sqr_range) {
+        return GW::Agents::CountAllegianceInRange((GW::Constants::Allegiance)allegiance, sqr_range);
+    }
+
+    GWCA_API bool ChangeTargetByAgent(const void* agent) {
+        return GW::Agents::ChangeTarget((const GW::Agent*)agent);
+    }
+    GWCA_API bool ChangeTargetById(uint32_t agent_id) {
+        return GW::Agents::ChangeTarget((GW::AgentID)agent_id);
+    }
+
+    GWCA_API bool Move(float x, float y, uint32_t zplane) {
+        return GW::Agents::Move(x, y, zplane);
+    }
+    GWCA_API bool InteractAgent(const void* agent, bool call_target) {
+        return GW::Agents::InteractAgent((const GW::Agent*)agent, call_target);
+    }
+
+    GWCA_API const wchar_t* GetPlayerNameByLoginNumber(uint32_t login_number) {
+        return GW::Agents::GetPlayerNameByLoginNumber(login_number);
+    }
+    GWCA_API uint32_t GetAgentIdByLoginNumber(uint32_t login_number) {
+        return GW::Agents::GetAgentIdByLoginNumber(login_number);
+    }
+    GWCA_API uint32_t GetHeroAgentID(uint32_t hero_index) {
+        return GW::Agents::GetHeroAgentID(hero_index);
+    }
+
+    GWCA_API const wchar_t* GetAgentEncNameByAgent(const void* agent) {
+        return GW::Agents::GetAgentEncName((const GW::Agent*)agent);
+    }
+    GWCA_API const wchar_t* GetAgentEncNameById(uint32_t agent_id) {
+        return GW::Agents::GetAgentEncName(agent_id);
+    }
+}

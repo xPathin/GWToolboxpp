@@ -16,12 +16,24 @@
 namespace {
     using namespace GW;
 
+    // Local callback type aliases (removed from public header)
+    using SendChatCallback = HookCallback<Chat::Channel, wchar_t**>;
+    using LocalMessageCallback = HookCallback<int, wchar_t*>;
+    using WhisperCallback = HookCallback<wchar_t*, wchar_t*>;
+    using PrintChatCallback = HookCallback<Chat::Channel, wchar_t**, FILETIME, int>;
+    using StartWhisperCallback = HookCallback<wchar_t*>;
+    using ChatLogCallback = HookCallback<wchar_t*, uint32_t, Chat::ChatMessage*>;
+
     bool ShowTimestamps = false;
     bool Timestamp_24hFormat = false;
     bool Timestamp_seconds = false;
     Chat::Color TimestampsColor = COLOR_RGB(0xff, 0xff, 0xff);
 
-    std::unordered_map<std::wstring, Chat::CmdCB> SlashCmdList;
+    struct SlashCmdEntry {
+        HookEntry* entry;
+        Chat::ChatCommandCallback callback;
+    };
+    std::unordered_map<std::wstring, SlashCmdEntry> SlashCmdList;
 
     // 08 01 07 01 [Time] 01 00 02 00
     // ChatBuffer **ChatBuffer_Addr;
@@ -47,15 +59,15 @@ namespace {
             s[i] = towlower(s[i]);
     }
 
-    std::unordered_map<HookEntry*, Chat::SendChatCallback>     SendChat_callbacks;
-    std::unordered_map<HookEntry*, Chat::LocalMessageCallback> LocalMessage_callbacks;
-    std::unordered_map<HookEntry*, Chat::WhisperCallback>      Whisper_callbacks;
-    std::unordered_map<HookEntry*, Chat::PrintChatCallback>    PrintChat_callbacks;
-    std::unordered_map<HookEntry*, Chat::StartWhisperCallback> StartWhisper_callbacks;
+    std::unordered_map<HookEntry*, SendChatCallback>     SendChat_callbacks;
+    std::unordered_map<HookEntry*, LocalMessageCallback> LocalMessage_callbacks;
+    std::unordered_map<HookEntry*, WhisperCallback>      Whisper_callbacks;
+    std::unordered_map<HookEntry*, PrintChatCallback>    PrintChat_callbacks;
+    std::unordered_map<HookEntry*, StartWhisperCallback> StartWhisper_callbacks;
     struct ChatLogCallbackEntry {
         int altitude;
         HookEntry* entry;
-        Chat::ChatLogCallback callback;
+        ChatLogCallback callback;
     };
     std::vector<ChatLogCallbackEntry> ChatLog_callbacks;
 
@@ -117,13 +129,13 @@ namespace {
             std::wstring cmd = argv[0];
             ::wstring_tolower(cmd);
 
-            const auto callback = SlashCmdList.find(cmd);
-            if (callback != SlashCmdList.end()) {
-                const auto capture_input = callback->second(message, argc, argv);
-                if (!capture_input) {
-                    RetSendChat(message, agent_id);
-                }
+            const auto it = SlashCmdList.find(cmd);
+            if (it != SlashCmdList.end()) {
+                HookStatus status;
+                it->second.callback(&status, message, argc, (const LPWSTR*)argv);
                 LocalFree(argv);
+                if (!status.blocked)
+                    RetSendChat(message, agent_id);
                 Hook::LeaveHook();
                 return;
             }
@@ -131,8 +143,9 @@ namespace {
         }
 
         HookStatus status;
+        wchar_t* msg = &message[1];
         for (auto& it : SendChat_callbacks) {
-            it.second(&status, GW::Chat::GetChannel(*message), &message[1]);
+            it.second(&status, GW::Chat::GetChannel(*message), &msg);
             ++status.altitude;
         }
         if (!status.blocked)
@@ -289,7 +302,7 @@ namespace {
     // When a control is terminated ( message 0xB ) it doesn't clear the IsTyping_FrameId that we're using. Clear it manually.
     void OnUICallback_AssignEditableText(UI::InteractionMessage* message, void* wParam, void* lParam) {
         Hook::EnterHook();
-        if (message->message_id == 0xb && IsTyping_FrameId && *IsTyping_FrameId == message->action_type) {
+        if (message->message_id == (UI::UIMessage)0xb && IsTyping_FrameId && *IsTyping_FrameId == message->frame_id) {
             *IsTyping_FrameId = 0;
             //GWCA_INFO("IsTyping_FrameId manually cleared");
         }
@@ -317,8 +330,8 @@ namespace {
         if (address && Scanner::IsValidPtr(*(uintptr_t*) address))
             IsTyping_FrameId = *(uint32_t **)address;
 
-        address = Scanner::Find("\x6a\x06\x68\x00\x03\x80\x00","xxxxxxx", 0, -0x4);
-        if (address && Scanner::IsValidPtr(*(uintptr_t*)address, Scanner::TEXT))
+        address = Scanner::Find("\x6a\x06\x68\x00\x03\x80\x00","xxxxxxx", -0x4);
+        if (address && Scanner::IsValidPtr(*(uintptr_t*)address, Section_TEXT))
             UICallback_AssignEditableText_Func = *(UI::UIInteractionCallback*)address;
 
         GWCA_INFO("[SCAN] GetSenderColor = %p", GetSenderColor_Func);
@@ -347,15 +360,15 @@ namespace {
         GWCA_ASSERT(UICallback_AssignEditableText_Func);
 #endif
 
-        Hook::CreateHook(StartWhisper_Func, OnStartWhisper, (void**)& RetStartWhisper);
-        Hook::CreateHook(GetSenderColor_Func, OnGetSenderColor, (void **)&RetGetSenderColor);
-        Hook::CreateHook(GetMessageColor_Func, OnGetMessageColor, (void **)&RetGetMessageColor);
-        Hook::CreateHook(LocalMessage_Func, OnLocalMessage, (void **)&RetLocalMessage);
-        Hook::CreateHook(SendChat_Func, OnSendChat, (void **)&RetSendChat);
-        Hook::CreateHook(WriteWhisper_Func, OnWriteWhisper, (void **)&RetWriteWhisper);
-        Hook::CreateHook(PrintChat_Func, OnPrintChat, (void **)&RetPrintChat);
-        Hook::CreateHook(AddToChatLog_Func, OnAddToChatLog, (void**)&RetAddToChatLog);
-        Hook::CreateHook(UICallback_AssignEditableText_Func, OnUICallback_AssignEditableText, (void**)& UICallback_AssignEditableText_Ret);
+        Hook::CreateHook((void**)&StartWhisper_Func, OnStartWhisper, (void**)& RetStartWhisper);
+        Hook::CreateHook((void**)&GetSenderColor_Func, OnGetSenderColor, (void **)&RetGetSenderColor);
+        Hook::CreateHook((void**)&GetMessageColor_Func, OnGetMessageColor, (void **)&RetGetMessageColor);
+        Hook::CreateHook((void**)&LocalMessage_Func, OnLocalMessage, (void **)&RetLocalMessage);
+        Hook::CreateHook((void**)&SendChat_Func, OnSendChat, (void **)&RetSendChat);
+        Hook::CreateHook((void**)&WriteWhisper_Func, OnWriteWhisper, (void **)&RetWriteWhisper);
+        Hook::CreateHook((void**)&PrintChat_Func, OnPrintChat, (void **)&RetPrintChat);
+        Hook::CreateHook((void**)&AddToChatLog_Func, OnAddToChatLog, (void**)&RetAddToChatLog);
+        Hook::CreateHook((void**)&UICallback_AssignEditableText_Func, OnUICallback_AssignEditableText, (void**)& UICallback_AssignEditableText_Ret);
     }
 
     void EnableHooks() {
@@ -438,99 +451,15 @@ namespace GW {
     Chat::Channel Chat::GetChannel(wchar_t opcode) {
         return GetChannel((char)opcode);
     }
-    void Chat::RegisterSendChatCallback(
-        HookEntry *entry,
-        const SendChatCallback& callback)
-    {
-        SendChat_callbacks.insert({entry, callback});
-    }
-
-    void Chat::RemoveSendChatCallback(
-        HookEntry* entry)
-    {
-        auto it = SendChat_callbacks.find(entry);
-        if (it != SendChat_callbacks.end())
-            SendChat_callbacks.erase(it);
-    }
-
-    void Chat::RegisterLocalMessageCallback(
-        HookEntry *entry,
-        const LocalMessageCallback& callback)
-    {
-        LocalMessage_callbacks.insert({entry, callback});
-    }
-
-    void Chat::RemoveLocalMessageCallback(
-        HookEntry *entry)
-    {
-        auto it = LocalMessage_callbacks.find(entry);
-        if (it != LocalMessage_callbacks.end())
-            LocalMessage_callbacks.erase(it);
-    }
-
-    void Chat::RegisterWhisperCallback(
-        HookEntry *entry,
-        const WhisperCallback& callback)
-    {
-        Whisper_callbacks.insert({entry, callback});
-    }
-
-    void Chat::RegisterPrintChatCallback(
-        HookEntry* entry,
-        const PrintChatCallback& callback)
-        {
-            PrintChat_callbacks.insert({ entry, callback });
-        }
-    void Chat::RegisterChatLogCallback(
-        HookEntry* entry,
-        const ChatLogCallback& callback,
-        int altitude)
-    {
-        ChatLog_callbacks.push_back({ altitude, entry, callback });
-    }
-    void Chat::RemoveChatLogCallback(
-        HookEntry* entry)
-    {
-        auto it = ChatLog_callbacks.begin();
-        while (it != ChatLog_callbacks.end()) {
-            if (it->entry == entry) {
-                ChatLog_callbacks.erase(it);
-                break;
-            }
-            it++;
-        }
-    }
-
-    void Chat::RemoveWhisperCallback(
-        HookEntry *entry)
-    {
-        auto it = Whisper_callbacks.find(entry);
-        if (it != Whisper_callbacks.end())
-            Whisper_callbacks.erase(it);
-    }
-
-    void Chat::RegisterStartWhisperCallback(
-        HookEntry* entry,
-        const StartWhisperCallback& callback)
-    {
-        StartWhisper_callbacks.insert({entry, callback});
-    }
-
-    void Chat::RemoveStartWhisperCallback(
-        HookEntry *entry)
-    {
-        auto it = StartWhisper_callbacks.find(entry);
-        if (it != StartWhisper_callbacks.end())
-            StartWhisper_callbacks.erase(it);
-    }
-
     Chat::ChatBuffer* Chat::GetChatLog() {
         return *ChatBuffer_Addr;
     }
 
-    void Chat::AddToChatLog(wchar_t* message, uint32_t channel) {
-        if (AddToChatLog_Func)
-            AddToChatLog_Func(message, channel);
+    bool Chat::AddToChatLog(wchar_t* message, uint32_t channel) {
+        if (!AddToChatLog_Func)
+            return false;
+        AddToChatLog_Func(message, channel);
+        return true;
     }
 
     Chat::Color Chat::SetSenderColor(Channel chan, Color col) {
@@ -592,19 +521,6 @@ namespace GW {
         if (!(SendChat_Func && from && *from && msg && *msg))
             return false;
         int written = swprintf(buffer, _countof(buffer), L"\"%s,%s", from, msg);
-        if (!(written > 0 && written < 140))
-            return false;
-        buffer[written] = 0;
-        SendChat_Func(buffer, 0);
-        return true;
-    }
-
-    bool Chat::SendChat(const char *from, const char *msg) {
-        GWCA_ASSERT(SendChat_Func);
-        wchar_t buffer[140];
-        if (!(SendChat_Func && from && *from && msg && *msg))
-            return false;
-        int written = swprintf(buffer, _countof(buffer), L"\"%S,%S", from, msg);
         if (!(written > 0 && written < 140))
             return false;
         buffer[written] = 0;
@@ -676,38 +592,30 @@ namespace GW {
             delete[] param.message;
     }
 
-    void Chat::CreateCommand(const wchar_t* cmd, CmdCB callback)
+    void Chat::CreateCommand(GW::HookEntry* entry, const wchar_t* cmd, ChatCommandCallback callback)
     {
         std::wstring cpy{cmd};
         ::wstring_tolower(cpy);
-        SlashCmdList[std::move(cpy)] = std::move(callback);
+        SlashCmdList[std::move(cpy)] = {entry, callback};
     }
 
-    void Chat::CreateCommand(const wchar_t* cmd, voidCmdCB callback)
+    void Chat::DeleteCommand(GW::HookEntry* entry, const wchar_t* cmd)
     {
-        std::wstring cpy{cmd};
-        ::wstring_tolower(cpy);
-        SlashCmdList[std::move(cpy)] = [cb = std::move(callback)](const wchar_t* a, const int b, wchar_t** c) {
-            cb(a, b, c);
-            return true;
-        };
-    }
-
-    Chat::CmdCB Chat::GetCommand(const wchar_t* cmd)
-    {
-        std::wstring cpy{cmd};
-        ::wstring_tolower(cpy);
-        if (SlashCmdList.find(cpy) != SlashCmdList.end()) {
-            return SlashCmdList[std::move(cpy)];
+        if (cmd) {
+            std::wstring cpy{cmd};
+            ::wstring_tolower(cpy);
+            auto it = SlashCmdList.find(cpy);
+            if (it != SlashCmdList.end() && it->second.entry == entry)
+                SlashCmdList.erase(it);
+        } else {
+            // Remove all commands registered by this entry
+            for (auto it = SlashCmdList.begin(); it != SlashCmdList.end(); ) {
+                if (it->second.entry == entry)
+                    it = SlashCmdList.erase(it);
+                else
+                    ++it;
+            }
         }
-        return nullptr;
-    }
-
-    void Chat::DeleteCommand(const wchar_t* cmd)
-    {
-        std::wstring cpy{cmd};
-        ::wstring_tolower(cpy);
-        SlashCmdList.erase(cpy);
     }
 
     void Chat::ToggleTimestamps(bool enable) {

@@ -5,6 +5,8 @@
 
 #include <GWCA/GameEntities/Item.h>
 
+#include <GWCA/Context/TradeContext.h>
+
 #include <GWCA/Managers/ItemMgr.h>
 #include <GWCA/Managers/Module.h>
 #include <GWCA/Managers/TradeMgr.h>
@@ -25,7 +27,8 @@ namespace {
 
     GW::HookEntry on_trade_action_entry;
 
-    std::unordered_map<HookEntry*, Trade::OfferItemCallback> OnOfferItem_callbacks;
+    typedef HookCallback<uint32_t, uint32_t> OfferItemCallback;
+    std::unordered_map<HookEntry*, OfferItemCallback> OnOfferItem_callbacks;
 
     typedef void(__fastcall* OfferTradeItem_pt)(void* ecx, void* edx, uint32_t item_id, uint32_t quantity, uint32_t always_one);
     OfferTradeItem_pt OfferTradeItem_Func = 0;
@@ -106,8 +109,8 @@ namespace {
         GWCA_ASSERT(TradeCancel_Func);
 #endif
 
-        Hook::CreateHook(OfferTradeItem_Func, OnOfferTradeItem, (void**)&RetOfferTradeItem);
-        Hook::CreateHook(UpdateTradeCart_Func, OnUpdateTradeWindow, (void**)&RetUpdateTradeCart);
+        Hook::CreateHook((void**)&OfferTradeItem_Func, OnOfferTradeItem, (void**)&RetOfferTradeItem);
+        Hook::CreateHook((void**)&UpdateTradeCart_Func, OnUpdateTradeWindow, (void**)&RetUpdateTradeCart);
     }
     void EnableHooks() {
         if(OfferTradeItem_Func)
@@ -166,12 +169,14 @@ namespace GW {
         return true;
     }
 
-    void Trade::RegisterOfferItemCallback(HookEntry* entry, const OfferItemCallback& callback) {
-        OnOfferItem_callbacks.insert({ entry, callback });
+    TradeItem* Trade::IsItemOffered(uint32_t item_id) {
+        auto* ctx = GetTradeContext();
+        if (!ctx) return nullptr;
+        for (auto& item : ctx->player.items) {
+            if (item.item_id == item_id)
+                return &item;
+        }
+        return nullptr;
     }
-    void Trade::RemoveOfferItemCallback(HookEntry* entry) {
-        auto it = OnOfferItem_callbacks.find(entry);
-        if (it != OnOfferItem_callbacks.end())
-            OnOfferItem_callbacks.erase(it);
-    }
+
 } // namespace GW

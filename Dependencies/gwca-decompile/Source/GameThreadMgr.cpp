@@ -64,7 +64,7 @@ namespace {
         GWCA_ASSERT(LeaveGameThread_Func);
 #endif
 
-        GW::Hook::CreateHook(LeaveGameThread_Func, OnLeaveGameThread, (void **)&LeaveGameThread_Ret);
+        GW::Hook::CreateHook((void**)&LeaveGameThread_Func, OnLeaveGameThread, (void **)&LeaveGameThread_Ret);
         /*
                 uintptr_t address = Scanner::Find("\x2B\xCE\x8B\x15\x00\x00\x00\x00\xF7\xD9\x1B\xC9", "xxxx????xxxx", 0, +4);
         GWCA_INFO("[SCAN] BasePointerLocation = %p", (void *)address);
@@ -136,12 +136,12 @@ namespace GW {
         LeaveCriticalSection(&mutex);
     }
 
-    void GameThread::Enqueue(std::function<void()> f)
+    void GameThread::Enqueue(std::function<void()> f, bool force_enqueue)
     {
         if (!initialised)
             return;
         EnterCriticalSection(&mutex);
-        if (in_gamethread) {
+        if (!force_enqueue && in_gamethread) {
             f();
         }
         else {
@@ -162,8 +162,10 @@ namespace GW {
 
     void GameThread::RegisterGameThreadCallback(
         HookEntry *entry,
-        const GameThreadCallback& callback)
+        const GameThreadCallback& callback,
+        int altitude)
     {
+        (void)altitude;
         GameThread_callbacks.insert({entry, callback});
     }
 

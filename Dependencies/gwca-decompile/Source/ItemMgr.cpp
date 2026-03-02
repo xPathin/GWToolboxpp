@@ -147,10 +147,13 @@ namespace {
 
         uint32_t slot = param->slot - 2; // for some reason the slot is offset by 2
         GW::HookStatus status;
-        Bag* bag = GetBag(*bag_id + 1);
+        Bag* bag = GetBag((GW::Constants::Bag)(*bag_id + 1));
         if (bag) {
+            Item* item = GetItemBySlot(bag, slot);
+            // TODO: delta patch - construct proper kMouseAction from click params
+            GW::UI::UIPacket::kMouseAction mouse_action{};
             for (auto& it : ItemClick_callbacks) {
-                it.second(&status, param->type, slot, bag);
+                it.second(&status, &mouse_action, item);
                 ++status.altitude;
             }
         }
@@ -183,7 +186,7 @@ namespace {
         SalvageSessionComplete_Func = (Void_pt)Scanner::FunctionFromNearCall(address - 0x37);
         SalvageMaterials_Func = (Void_pt)Scanner::FunctionFromNearCall(address - 0x4b);
 
-        address = Scanner::Find("\x6a\x00\x50\x68\x00\x01\x00\x10", "xxxxxxxx", 0, 0);
+        address = Scanner::Find("\x6a\x00\x50\x68\x00\x01\x00\x10", "xxxxxxxx", 0);
         SalvageStart_Func = (SalvageStart_pt)Scanner::FunctionFromNearCall(address + 0x22);
 
         IdentifyItem_Func = (IdentifyItem_pt)Scanner::FunctionFromNearCall(address + 0x4a);
@@ -222,7 +225,7 @@ namespace {
         }
 
         address = GW::Scanner::Find("\xff\x75\x0c\x81\xc1\xb4\x00\x00\x00","xxxxxxxxx", -0x11);
-        if (GW::Scanner::IsValidPtr(address, GW::Scanner::TEXT)) {
+        if (GW::Scanner::IsValidPtr(address, GW::Section_TEXT)) {
             GetPvPItemUpgradeInfoName_Func = (GetPvPItemUpgradeInfoName_pt)address;
         }
 
@@ -263,17 +266,17 @@ namespace {
         GWCA_ASSERT(unlocked_pvp_item_upgrade_array.m_size);
         GWCA_ASSERT(GetPvPItemUpgradeInfoName_Func);
 #endif
-        Hook::CreateHook(ItemClick_Func, OnItemClick, (void**)&RetItemClick);
+        Hook::CreateHook((void**)&ItemClick_Func, OnItemClick, (void**)&RetItemClick);
         if (PingWeaponSet_Func) {
-            Hook::CreateHook(PingWeaponSet_Func, OnPingWeaponSet, (void**)&PingWeaponSet_Ret);
+            Hook::CreateHook((void**)&PingWeaponSet_Func, OnPingWeaponSet, (void**)&PingWeaponSet_Ret);
             UI::RegisterUIMessageCallback(&OnPingWeaponSet_Entry, UI::UIMessage::kSendPingWeaponSet, OnPingWeaponSet_UIMessage, 0x1);
         }
         if (MoveItem_Func) {
-            Hook::CreateHook(MoveItem_Func, OnMoveItem, (void**)&MoveItem_Ret);
+            Hook::CreateHook((void**)&MoveItem_Func, OnMoveItem, (void**)&MoveItem_Ret);
             UI::RegisterUIMessageCallback(&OnMoveItem_Entry, UI::UIMessage::kSendMoveItem, OnMoveItem_UIMessage, 0x1);
         }
         if (UseItem_Func) {
-            Hook::CreateHook(UseItem_Func, OnUseItem, (void**)&UseItem_Ret);
+            Hook::CreateHook((void**)&UseItem_Func, OnUseItem, (void**)&UseItem_Ret);
             UI::RegisterUIMessageCallback(&OnUseItem_Entry, UI::UIMessage::kSendUseItem, OnUseItem_UIMessage, 0x1);
         }
     }
@@ -334,16 +337,17 @@ namespace GW {
     }
     namespace Items {
 
-        void OpenXunlaiWindow() {
+        bool OpenXunlaiWindow(bool anniversary_pane_unlocked, bool storage_pane_unlocked) {
             Packet::StoC::DataWindow pack;
             pack.agent = 0;
             pack.type = 0;
             pack.data = 3;
             StoC::EmulatePacket(&pack);
+            return true;
         }
 
         bool PickUpItem(const Item* item, uint32_t CallTarget /*= 0*/) {
-            return Agents::PickUpItem(Agents::GetAgentByID(item->agent_id), CallTarget);
+            return Agents::InteractAgent(Agents::GetAgentByID(item->agent_id), CallTarget != 0);
         }
 
         bool DropItem(const Item* item, uint32_t quantity) {
@@ -363,8 +367,10 @@ namespace GW {
         bool EquipItem(const Item* item, uint32_t agent_id) {
             if (!(item && EquipItem_Func))
                 return false;
-            if (!agent_id)
-                agent_id = Agents::GetPlayerId();
+            if (!agent_id) {
+                auto* character = Agents::GetControlledCharacter();
+                agent_id = character ? character->agent_id : 0;
+            }
             if (!agent_id)
                 return false;
             EquipItem_Func(item->item_id, agent_id);
@@ -408,7 +414,7 @@ namespace GW {
 
         Item* GetHoveredItem() {
             UI::TooltipInfo* tooltip = UI::GetCurrentTooltip();
-            if (!(tooltip && (tooltip->type() == UI::TooltipType::Item || tooltip->type() == UI::TooltipType::WeaponSet)))
+            if (!(tooltip && (static_cast<UI::TooltipType>(tooltip->payload_len) == UI::TooltipType::Item || static_cast<UI::TooltipType>(tooltip->payload_len) == UI::TooltipType::WeaponSet)))
                 return nullptr;
             return GetItemById(*(uint32_t*)tooltip->payload);
         }
@@ -514,22 +520,8 @@ namespace GW {
             return ChangeGold(gold_character, gold_storage) ? will_move : 0;
         }
 
-        bool OpenLockedChest(bool use_key) {
-            auto* target = Agents::GetTarget();
-            if (!(OpenLockedChest_Func && target && target->GetIsGadgetType()))
-                return false;
-            auto* me = Agents::GetPlayer();
-            if (!(me && GetDistance(me->pos, target->pos) < Constants::Range::Area))
-                return false;
-            if (use_key) {
-                // TODO: Find matching key for chest to allow GWCA to use keys; how does the game know what dialog buttons to show?
-                use_key = false;
-            }
-            if (!use_key && !GetItemByModelId(Constants::ItemID::Lockpick))
-                return false;
-            OpenLockedChest_Func(use_key ? 0x1U : 0x2U);
-            return true;
-        }
+        // OpenLockedChest removed from public API; kept as internal for reference
+        // TODO: delta patch if still present in binary
 
         bool MoveItem(const Item* from, const Bag* bag, uint32_t slot, uint32_t quantity) {
             if (!(MoveItem_Func && from && bag)) return false;
@@ -550,53 +542,53 @@ namespace GW {
         }
 
 
-        int GetMaterialSlot(uint32_t model_id) {
+        Constants::MaterialSlot GetMaterialSlotByModelId(uint32_t model_id) {
             switch (model_id) {
-            case 921: return Constants::Bone;
-            case 948: return Constants::IronIngot;
-            case 940: return Constants::TannedHideSquare;
-            case 953: return Constants::Scale;
-            case 954: return Constants::ChitinFragment;
-            case 925: return Constants::BoltofCloth;
-            case 946: return Constants::WoodPlank;
-            case 955: return Constants::GraniteSlab;
-            case 929: return Constants::PileofGlitteringDust;
-            case 934: return Constants::PlantFiber;
-            case 933: return Constants::Feather;
+            case 921: return Constants::MaterialSlot::Bone;
+            case 948: return Constants::MaterialSlot::IronIngot;
+            case 940: return Constants::MaterialSlot::TannedHideSquare;
+            case 953: return Constants::MaterialSlot::Scale;
+            case 954: return Constants::MaterialSlot::ChitinFragment;
+            case 925: return Constants::MaterialSlot::BoltofCloth;
+            case 946: return Constants::MaterialSlot::WoodPlank;
+            case 955: return Constants::MaterialSlot::GraniteSlab;
+            case 929: return Constants::MaterialSlot::PileofGlitteringDust;
+            case 934: return Constants::MaterialSlot::PlantFiber;
+            case 933: return Constants::MaterialSlot::Feather;
                 // rare
-            case 941: return Constants::FurSquare;
-            case 926: return Constants::BoltofLinen;
-            case 927: return Constants::BoltofDamask;
-            case 928: return Constants::BoltofSilk;
-            case 930: return Constants::GlobofEctoplasm;
-            case 949: return Constants::SteelIngot;
-            case 950: return Constants::DeldrimorSteelIngot;
-            case 923: return Constants::MonstrousClaw;
-            case 931: return Constants::MonstrousEye;
-            case 932: return Constants::MonstrousFang;
-            case 937: return Constants::Ruby;
-            case 938: return Constants::Sapphire;
-            case 935: return Constants::Diamond;
-            case 936: return Constants::OnyxGemstone;
-            case 922: return Constants::LumpofCharcoal;
-            case 945: return Constants::ObsidianShard;
-            case 939: return Constants::TemperedGlassVial;
-            case 942: return Constants::LeatherSquare;
-            case 943: return Constants::ElonianLeatherSquare;
-            case 944: return Constants::VialofInk;
-            case 951: return Constants::RollofParchment;
-            case 952: return Constants::RollofVellum;
-            case 956: return Constants::SpiritwoodPlank;
-            case 6532: return Constants::AmberChunk;
-            case 6533: return Constants::JadeiteShard;
+            case 941: return Constants::MaterialSlot::FurSquare;
+            case 926: return Constants::MaterialSlot::BoltofLinen;
+            case 927: return Constants::MaterialSlot::BoltofDamask;
+            case 928: return Constants::MaterialSlot::BoltofSilk;
+            case 930: return Constants::MaterialSlot::GlobofEctoplasm;
+            case 949: return Constants::MaterialSlot::SteelIngot;
+            case 950: return Constants::MaterialSlot::DeldrimorSteelIngot;
+            case 923: return Constants::MaterialSlot::MonstrousClaw;
+            case 931: return Constants::MaterialSlot::MonstrousEye;
+            case 932: return Constants::MaterialSlot::MonstrousFang;
+            case 937: return Constants::MaterialSlot::Ruby;
+            case 938: return Constants::MaterialSlot::Sapphire;
+            case 935: return Constants::MaterialSlot::Diamond;
+            case 936: return Constants::MaterialSlot::OnyxGemstone;
+            case 922: return Constants::MaterialSlot::LumpofCharcoal;
+            case 945: return Constants::MaterialSlot::ObsidianShard;
+            case 939: return Constants::MaterialSlot::TemperedGlassVial;
+            case 942: return Constants::MaterialSlot::LeatherSquare;
+            case 943: return Constants::MaterialSlot::ElonianLeatherSquare;
+            case 944: return Constants::MaterialSlot::VialofInk;
+            case 951: return Constants::MaterialSlot::RollofParchment;
+            case 952: return Constants::MaterialSlot::RollofVellum;
+            case 956: return Constants::MaterialSlot::SpiritwoodPlank;
+            case 6532: return Constants::MaterialSlot::AmberChunk;
+            case 6533: return Constants::MaterialSlot::JadeiteShard;
             };
-            return -1;
+            return (Constants::MaterialSlot)-1;
         }
 
-        int GetMaterialSlot(const Item* item) {
-            if (!item) return -1;
-            if (!item->GetIsMaterial()) return -1;
-            return GetMaterialSlot(item->model_id);
+        Constants::MaterialSlot GetMaterialSlot(const Item* item) {
+            if (!item) return (Constants::MaterialSlot)-1;
+            if (!item->GetIsMaterial()) return (Constants::MaterialSlot)-1;
+            return GetMaterialSlotByModelId(item->model_id);
         }
 
         bool UseItemByModelId(uint32_t modelid, int bagStart, int bagEnd) {
@@ -658,8 +650,8 @@ namespace GW {
             return nullptr;
         }
 
-        uint32_t GetStoragePage(void) {
-            return UI::GetPreference(UI::NumberPreference::StorageBagPage);
+        GW::Constants::StoragePane GetStoragePage(void) {
+            return (GW::Constants::StoragePane)UI::GetPreference(UI::NumberPreference::StorageBagPage);
         }
 
         bool GetIsStorageOpen(void) {
@@ -679,13 +671,6 @@ namespace GW {
             auto it = ItemClick_callbacks.find(entry);
             if (it != ItemClick_callbacks.end())
                 ItemClick_callbacks.erase(it);
-        }
-
-        void AsyncGetItemName(const Item* item, std::wstring& res) {
-            if (!item) return;
-            if (!item || !item->complete_name_enc) return;
-            wchar_t* str = item->complete_name_enc;
-            UI::AsyncDecodeStr(str, &res);
         }
 
         uint32_t GetEquipmentVisibilityState() {
@@ -712,7 +697,7 @@ namespace GW {
             }
             return nullptr;
         }
-        const Array<PvPItemUpgradeInfo>& GetPvPItemUpgradesArray()
+        const BaseArray<PvPItemUpgradeInfo>& GetPvPItemUpgradesArray()
         {
             return unlocked_pvp_item_upgrade_array;
         }
@@ -724,7 +709,7 @@ namespace GW {
             }
             return nullptr;
         }
-        const Array<CompositeModelInfo>& GetCompositeModelInfoArray()
+        const BaseArray<CompositeModelInfo>& GetCompositeModelInfoArray()
         {
             return *composite_model_info_array;
         }
@@ -736,7 +721,7 @@ namespace GW {
             }
             return nullptr;
         }
-        const Array<PvPItemInfo>& GetPvPItemInfoArray()
+        const BaseArray<PvPItemInfo>& GetPvPItemInfoArray()
         {
             return pvp_item_array;
         }
@@ -762,7 +747,168 @@ namespace GW {
             return *out != nullptr;
         }
 
+        // TODO: delta patch - stub implementations for new API functions
+        SalvageSessionInfo* GetSalvageSessionInfo() {
+            return nullptr;
+        }
+
+        Bag* GetBagByIndex(uint32_t bag_index) {
+            Bag** bags = GetBagArray();
+            return bags ? bags[bag_index] : nullptr;
+        }
+
+        uint32_t GetMaterialStorageStackSize() {
+            return 250; // TODO: delta patch - scan for actual value
+        }
+
+        bool CanInteractWithItem(const Item* item) {
+            return item != nullptr; // TODO: delta patch
+        }
+
+        bool CanAccessXunlaiChest() {
+            return false; // TODO: delta patch
+        }
+
+        bool DestroyItem(uint32_t item_id) {
+            return false; // TODO: delta patch
+        }
+
+        const ItemFormula* GetItemFormula(const GW::Item* item) {
+            return nullptr; // TODO: delta patch
+        }
 
     }
 
 } // namespace GW
+
+// ============================================================
+// C Interop API
+// ============================================================
+extern "C" {
+    GWCA_API void* GetSalvageSessionInfo() {
+        return GW::Items::GetSalvageSessionInfo();
+    }
+    GWCA_API void* GetInventory() {
+        return GW::Items::GetInventory();
+    }
+    GWCA_API void* GetBag(uint8_t bag_id) {
+        return GW::Items::GetBag((GW::Constants::Bag)bag_id);
+    }
+    GWCA_API void* GetBagByIndex(uint32_t bag_index) {
+        return GW::Items::GetBagByIndex(bag_index);
+    }
+    GWCA_API void* GetItemBySlot(const void* bag, uint32_t slot) {
+        return GW::Items::GetItemBySlot((const GW::Bag*)bag, slot);
+    }
+    GWCA_API void* GetHoveredItem() {
+        return GW::Items::GetHoveredItem();
+    }
+    GWCA_API void* GetItemById(uint32_t item_id) {
+        return GW::Items::GetItemById(item_id);
+    }
+    GWCA_API void* GetItemByModelId(uint32_t model_id, int bag_start, int bag_end) {
+        return GW::Items::GetItemByModelId(model_id, bag_start, bag_end);
+    }
+    GWCA_API void* GetItemFormula(const void* item) {
+        return (void*)GW::Items::GetItemFormula((const GW::Item*)item);
+    }
+    GWCA_API uint32_t GetMaterialStorageStackSize() {
+        return GW::Items::GetMaterialStorageStackSize();
+    }
+    GWCA_API uint32_t GetMaterialSlot(const void* item) {
+        return (uint32_t)GW::Items::GetMaterialSlot((const GW::Item*)item);
+    }
+    GWCA_API uint32_t GetStoragePage() {
+        return (uint32_t)GW::Items::GetStoragePage();
+    }
+    GWCA_API bool GetIsStorageOpen() {
+        return GW::Items::GetIsStorageOpen();
+    }
+    GWCA_API bool UseItem(const void* item) {
+        return GW::Items::UseItem((const GW::Item*)item);
+    }
+    GWCA_API bool EquipItem(const void* item, uint32_t agent_id) {
+        return GW::Items::EquipItem((const GW::Item*)item, agent_id);
+    }
+    GWCA_API bool DropItem(const void* item, uint32_t quantity) {
+        return GW::Items::DropItem((const GW::Item*)item, quantity);
+    }
+    GWCA_API bool PickUpItem(const void* item, uint32_t call_target) {
+        return GW::Items::PickUpItem((const GW::Item*)item, call_target);
+    }
+    GWCA_API bool CanInteractWithItem(const void* item) {
+        return GW::Items::CanInteractWithItem((const GW::Item*)item);
+    }
+    GWCA_API bool PingWeaponSet(uint32_t agent_id, uint32_t weapon_item_id, uint32_t offhand_item_id) {
+        return GW::Items::PingWeaponSet(agent_id, weapon_item_id, offhand_item_id);
+    }
+    GWCA_API bool MoveItemToBag(const void* item, uint8_t bag_id, uint32_t slot, uint32_t quantity) {
+        return GW::Items::MoveItem((const GW::Item*)item, (GW::Constants::Bag)bag_id, slot, quantity);
+    }
+    GWCA_API bool MoveItemToItem(const void* from, const void* to, uint32_t quantity) {
+        return GW::Items::MoveItem((const GW::Item*)from, (const GW::Item*)to, quantity);
+    }
+    GWCA_API bool UseItemByModelId(uint32_t model_id, int bag_start, int bag_end) {
+        return GW::Items::UseItemByModelId(model_id, bag_start, bag_end);
+    }
+    GWCA_API uint32_t CountItemByModelId(uint32_t model_id, int bag_start, int bag_end) {
+        return GW::Items::CountItemByModelId(model_id, bag_start, bag_end);
+    }
+    GWCA_API bool DestroyItem(uint32_t item_id) {
+        return GW::Items::DestroyItem(item_id);
+    }
+    GWCA_API bool SalvageStart(uint32_t salvage_kit_id, uint32_t item_id) {
+        return GW::Items::SalvageStart(salvage_kit_id, item_id);
+    }
+    GWCA_API bool SalvageSessionCancel() {
+        return GW::Items::SalvageSessionCancel();
+    }
+    GWCA_API bool SalvageMaterials() {
+        return GW::Items::SalvageMaterials();
+    }
+    GWCA_API bool IdentifyItem(uint32_t identification_kit_id, uint32_t item_id) {
+        return GW::Items::IdentifyItem(identification_kit_id, item_id);
+    }
+    GWCA_API uint32_t GetGoldAmountOnCharacter() {
+        return GW::Items::GetGoldAmountOnCharacter();
+    }
+    GWCA_API uint32_t GetGoldAmountInStorage() {
+        return GW::Items::GetGoldAmountInStorage();
+    }
+    GWCA_API uint32_t DepositGold(uint32_t amount) {
+        return GW::Items::DepositGold(amount);
+    }
+    GWCA_API uint32_t WithdrawGold(uint32_t amount) {
+        return GW::Items::WithdrawGold(amount);
+    }
+    GWCA_API bool DropGold(uint32_t amount) {
+        return GW::Items::DropGold(amount);
+    }
+    GWCA_API bool OpenXunlaiWindow(bool anniversary_pane_unlocked, bool storage_pane_unlocked) {
+        return GW::Items::OpenXunlaiWindow(anniversary_pane_unlocked, storage_pane_unlocked);
+    }
+    GWCA_API bool CanAccessXunlaiChest() {
+        return GW::Items::CanAccessXunlaiChest();
+    }
+    GWCA_API uint32_t GetEquipmentVisibility(uint32_t type) {
+        return (uint32_t)GW::Items::GetEquipmentVisibility((GW::EquipmentType)type);
+    }
+    GWCA_API bool SetEquipmentVisibility(uint32_t type, uint32_t state) {
+        return GW::Items::SetEquipmentVisibility((GW::EquipmentType)type, (GW::EquipmentStatus)state);
+    }
+    GWCA_API const void* GetPvPItemUpgrade(uint32_t idx) {
+        return GW::Items::GetPvPItemUpgrade(idx);
+    }
+    GWCA_API const void* GetPvPItemInfo(uint32_t idx) {
+        return GW::Items::GetPvPItemInfo(idx);
+    }
+    GWCA_API const void* GetCompositeModelInfo(uint32_t model_file_id) {
+        return GW::Items::GetCompositeModelInfo(model_file_id);
+    }
+    GWCA_API bool GetPvPItemUpgradeEncodedName(uint32_t idx, wchar_t** out) {
+        return GW::Items::GetPvPItemUpgradeEncodedName(idx, out);
+    }
+    GWCA_API bool GetPvPItemUpgradeEncodedDescription(uint32_t idx, wchar_t** out) {
+        return GW::Items::GetPvPItemUpgradeEncodedDescription(idx, out);
+    }
+}

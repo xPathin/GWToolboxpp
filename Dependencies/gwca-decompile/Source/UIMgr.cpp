@@ -40,11 +40,11 @@ namespace {
 
     uint32_t __cdecl OnCreateUIComponent(uint32_t frame_id, uint32_t component_flags, uint32_t tab_index, void* event_callback, wchar_t* name_enc, wchar_t* component_label) {
         GW::Hook::EnterHook();
-        UI::CreateUIComponentPacket packet = {frame_id,component_flags, tab_index, event_callback, name_enc, component_label};
+        UI::CreateUIComponentPacket packet = {frame_id,component_flags, tab_index, (UI::UIInteractionCallback)event_callback, name_enc, component_label};
         for (auto& it : OnCreateUIComponent_callbacks) {
             it.second(&packet);
         }
-        uint32_t out = CreateUIComponent_Ret(packet.frame_id,packet.component_flags,packet.tab_index,packet.event_callback,packet.name_enc,packet.component_label);
+        uint32_t out = CreateUIComponent_Ret(packet.frame_id,packet.component_flags,packet.tab_index,(void*)packet.event_callback,(wchar_t*)packet.wparam,packet.component_label);
         GW::Hook::LeaveHook();
         return out;
     }
@@ -240,7 +240,7 @@ namespace {
         size_t size;
     };
 
-    void __cdecl __callback_copy_char(void *param, wchar_t *s) {
+    void __cdecl __callback_copy_char(void *param, const wchar_t *s) {
         GWCA_ASSERT(param && s);
         AsyncBuffer *abuf = (AsyncBuffer *)param;
         char *outstr = (char *)abuf->buffer;
@@ -251,14 +251,14 @@ namespace {
         delete abuf;
     }
 
-    void __cdecl __callback_copy_wchar(void *param, wchar_t *s) {
+    void __cdecl __callback_copy_wchar(void *param, const wchar_t *s) {
         GWCA_ASSERT(param && s);
         AsyncBuffer *abuf = (AsyncBuffer *)param;
         wcsncpy((wchar_t *)abuf->buffer, s, abuf->size);
         delete abuf;
     }
 
-    void __cdecl __calback_copy_wstring(void *param, wchar_t *s) {
+    void __cdecl __calback_copy_wstring(void *param, const wchar_t *s) {
         GWCA_ASSERT(param && s);
         std::wstring *str = (std::wstring *)param;
         *str = s;
@@ -290,7 +290,7 @@ namespace {
             ui_drawn_addr = *(uintptr_t*)address - 0x10;
 
         address = Scanner::Find(
-            "\x75\x19\x6A\x00\xC7\x05\x00\x00\x00\x00\x01\x00", "xxxxxx????xx", 0, +6);
+            "\x75\x19\x6A\x00\xC7\x05\x00\x00\x00\x00\x01\x00", "xxxxxx????xx", +6);
         if (Verify(address))
             shift_screen_addr = *(uintptr_t *)address;
 
@@ -311,7 +311,7 @@ namespace {
         }
         
         address = GW::Scanner::FindAssertion("p:\\code\\gw\\param\\param.cpp","value - PARAM_VALUE_FIRST < (sizeof(s_values) / sizeof((s_values)[0]))", 0, -0x13);
-        if (address && GW::Scanner::IsValidPtr(address, GW::Scanner::TEXT)) {
+        if (address && GW::Scanner::IsValidPtr(address, GW::Section_TEXT)) {
             GetCommandLineNumber_Func = (GetNumberPreference_pt)address;
             CommandLineNumber_Buffer = *(uint32_t**)(address + 0x29);
             CommandLineNumber_Buffer += 0x30; // Offset for command line values
@@ -319,7 +319,7 @@ namespace {
 
         SetInGameShadowQuality_Func = (SetInGameShadowQuality_pt)GW::Scanner::FindAssertion("p:\\code\\gw\\agentview\\avshadow.cpp","No valid case for switch variable 'value'", 0,-0xca);
 
-        address = GW::Scanner::Find("\x83\xc4\x1c\x81\xfe\x20\x03\x00\x00","xxxxxxxxx", 0, 0x31);
+        address = GW::Scanner::Find("\x83\xc4\x1c\x81\xfe\x20\x03\x00\x00","xxxxxxxxx", 0x31);
         SetInGameUIScale_Func = (SetInGameUIScale_pt)GW::Scanner::FunctionFromNearCall(address);
 
         address = GW::Scanner::FindAssertion("p:\\code\\gw\\ui\\game\\charcreate\\charcreate.cpp", "msg.summaryBytes <= NET_CHARACTER_SUMMARY_MAX", 0, 0);
@@ -337,15 +337,15 @@ namespace {
         }
 
         address = GW::Scanner::FindAssertion("p:\\code\\gw\\pref\\prconst.cpp", "pref < arrsize(s_enumInfo)", 0, 0x15);
-        if (GW::Scanner::IsValidPtr(address, GW::Scanner::TEXT))
+        if (GW::Scanner::IsValidPtr(address, GW::Section_TEXT))
             EnumPreferenceOptions_Addr = *(EnumPreferenceInfo**)address;
         address = GW::Scanner::FindAssertion("p:\\code\\gw\\pref\\prconst.cpp", "pref < arrsize(s_valueInfo)", 0, 0x15);
-        if (GW::Scanner::IsValidPtr(address, GW::Scanner::TEXT))
+        if (GW::Scanner::IsValidPtr(address, GW::Section_TEXT))
             NumberPreferenceOptions_Addr = *(NumberPreferenceInfo**)address;
 
         address = GW::Scanner::FindAssertion("p:\\code\\engine\\frame\\frtip.cpp", "CMsg::Validate(id)", 0, 0);
         if(address)
-            address = GW::Scanner::FindInRange("\x56\x8B\xF7", "xxx", 0, -0x13, address, address - 0x200);
+            address = GW::Scanner::FindInRange("\x56\x8B\xF7", "xxx", -0x13, address - 0x200, address);
         if (address) {
             SetTooltip_Func = (SetTooltip_pt)address;
             address += 0x9;
@@ -388,7 +388,7 @@ namespace {
         address = GW::Scanner::FindAssertion("p:\\code\\gw\\ui\\dialog\\dlgoptgr.cpp", "multiSampleIndex != CTL_DROPLIST_INDEX_NULL", 0, -0x46);
         SetGameRendererMode_Func = (SetGameRendererMode_pt)GW::Scanner::FunctionFromNearCall(address);
 
-        address = GW::Scanner::Find("\x83\xc4\x1c\x81\xfe\x20\x03\x00\x00", "xxxxxxxxx", 0, 0);
+        address = GW::Scanner::Find("\x83\xc4\x1c\x81\xfe\x20\x03\x00\x00", "xxxxxxxxx", 0);
         GetGameRendererMode_Func = (GetGameRendererMode_pt)GW::Scanner::FunctionFromNearCall(address - 0x1d);
         GetGameRendererMetric_Func = (GetGameRendererMetric_pt)GW::Scanner::FunctionFromNearCall(address - 0x5);
 
@@ -460,9 +460,9 @@ namespace {
         GWCA_ASSERT(SetInGameUIScale_Func);
         GWCA_ASSERT(PreferencesInitialised_Addr);
 #endif
-        Hook::CreateHook(SendUIMessage_Func, OnSendUIMessage, (void **)&RetSendUIMessage);
-        Hook::CreateHook(DoAction_Func, OnDoAction, (void**)&RetDoAction);
-        Hook::CreateHook(CreateUIComponent_Func, OnCreateUIComponent, (void**)&CreateUIComponent_Ret);
+        Hook::CreateHook((void**)&SendUIMessage_Func, OnSendUIMessage, (void **)&RetSendUIMessage);
+        Hook::CreateHook((void**)&DoAction_Func, OnDoAction, (void**)&RetDoAction);
+        Hook::CreateHook((void**)&CreateUIComponent_Func, OnCreateUIComponent, (void**)&CreateUIComponent_Ret);
 
     }
 
@@ -518,7 +518,7 @@ namespace GW {
         ::DisableHooks,           // disable_hooks
     };
     namespace UI {
-        Vec2f WindowPosition::yAxis(float multiplier) const {
+        Vec2f WindowPosition::yAxis(float multiplier, bool clamp_position) const {
             const float h = static_cast<float>(Render::GetViewportHeight());
             Vec2f y;
             float correct;
@@ -540,7 +540,7 @@ namespace GW {
             }
             return y;
         }
-        Vec2f WindowPosition::xAxis(float multiplier) const {
+        Vec2f WindowPosition::xAxis(float multiplier, bool clamp_position) const {
             const auto w = static_cast<float>(Render::GetViewportWidth());
             const auto middle = w / 2.f;
             switch (state ^ 0x1) {
@@ -555,18 +555,6 @@ namespace GW {
             default:
                 return {std::roundf(p1.x * multiplier), std::roundf(p2.x * multiplier)};
             }
-        }
-        float WindowPosition::top(float multiplier) const {
-            return yAxis(multiplier).x;
-        }
-        float WindowPosition::left(float multiplier) const {
-            return xAxis(multiplier).x;
-        }
-        float WindowPosition::bottom(float multiplier) const {
-            return yAxis(multiplier).y;
-        }
-        float WindowPosition::right(float multiplier) const {
-            return xAxis(multiplier).y;
         }
 
         bool RawSendUIMessage(UIMessage msgid, void* wParam, void* lParam) {
@@ -609,7 +597,7 @@ namespace GW {
             }
             return result;
         }
-        bool Keydown(ControlAction key) {
+        bool Keydown(ControlAction key, Frame* target) {
             const uintptr_t ecx = GetActionContext();
             if (!(ecx && RetDoAction))
                 return false;
@@ -618,7 +606,7 @@ namespace GW {
             OnDoAction(reinterpret_cast<void*>(ecx), nullptr, 0x1E, &action, nullptr);
             return true;
         }
-        bool Keyup(ControlAction key) {
+        bool Keyup(ControlAction key, Frame* target) {
             const uintptr_t ecx = GetActionContext();
             if (!(ecx && RetDoAction))
                 return false;
@@ -646,11 +634,11 @@ namespace GW {
             return &window_positions_array[window_id];
         }
 
-        bool Keypress(ControlAction key) {
-            if (!Keydown(key))
+        bool Keypress(ControlAction key, Frame* target) {
+            if (!Keydown(key, target))
                 return false;
             GW::GameThread::Enqueue([key] {
-                Keyup(key);
+                Keyup(key, nullptr);
                 });
             return true;
         }
@@ -721,19 +709,19 @@ namespace GW {
             ValidateAsyncDecodeStr((wchar_t*)enc_str, __callback_copy_char, abuf);
         }
 
-        void AsyncDecodeStr(const wchar_t* enc_str, DecodeStr_Callback callback, void* callback_param, uint32_t language_id) {
+        void AsyncDecodeStr(const wchar_t* enc_str, DecodeStr_Callback callback, void* callback_param, GW::Constants::Language language_id) {
             if (!ValidateAsyncDecodeStr)
                 return;
             auto& textParser = GetGameContext()->text_parser;
-            uint32_t prev_language_id = textParser->language_id;
-            if (language_id != -1) {
+            GW::Constants::Language prev_language_id = textParser->language_id;
+            if (language_id != (GW::Constants::Language)0xff) {
                 textParser->language_id = language_id;
             }
             ValidateAsyncDecodeStr((wchar_t*)enc_str, callback, callback_param);
             textParser->language_id = prev_language_id;
         }
 
-        void AsyncDecodeStr(const wchar_t *enc_str, std::wstring *out, uint32_t language_id) {
+        void AsyncDecodeStr(const wchar_t *enc_str, std::wstring *out, GW::Constants::Language language_id) {
             return AsyncDecodeStr(enc_str, __calback_copy_wstring, out, language_id);
         }
 
@@ -889,37 +877,37 @@ namespace GW {
             GameThread::Enqueue([pref]() {
                 uint32_t value = GetPreference(pref);
                 switch (pref) {
-                case NumberPreference::EffectsVolume:
+                case NumberPreference::VolEffect:
                     if (SetVolume_Func) SetVolume_Func(0, (float)value / 100.f);
                     break;
-                case NumberPreference::DialogVolume:
+                case NumberPreference::VolDialog:
                     if (SetVolume_Func) SetVolume_Func(4, (float)value / 100.f);
                     break;
-                case NumberPreference::BackgroundVolume:
+                case NumberPreference::VolBackground:
                     if (SetVolume_Func) SetVolume_Func(1, (float)value / 100.f);
                     break;
-                case NumberPreference::MusicVolume:
+                case NumberPreference::VolMusic:
                     if (SetVolume_Func) SetVolume_Func(3, (float)value / 100.f);
                     break;
-                case NumberPreference::UIVolume:
+                case NumberPreference::VolUi:
                     if (SetVolume_Func) SetVolume_Func(2, (float)value / 100.f);
                     break;
-                case NumberPreference::MasterVolume:
+                case NumberPreference::VolMaster:
                     if (SetMasterVolume_Func) SetMasterVolume_Func((float)value / 100.f);
                     break;
                 case NumberPreference::FullscreenGamma:
                     SetGraphicsRendererValue_Func(0, 2, 0x4, value);
                     SetGraphicsRendererValue_Func(0, 0, 0x4, value);
                     break;
-                case NumberPreference::TextureQuality:
+                case NumberPreference::TextureLod:
                     SetGraphicsRendererValue_Func(0, 2, 0xd, value);
                     SetGraphicsRendererValue_Func(0, 0, 0xd, value);
                     break;
-                case NumberPreference::RefreshRate:
+                case NumberPreference::Refresh:
                     SetGraphicsRendererValue_Func(0, 2, 0x8, value);
                     SetGraphicsRendererValue_Func(0, 0, 0x8, value);
                     break;
-                case NumberPreference::UseBestTextureFiltering:
+                case NumberPreference::TexFilterMode:
                     SetGraphicsRendererValue_Func(0, 2, 0xc, value);
                     SetGraphicsRendererValue_Func(0, 0, 0xc, value);
                     break;
@@ -1047,7 +1035,7 @@ namespace GW {
         }
 
         void RemoveUIMessageCallback(
-            HookEntry *entry)
+            HookEntry *entry, UIMessage message_id)
         {
             for (auto& it : UIMessage_callbacks) {
                 auto it2 = it.second.begin();
@@ -1065,7 +1053,7 @@ namespace GW {
             return CurrentTooltipPtr && *CurrentTooltipPtr ? **CurrentTooltipPtr : 0;
         }
 
-        void RegisterCreateUIComponentCallback(HookEntry* entry, const CreateUIComponentCallback& callback)
+        void RegisterCreateUIComponentCallback(HookEntry* entry, const CreateUIComponentCallback& callback, int altitude)
         {
             if (OnCreateUIComponent_callbacks.find(entry) == OnCreateUIComponent_callbacks.end())
                 OnCreateUIComponent_callbacks[entry] = callback;

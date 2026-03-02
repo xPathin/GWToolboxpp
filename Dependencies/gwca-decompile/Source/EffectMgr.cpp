@@ -9,6 +9,7 @@
 #include <GWCA/GameContainers/Array.h>
 
 #include <GWCA/GameEntities/Skill.h>
+#include <GWCA/GameEntities/Agent.h>
 
 #include <GWCA/Context/WorldContext.h>
 
@@ -18,6 +19,11 @@
 
 namespace {
     using namespace GW;
+
+    static uint32_t GetPlayerAgentId() {
+        auto* c = GW::Agents::GetControlledCharacter();
+        return c ? c->agent_id : 0;
+    }
 
     uint32_t alcohol_level = 0;
     // post processing effects hook
@@ -50,7 +56,7 @@ namespace {
         GWCA_ASSERT(DropBuff_Func);
 #endif
 
-        Hook::CreateHook(PostProcessEffect_Func, OnPostProcessEffect, (void**)&RetPostProcessEffect);
+        Hook::CreateHook((void**)&PostProcessEffect_Func, OnPostProcessEffect, (void**)&RetPostProcessEffect);
     }
 
     void DisableHooks() {
@@ -122,7 +128,7 @@ namespace GW {
             return nullptr;
         }
         AgentEffects* GetPlayerEffectsArray() {
-            return GetAgentEffectsArray(Agents::GetPlayerId());
+            return GetAgentEffectsArray(GetPlayerAgentId());
         }
         EffectArray* GetAgentEffects(uint32_t agent_id) {
             auto* e = GetAgentEffectsArray(agent_id);
@@ -133,11 +139,11 @@ namespace GW {
             return e && e->buffs.valid() ? &e->buffs : nullptr;
         }
         EffectArray* GetPlayerEffects() {
-            return GetAgentEffects(Agents::GetPlayerId());
+            return GetAgentEffects(GetPlayerAgentId());
         }
 
         BuffArray* GetPlayerBuffs() {
-            return GetAgentBuffs(Agents::GetPlayerId());
+            return GetAgentBuffs(GetPlayerAgentId());
         }
 
         bool DropBuff(uint32_t buff_id) {

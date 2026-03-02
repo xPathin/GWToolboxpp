@@ -28,6 +28,10 @@
 namespace {
     using namespace GW;
 
+    // kSendEnterMission (0x30000002) was removed from the UIMessage enum in the current GWCA headers;
+    // use the raw value to preserve the hook mechanism.
+    constexpr UI::UIMessage kSendEnterMission = static_cast<UI::UIMessage>(0x30000002);
+
     int* region_id_addr = 0;
     AreaInfo* area_info_addr = 0;
 
@@ -44,7 +48,7 @@ namespace {
     HookEntry EnterChallengeMission_Entry;
 
     void OnEnterChallengeMission_Hook(uint32_t identifier) {
-        GW::UI::SendUIMessage(UI::UIMessage::kSendEnterMission, (void*)identifier);
+        GW::UI::SendUIMessage(kSendEnterMission, (void*)identifier);
     }
     void OnEnterChallengeMission_UIMessage(GW::HookStatus* status, UI::UIMessage, void* wparam, void*) {
         if (!status->blocked && EnterChallengeMission_Ret)
@@ -54,6 +58,14 @@ namespace {
     typedef void(__cdecl* Void_pt)();
     Void_pt SkipCinematic_Func = 0;
     Void_pt CancelEnterChallengeMission_Func = 0;
+
+    typedef GW::MapContext*(__cdecl* CreateMapContext_pt)(uint32_t map_file_id);
+    typedef bool(__cdecl* DestroyMapContext_pt)(GW::MapContext*);
+    CreateMapContext_pt CreateMapContext_Func = 0;
+    DestroyMapContext_pt DestroyMapContext_Func = 0;
+
+    GW::MissionMapContext* mission_map_context = 0;
+    GW::WorldMapContext* world_map_context = 0;
 
 
 
@@ -122,8 +134,8 @@ namespace {
         CancelEnterChallengeMission_Func = (Void_pt)Scanner::FunctionFromNearCall(address + 0x19);
         EnterChallengeMission_Func = (DoAction_pt)Scanner::FunctionFromNearCall(address + 0x51);
         if (EnterChallengeMission_Func) {
-            GW::Hook::CreateHook(EnterChallengeMission_Func, OnEnterChallengeMission_Hook, (void**)&EnterChallengeMission_Ret);
-            UI::RegisterUIMessageCallback(&EnterChallengeMission_Entry, UI::UIMessage::kSendEnterMission, OnEnterChallengeMission_UIMessage, 0x1);
+            GW::Hook::CreateHook((void**)&EnterChallengeMission_Func, OnEnterChallengeMission_Hook, (void**)&EnterChallengeMission_Ret);
+            UI::RegisterUIMessageCallback(&EnterChallengeMission_Entry, kSendEnterMission, OnEnterChallengeMission_UIMessage, 0x1);
         }
 
         address = Scanner::Find("\x83\xc0\x0c\x41\x3d\x68\x01\x00\x00", "xxxxxxxxx");
@@ -132,6 +144,21 @@ namespace {
             map_type_instance_infos_size = (*(uint32_t*)(address + 5)) / sizeof(MapTypeInstanceInfo);
         }
 
+        address = Scanner::Find("\x8d\x45\x00\x6a\x2c\x50\xe8", "xx?xxxx", +0x6);
+        if (address)
+            CreateMapContext_Func = (CreateMapContext_pt)Scanner::FunctionFromNearCall(address);
+
+        address = Scanner::Find("\x8b\x45\x00\x50\xe8\x00\x00\x00\x00\x83\xc4\x04\x84\xc0", "xx?xx????xxxxx", +0x4);
+        if (address)
+            DestroyMapContext_Func = (DestroyMapContext_pt)Scanner::FunctionFromNearCall(address);
+
+        address = Scanner::Find("\x68\x48\x00\x00\x00\xe8\x00\x00\x00\x00\xa3", "xxxxx????xx", +0xa);
+        if (address && Scanner::IsValidPtr(*(uintptr_t*)(address)))
+            mission_map_context = *(GW::MissionMapContext**)(address);
+
+        address = Scanner::Find("\x68\x24\x02\x00\x00\xe8\x00\x00\x00\x00\xa3", "xxxxx????xx", +0xa);
+        if (address && Scanner::IsValidPtr(*(uintptr_t*)(address)))
+            world_map_context = *(GW::WorldMapContext**)(address);
 
         GWCA_INFO("[SCAN] map_type_instance_infos address = %p, size = %d", map_type_instance_infos, map_type_instance_infos_size);
         GWCA_INFO("[SCAN] RegionId address = %p", region_id_addr);
@@ -140,6 +167,8 @@ namespace {
         GWCA_INFO("[SCAN] QueryAltitude Function = %p", QueryAltitude_Func);
         GWCA_INFO("[SCAN] EnterChallengeMission_Func = %p", EnterChallengeMission_Func);
         GWCA_INFO("[SCAN] CancelEnterChallengeMission_Func = %p", CancelEnterChallengeMission_Func);
+        GWCA_INFO("[SCAN] CreateMapContext_Func = %p", CreateMapContext_Func);
+        GWCA_INFO("[SCAN] DestroyMapContext_Func = %p", DestroyMapContext_Func);
 #ifdef _DEBUG
         GWCA_ASSERT(map_type_instance_infos);
         GWCA_ASSERT(region_id_addr);
@@ -175,10 +204,18 @@ namespace GW {
     };
     namespace Map {
 
-        float QueryAltitude(const GamePos& pos, float radius, float& alt, Vec3f* terrain_normal) {
+        float QueryAltitudeInternal(const GamePos& pos, float radius, float& alt, Vec3f* terrain_normal) {
             if (QueryAltitude_Func)
                 return QueryAltitude_Func(&pos, radius, &alt, terrain_normal);
             return 0;
+        }
+
+        float QueryAltitude(const GamePos* pos, float radius, GW::MapContext* context) {
+            if (!pos)
+                return 0.f;
+            float alt = 0.f;
+            QueryAltitudeInternal(*pos, radius, alt, nullptr);
+            return alt;
         }
 
         bool GetIsMapLoaded() {
@@ -186,17 +223,16 @@ namespace GW {
             return g && g->map != nullptr;
         }
 
-        bool Travel(Constants::MapID map_id,
-            int district, int region, int language) {
+        bool Travel(Constants::MapID map_id, GW::Constants::ServerRegion region, int district_number, GW::Constants::Language language) {
             struct MapStruct {
                 GW::Constants::MapID map_id;
-                int region;
-                int language;
+                GW::Constants::ServerRegion region;
+                GW::Constants::Language language;
                 int district;
             };
             MapStruct t;
             t.map_id = map_id;
-            t.district = district;
+            t.district = district_number;
             t.region = region;
             t.language = language;
             return UI::SendUIMessage(UI::UIMessage::kTravel, &t);
@@ -205,31 +241,31 @@ namespace GW {
         bool Travel(Constants::MapID map_id, Constants::District district, int district_number) {
             switch (district) {
             case Constants::District::Current:
-                return Travel(map_id, district_number, GetRegion(), GetLanguage());
+                return Travel(map_id, GetRegion(), district_number, GetLanguage());
             case Constants::District::International:
-                return Travel(map_id, district_number, Constants::Region::International, 0);
+                return Travel(map_id, Constants::ServerRegion::International, district_number, (Constants::Language)0);
             case Constants::District::American:
-                return Travel(map_id, district_number, Constants::Region::America, 0);
+                return Travel(map_id, Constants::ServerRegion::America, district_number, (Constants::Language)0);
             case Constants::District::EuropeEnglish:
-                return Travel(map_id, district_number, Constants::Region::Europe, Constants::EuropeLanguage::English);
+                return Travel(map_id, Constants::ServerRegion::Europe, district_number, Constants::Language::English);
             case Constants::District::EuropeFrench:
-                return Travel(map_id, district_number, Constants::Region::Europe, Constants::EuropeLanguage::French);
+                return Travel(map_id, Constants::ServerRegion::Europe, district_number, Constants::Language::French);
             case Constants::District::EuropeGerman:
-                return Travel(map_id, district_number, Constants::Region::Europe, Constants::EuropeLanguage::German);
+                return Travel(map_id, Constants::ServerRegion::Europe, district_number, Constants::Language::German);
             case Constants::District::EuropeItalian:
-                return Travel(map_id, district_number, Constants::Region::Europe, Constants::EuropeLanguage::Italian);
+                return Travel(map_id, Constants::ServerRegion::Europe, district_number, Constants::Language::Italian);
             case Constants::District::EuropeSpanish:
-                return Travel(map_id, district_number, Constants::Region::Europe, Constants::EuropeLanguage::Spanish);
+                return Travel(map_id, Constants::ServerRegion::Europe, district_number, Constants::Language::Spanish);
             case Constants::District::EuropePolish:
-                return Travel(map_id, district_number, Constants::Region::Europe, Constants::EuropeLanguage::Polish);
+                return Travel(map_id, Constants::ServerRegion::Europe, district_number, Constants::Language::Polish);
             case Constants::District::EuropeRussian:
-                return Travel(map_id, district_number, Constants::Region::Europe, Constants::EuropeLanguage::Russian);
+                return Travel(map_id, Constants::ServerRegion::Europe, district_number, Constants::Language::Russian);
             case Constants::District::AsiaKorean:
-                return Travel(map_id, district_number, Constants::Region::Korea, 0);
+                return Travel(map_id, Constants::ServerRegion::Korea, district_number, (Constants::Language)0);
             case Constants::District::AsiaChinese:
-                return Travel(map_id, district_number, Constants::Region::China, 0);
+                return Travel(map_id, Constants::ServerRegion::China, district_number, (Constants::Language)0);
             case Constants::District::AsiaJapanese:
-                return Travel(map_id, district_number, Constants::Region::Japan, 0);
+                return Travel(map_id, Constants::ServerRegion::Japan, district_number, (Constants::Language)0);
             }
             return false;
         }
@@ -244,8 +280,8 @@ namespace GW {
             return c ? (Constants::MapID)c->current_map_id : Constants::MapID::None;
         }
 
-        int GetRegion() {
-            return region_id_addr ? *region_id_addr : 0;
+        Constants::ServerRegion GetRegion() {
+            return region_id_addr ? (Constants::ServerRegion)*region_id_addr : Constants::ServerRegion::Unknown;
         }
 
         bool GetIsMapUnlocked(Constants::MapID map_id) {
@@ -261,9 +297,9 @@ namespace GW {
             return (unlocked_map->at(real_index) & flag) != 0;
         }
 
-        int GetLanguage() {
+        Constants::Language GetLanguage() {
             auto* c = GetCharContext();
-            return c ? c->language : 0;
+            return c ? c->language : Constants::Language::Unknown;
         }
 
         bool GetIsObserving() {
@@ -286,8 +322,8 @@ namespace GW {
         }
 
         PathingMapArray* GetPathingMap() {
-            // @Cleanup: Verify pointers
-            return &GetGameContext()->map->sub1->sub2->pmaps;
+            auto* map = GetMapContext();
+            return map && map->path && map->path->staticData ? &map->path->staticData->map : nullptr;
         }
 
         uint32_t GetFoesKilled() {
@@ -317,7 +353,7 @@ namespace GW {
         }
 
         bool EnterChallenge() {
-            return UI::SendUIMessage(UI::UIMessage::kSendEnterMission, (void*)0x36d);
+            return UI::SendUIMessage(kSendEnterMission, (void*)0x36d);
         }
 
         bool CancelEnterChallenge() {
@@ -336,5 +372,154 @@ namespace GW {
             return nullptr;
         }
 
+        MissionMapContext* GetMissionMapContext() {
+            return mission_map_context;
+        }
+
+        WorldMapContext* GetWorldMapContext() {
+            return world_map_context;
+        }
+
+        MapContext* CreateMapContext(uint32_t map_file_id) {
+            return CreateMapContext_Func ? CreateMapContext_Func(map_file_id) : nullptr;
+        }
+
+        bool DestroyMapContext(MapContext* context) {
+            return DestroyMapContext_Func ? DestroyMapContext_Func(context) : false;
+        }
+
+        Constants::ServerRegion RegionFromDistrict(const GW::Constants::District district) {
+            switch (district) {
+            case Constants::District::American:
+                return Constants::ServerRegion::America;
+            case Constants::District::EuropeEnglish:
+            case Constants::District::EuropeFrench:
+            case Constants::District::EuropeGerman:
+            case Constants::District::EuropeItalian:
+            case Constants::District::EuropeSpanish:
+            case Constants::District::EuropePolish:
+            case Constants::District::EuropeRussian:
+                return Constants::ServerRegion::Europe;
+            case Constants::District::AsiaKorean:
+                return Constants::ServerRegion::Korea;
+            case Constants::District::AsiaChinese:
+                return Constants::ServerRegion::China;
+            case Constants::District::AsiaJapanese:
+                return Constants::ServerRegion::Japan;
+            case Constants::District::International:
+                return Constants::ServerRegion::International;
+            default:
+                return GetRegion();
+            }
+        }
+
+        Constants::Language LanguageFromDistrict(const GW::Constants::District district) {
+            switch (district) {
+            case Constants::District::EuropeFrench:
+                return Constants::Language::French;
+            case Constants::District::EuropeGerman:
+                return Constants::Language::German;
+            case Constants::District::EuropeItalian:
+                return Constants::Language::Italian;
+            case Constants::District::EuropeSpanish:
+                return Constants::Language::Spanish;
+            case Constants::District::EuropePolish:
+                return Constants::Language::Polish;
+            case Constants::District::EuropeRussian:
+                return Constants::Language::Russian;
+            case Constants::District::AsiaKorean:
+                return Constants::Language::Korean;
+            case Constants::District::AsiaChinese:
+                return Constants::Language::TraditionalChinese;
+            case Constants::District::AsiaJapanese:
+                return Constants::Language::Japanese;
+            default:
+                return Constants::Language::English;
+            }
+        }
+
     }
 } // namespace GW
+
+// ============================================================
+// C Interop API
+// ============================================================
+extern "C" {
+    GWCA_API void* GetMissionMapContext() {
+        return GW::Map::GetMissionMapContext();
+    }
+    GWCA_API void* GetWorldMapContext() {
+        return GW::Map::GetWorldMapContext();
+    }
+    GWCA_API void* CreateMapContext(uint32_t map_file_id) {
+        return GW::Map::CreateMapContext(map_file_id);
+    }
+    GWCA_API bool DestroyMapContext(void* context) {
+        return GW::Map::DestroyMapContext((GW::MapContext*)context);
+    }
+    GWCA_API float QueryAltitude(const float* x, const float* y, float radius, void* context) {
+        if (!x || !y) return 0.f;
+        GW::GamePos pos(*x, *y, 0);
+        return GW::Map::QueryAltitude(&pos, radius, (GW::MapContext*)context);
+    }
+    GWCA_API bool GetIsMapLoaded() {
+        return GW::Map::GetIsMapLoaded();
+    }
+    GWCA_API uint32_t GetMapID() {
+        return (uint32_t)GW::Map::GetMapID();
+    }
+    GWCA_API bool GetIsMapUnlocked(uint32_t map_id) {
+        return GW::Map::GetIsMapUnlocked((GW::Constants::MapID)map_id);
+    }
+    GWCA_API uint32_t GetRegion() {
+        return (uint32_t)GW::Map::GetRegion();
+    }
+    GWCA_API uint32_t GetLanguage() {
+        return (uint32_t)GW::Map::GetLanguage();
+    }
+    GWCA_API bool GetIsObserving() {
+        return GW::Map::GetIsObserving();
+    }
+    GWCA_API int GetDistrict() {
+        return GW::Map::GetDistrict();
+    }
+    GWCA_API uint32_t GetInstanceTime() {
+        return GW::Map::GetInstanceTime();
+    }
+    GWCA_API uint32_t GetInstanceType() {
+        return (uint32_t)GW::Map::GetInstanceType();
+    }
+    GWCA_API bool TravelByRegion(uint32_t map_id, uint32_t region, int district_number, uint32_t language) {
+        return GW::Map::Travel((GW::Constants::MapID)map_id, (GW::Constants::ServerRegion)region, district_number, (GW::Constants::Language)language);
+    }
+    GWCA_API bool TravelByDistrict(uint32_t map_id, uint32_t district, int district_number) {
+        return GW::Map::Travel((GW::Constants::MapID)map_id, (GW::Constants::District)district, district_number);
+    }
+    GWCA_API uint32_t RegionFromDistrict(uint32_t district) {
+        return (uint32_t)GW::Map::RegionFromDistrict((GW::Constants::District)district);
+    }
+    GWCA_API uint32_t LanguageFromDistrict(uint32_t district) {
+        return (uint32_t)GW::Map::LanguageFromDistrict((GW::Constants::District)district);
+    }
+    GWCA_API uint32_t GetFoesKilled() {
+        return GW::Map::GetFoesKilled();
+    }
+    GWCA_API uint32_t GetFoesToKill() {
+        return GW::Map::GetFoesToKill();
+    }
+    GWCA_API void* GetMapInfo(uint32_t map_id) {
+        return GW::Map::GetMapInfo((GW::Constants::MapID)map_id);
+    }
+    GWCA_API bool GetIsInCinematic() {
+        return GW::Map::GetIsInCinematic();
+    }
+    GWCA_API bool SkipCinematic() {
+        return GW::Map::SkipCinematic();
+    }
+    GWCA_API bool EnterChallenge() {
+        return GW::Map::EnterChallenge();
+    }
+    GWCA_API bool CancelEnterChallenge() {
+        return GW::Map::CancelEnterChallenge();
+    }
+}

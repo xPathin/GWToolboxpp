@@ -100,12 +100,14 @@ namespace GW {
         return camera;
     }
 
-    void CameraMgr::SetMaxDist(float dist) {
+    bool CameraMgr::SetMaxDist(float dist) {
         GetCamera()->max_distance2 = dist;
+        return true;
     }
 
-    void CameraMgr::SetFieldOfView(float fov) {
+    bool CameraMgr::SetFieldOfView(float fov) {
         GetCamera()->field_of_view = fov;
+        return true;
     }
 
     bool CameraMgr::UnlockCam(bool flag) {
@@ -132,49 +134,7 @@ namespace GW {
         }
     }
 
-    void CameraMgr::ForwardMovement(float amount, bool true_forward) {
-        if (amount == 0.f) return;
-        Camera *cam = GetCamera();
-        if (true_forward) {
-            float pitchX = sqrtf(1.f - cam->pitch * cam->pitch);
-            cam->look_at_target.x += amount * pitchX * cosf(cam->yaw);
-            cam->look_at_target.y += amount * pitchX * sinf(cam->yaw);
-            cam->look_at_target.z += amount * cam->pitch;
-        } else {
-            cam->look_at_target.x += amount * cosf(cam->yaw);
-            cam->look_at_target.y += amount * sinf(cam->yaw);
-        }
-    }
-
-    void CameraMgr::VerticalMovement(float amount) {
-        Camera *cam = GetCamera();
-        cam->look_at_target.z += amount;
-    }
-
-    void CameraMgr::SideMovement(float amount) {
-        if (amount == 0.f) return;
-        Camera *cam = GetCamera();
-        cam->look_at_target.x += amount * -sinf(cam->yaw);
-        cam->look_at_target.y += amount *  cosf(cam->yaw);
-    }
-
-    void CameraMgr::RotateMovement(float angle) {
-        if (angle == 0.f) return;
-        // rotation with fixed z (vertical axe)
-        Camera *cam = GetCamera();
-        float pos_x = cam->position.x;
-        float pos_y = cam->position.y;
-        float px = cam->look_at_target.x - pos_x;
-        float py = cam->look_at_target.y - pos_y;
-
-        Vec3f newPos;
-        newPos.x = pos_x + (cosf(angle) * px - sinf(angle) * py);
-        newPos.y = pos_y + (sinf(angle) * px + cosf(angle) * py);
-        newPos.z = cam->look_at_target.z;
-
-        cam->SetYaw(cam->yaw + angle);
-        GetCamera()->look_at_target = newPos;
-    }
+    // ForwardMovement, VerticalMovement, SideMovement, RotateMovement removed from CameraMgr namespace (not in header)
 
     Vec3f CameraMgr::ComputeCamPos(float dist) {
         Camera *cam = GetCamera();
@@ -190,9 +150,10 @@ namespace GW {
         return newPos;
     }
 
-    void CameraMgr::UpdateCameraPos() {
+    bool CameraMgr::UpdateCameraPos() {
         Camera *cam = GetCamera();
         cam->SetCameraPos(ComputeCamPos());
+        return true;
     }
 
     float CameraMgr::GetFieldOfView() {

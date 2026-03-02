@@ -2,6 +2,7 @@
 
 #include <GWCA/Utilities/Debug.h>
 #include <GWCA/Utilities/Hooker.h>
+#include <GWCA/Utilities/Macros.h>
 #include <GWCA/Utilities/Scanner.h>
 
 #include <GWCA/GameContainers/GamePos.h>
@@ -62,6 +63,9 @@ namespace {
     typedef bool(__cdecl* LockPetTarget_pt)(uint32_t pet_agent_id, uint32_t target_id);
     LockPetTarget_pt LockPetTarget_Func = 0;
 
+    typedef HeroConstData*(__cdecl* GetHeroConstDataLookup_pt)(uint32_t hero_id);
+    uintptr_t GetHeroConstDataLookup_addr = 0;
+
     bool tick_work_as_toggle = false;
 
     UI::UIInteractionCallback OnTickButtonUICallback(UI::InteractionMessage* message, void* wParam, void* lParam) {
@@ -70,11 +74,11 @@ namespace {
         if (!tick_work_as_toggle)
             goto finish;
         switch (message->message_id) {
-        case 0x22:  // Ready state icon clicked
+        case UI::UIMessage::kKeyUp:  // Ready state icon clicked
             PartyMgr::Tick(!PartyMgr::GetIsPlayerTicked());
             blocked = true;
             break;
-        case 0x2c:  // Show ready state dropdown
+        case UI::UIMessage::kFrameMessage_0x2a:  // Show ready state dropdown
             blocked = true;
             break;
         }
@@ -116,7 +120,7 @@ namespace {
         address = Scanner::FindAssertion("p:\\code\\gw\\ui\\game\\party\\ptplayer.cpp", "No valid case for switch variable '\"\"'", 0, 0x27);
         SetReadyStatus_Func = (DoAction_pt)Scanner::FunctionFromNearCall(address);
 
-        address = Scanner::Find("\x8d\x45\x10\x50\x56\x6a\x4d\x57","xxxxxxxx", 0, 0);
+        address = Scanner::Find("\x8d\x45\x10\x50\x56\x6a\x4d\x57","xxxxxxxx", 0, GW::ScannerSection::Section_TEXT);
         FlagHeroAgent_Func = (FlagHeroAgent_pt)Scanner::FunctionFromNearCall(address + 0x4e);
         FlagAll_Func = (FlagAll_pt)Scanner::FunctionFromNearCall(address + 0x7c);
 
@@ -131,6 +135,13 @@ namespace {
         address = Scanner::Find("\x8b\x46\x10\x25\xa7\x00\x00\x00\x3c\xa0", "xxxxxxxxxx", 0x12);
         ReturnToOutpost_Func = (Void_pt)Scanner::FunctionFromNearCall(address);
 
+        {
+            uintptr_t addr = (uintptr_t)Scanner::Find("\x83\xF9\x28\x73\x00\x89\x4D\x08\x5D\xFF\xE0", "xxxx?xxxxxx", -11);
+            if (Verify(addr))
+                GetHeroConstDataLookup_addr = *(uintptr_t*)addr;
+        }
+
+        GWCA_INFO("[SCAN] GetHeroConstDataLookup = %p", GetHeroConstDataLookup_addr);
         GWCA_INFO("[SCAN] ReturnToOutpost_Func = %p", ReturnToOutpost_Func);
         GWCA_INFO("[SCAN] TickButtonUICallback Function = %p", TickButtonUICallback);
         GWCA_INFO("[SCAN] SetDifficulty_Func = %p", SetDifficulty_Func);
@@ -174,7 +185,7 @@ namespace {
         GWCA_ASSERT(ReturnToOutpost_Func);
         GWCA_ASSERT(LockPetTarget_Func);
 #endif
-        Hook::CreateHook(TickButtonUICallback, OnTickButtonUICallback, (void**)&TickButtonUICallback_Ret);
+        Hook::CreateHook((void**)&TickButtonUICallback, OnTickButtonUICallback, (void**)&TickButtonUICallback_Ret);
     }
 
     void EnableHooks() {
@@ -342,23 +353,23 @@ namespace GW {
             return true;
         }
 
-        bool AddHero(uint32_t heroid) {
+        bool AddHero(GW::Constants::HeroID heroid) {
             // @Robustness: Make sure player has hero available
             if (!AddHero_Func)
                 return false;
-            AddHero_Func(heroid);
+            AddHero_Func((uint32_t)heroid);
             return true;
         }
 
-        bool KickHero(uint32_t heroid) {
+        bool KickHero(GW::Constants::HeroID heroid) {
             // @Robustness: Make sure player's hero is in party
             if (!KickHero_Func)
                 return false;
-            KickHero_Func(heroid);
+            KickHero_Func((uint32_t)heroid);
             return true;
         }
         bool KickAllHeroes() {
-            return KickHero(0x26);
+            return KickHero((GW::Constants::HeroID)0x26);
         }
         bool AddHenchman(uint32_t agent_id) {
             // @Robustness: Make sure agent is valid henchman
@@ -376,7 +387,7 @@ namespace GW {
             KickPlayer_Func(playerid);
             return true;
         }
-        bool InvitePlayer(wchar_t* player_name) {
+        bool InvitePlayer(const wchar_t* player_name) {
             // There is a specific CtoS packet for this, but just use chat command instead
             if (!(player_name && player_name[0]))
                 return false;
@@ -404,15 +415,12 @@ namespace GW {
         }
 
         bool FlagHero(uint32_t hero_index, GamePos pos) {
-            return FlagHeroAgent(Agents::GetHeroAgentID(hero_index), pos);
-        }
-
-        bool FlagHeroAgent(AgentID agent_id, GamePos pos) {
             // @Robustness: Make sure player has control of hero agent
             if (!FlagHeroAgent_Func)
                 return false;
+            AgentID agent_id = Agents::GetHeroAgentID(hero_index);
             if (agent_id == 0) return false;
-            if (agent_id == Agents::GetPlayerId()) return false;
+            if (agent_id == Agents::GetControlledCharacterId()) return false;
             FlagHeroAgent_Func(agent_id, &pos);
             return true;
         }
@@ -446,22 +454,20 @@ namespace GW {
             }
             return false;
         }
-        bool SetPetBehavior(HeroBehavior behavior, uint32_t lock_target_id) {
+        bool SetPetBehavior(uint32_t owner_agent_id, HeroBehavior behavior) {
             auto w = GetWorldContext();
             if (!(w && SetHeroBehavior_Func && LockPetTarget_Func && w->pets.size()))
                 return false;
 
-            // Always need to lock target (current target if fight, otherwise 0)
-
-            const auto pet_info = GetPetInfo();
+            const auto pet_info = GetPetInfo(owner_agent_id);
             if (!pet_info)
                 return false;
             uint32_t target_agent_id = 0;
             if (behavior == HeroBehavior::Fight) {
                 // Setting fight mode without a valid target results in the same effect as guard mode.
                 // Check and validate target
-                const auto target = static_cast<AgentLiving*>(lock_target_id ? Agents::GetAgentByID(lock_target_id) : Agents::GetTarget());
-                if (!(target && target->GetIsLivingType() && target->allegiance == Constants::Allegiance::Enemy))
+                const auto target = Agents::GetTargetAsAgentLiving();
+                if (!(target && target->allegiance == Constants::Allegiance::Enemy))
                     return false; // Invalid target
                 target_agent_id = target->agent_id;
             }
@@ -477,7 +483,7 @@ namespace GW {
             if (!(w && w->pets.size()))
                 return nullptr;
             if (owner_agent_id == 0)
-                owner_agent_id = Agents::GetPlayerId();
+                owner_agent_id = Agents::GetControlledCharacterId();
             for (auto& pet : w->pets) {
                 if (pet.owner_agent_id == owner_agent_id)
                     return &pet;
@@ -490,7 +496,7 @@ namespace GW {
         }
         uint32_t GetHeroAgentID(uint32_t hero_index) {
             if (hero_index == 0)
-                return Agents::GetPlayerId();
+                return Agents::GetControlledCharacterId();
             hero_index--;
             PartyInfo* party = GetPartyInfo();
             if (!party)
@@ -522,8 +528,44 @@ namespace GW {
         bool SearchPartyCancel() {
             return PartySearchCancel_Func ? PartySearchCancel_Func(), true : false;
         }
-        bool SearchPartyReply(bool accept) {
+        bool SearchPartyReply(uint32_t party_search_id, bool accept) {
+            (void)party_search_id;
             return PartySearchRequestReply_Func ? PartySearchRequestReply_Func(accept ? 1U : 0U), true : false;
+        }
+
+        PartySearch* GetPartySearch(uint32_t party_search_id) {
+            auto* p = GetPartyContext();
+            if (!p) return nullptr;
+            for (auto* search : p->party_search) {
+                if (search && search->party_search_id == party_search_id)
+                    return search;
+            }
+            return nullptr;
+        }
+
+        HeroInfo* GetHeroInfo(GW::Constants::HeroID hero_id) {
+            auto* w = GetWorldContext();
+            if (!w) return nullptr;
+            for (auto& hero : w->hero_info) {
+                if (hero.hero_id == hero_id)
+                    return &hero;
+            }
+            return nullptr;
+        }
+
+        HeroConstData* GetHeroConstData(GW::Constants::HeroID hero_id) {
+            auto* func = GetHeroConstDataLookup_addr
+                ? *(GetHeroConstDataLookup_pt*)GetHeroConstDataLookup_addr : nullptr;
+            if (!func) return nullptr;
+            if ((uint32_t)hero_id >= 0x28) return nullptr;
+            return func((uint32_t)hero_id);
+        }
+
+        bool SetHeroTarget(uint32_t hero_agent_id, uint32_t target_agent_id) {
+            // TODO: Complex UI frame interaction, needs internal function pointers
+            (void)hero_agent_id;
+            (void)target_agent_id;
+            return false;
         }
     }
 

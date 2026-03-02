@@ -141,7 +141,7 @@ namespace {
         GWCA_ASSERT(RemoveFriend_Func);
 #endif
 
-        Hook::CreateHook(FriendEventHandler_Func, OnFriendEventHandler, (void**)&FriendEventHandler_Ret);
+        Hook::CreateHook((void**)&FriendEventHandler_Func, OnFriendEventHandler, (void**)&FriendEventHandler_Ret);
     }
 
     void EnableHooks() {
@@ -291,6 +291,14 @@ namespace GW {
         if (!(_friend && RemoveFriend_Func))
             return false;
         RemoveFriend_Func(_friend->uuid, _friend->alias, 0);
+        return true;
+    }
+
+    bool FriendListMgr::ChangeFriendType(Friend *_friend, FriendType type)
+    {
+        if (!(_friend && RemoveFriend_Func))
+            return false;
+        RemoveFriend_Func(_friend->uuid, _friend->alias, (uint32_t)type);
         return true;
     }
 } // namespace GW

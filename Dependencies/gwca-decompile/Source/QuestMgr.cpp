@@ -60,13 +60,13 @@ namespace {
 
         AbandonQuest_Func = (DoAction_pt)Scanner::FunctionFromNearCall(address + 0x100);
         if (AbandonQuest_Func) {
-            Hook::CreateHook(AbandonQuest_Func, OnAbandonQuest, (void**)&AbandonQuest_Ret);
+            Hook::CreateHook((void**)&AbandonQuest_Func, OnAbandonQuest, (void**)&AbandonQuest_Ret);
             UI::RegisterUIMessageCallback(&AbandonQuest_HookEntry, UI::UIMessage::kSendAbandonQuest, OnAbandonQuest_UIMessage, 0x1);
         }
             
         SetActiveQuest_Func = (DoAction_pt)Scanner::FunctionFromNearCall(address + 0x96);
         if (SetActiveQuest_Func) {
-            Hook::CreateHook(SetActiveQuest_Func, OnSetActiveQuest, (void**)&SetActiveQuest_Ret);
+            Hook::CreateHook((void**)&SetActiveQuest_Func, OnSetActiveQuest, (void**)&SetActiveQuest_Ret);
             UI::RegisterUIMessageCallback(&SetActiveQuest_HookEntry, UI::UIMessage::kSendSetActiveQuest, OnSetActiveQuest_UIMessage, 0x1);
         }
 
@@ -179,10 +179,10 @@ namespace GW {
 
         bool RequestQuestInfo(const Quest* quest)
         {
-            return quest && RequestQuestInfoId(quest->quest_id);
+            return quest && RequestQuestInfoId(quest->quest_id, false);
         }
 
-        bool RequestQuestInfoId(Constants::QuestID quest_id)
+        bool RequestQuestInfoId(Constants::QuestID quest_id, bool update_markers)
         {
             if (!(RequestQuestInfo_Func && GetQuest(quest_id)))
                 return false;

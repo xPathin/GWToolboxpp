@@ -148,7 +148,7 @@ namespace GW {
         }
 
         bool ChangeSecondProfession(Constants::Profession prof, uint32_t hero_index) {
-            return SkillbarMgr::ChangeSecondProfession(prof, hero_index);
+            return SkillbarMgr::ChangeSecondProfession(hero_index, prof);
         }
 
         static int wcsncasecmp(const wchar_t* s1, const wchar_t* s2, size_t n)
@@ -181,3 +181,39 @@ namespace GW {
     }
 
 } // namespace GW
+
+// ============================================================
+// C Interop API
+// ============================================================
+extern "C" {
+    GWCA_API bool SetActiveTitle(uint32_t title_id) {
+        return GW::PlayerMgr::SetActiveTitle((GW::Constants::TitleID)title_id);
+    }
+    GWCA_API bool RemoveActiveTitle() {
+        return GW::PlayerMgr::RemoveActiveTitle();
+    }
+    GWCA_API uint32_t GetPlayerAgentId(uint32_t player_id) {
+        return GW::PlayerMgr::GetPlayerAgentId(player_id);
+    }
+    GWCA_API uint32_t GetPlayerNumber() {
+        return GW::PlayerMgr::GetPlayerNumber();
+    }
+    GWCA_API const wchar_t* SetPlayerName(uint32_t player_id, const wchar_t* replace_name) {
+        return GW::PlayerMgr::SetPlayerName(player_id, replace_name);
+    }
+    GWCA_API bool ChangeSecondProfession(uint32_t profession, uint32_t hero_index) {
+        return GW::PlayerMgr::ChangeSecondProfession((GW::Constants::Profession)profession, hero_index);
+    }
+    GWCA_API void* GetTitleTrack(uint32_t title_id) {
+        return GW::PlayerMgr::GetTitleTrack((GW::Constants::TitleID)title_id);
+    }
+    GWCA_API uint32_t GetActiveTitleId() {
+        return (uint32_t)GW::PlayerMgr::GetActiveTitleId();
+    }
+    GWCA_API void* GetActiveTitle() {
+        return GW::PlayerMgr::GetActiveTitle();
+    }
+    GWCA_API void* GetTitleData(uint32_t title_id) {
+        return GW::PlayerMgr::GetTitleData((GW::Constants::TitleID)title_id);
+    }
+}

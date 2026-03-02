@@ -24,7 +24,7 @@ namespace GW
         s_PanicHandlerContext = context;
     }
 
-    __declspec(noreturn) void FatalAssert(
+    void FatalAssert(
         const char *expr,
         const char *file,
         unsigned int line,

@@ -202,20 +202,41 @@ namespace GW {
         return RegisterPacketCallback(entry, header, callback, 0x8000);
     }
 
-    void StoC::RemoveCallback(uint32_t header, HookEntry *entry) {
+    size_t StoC::RemoveCallback(uint32_t header, HookEntry *entry) {
         EnterCriticalSection(&mutex);
+        size_t removed = 0;
         if (packet_entries.size() <= header) {
             packet_entries.resize(header + 1);
         }
         auto it = packet_entries[header].begin();
         while (it != packet_entries[header].end()) {
             if (it->entry == entry) {
-                packet_entries[header].erase(it);
-                break;
+                it = packet_entries[header].erase(it);
+                ++removed;
+            } else {
+                ++it;
             }
-            it++;
         }
         LeaveCriticalSection(&mutex);
+        return removed;
+    }
+
+    size_t StoC::RemoveCallbacks(HookEntry *entry) {
+        size_t removed = 0;
+        EnterCriticalSection(&mutex);
+        for (auto& entries : packet_entries) {
+            auto it = entries.begin();
+            while (it != entries.end()) {
+                if (it->entry == entry) {
+                    it = entries.erase(it);
+                    ++removed;
+                } else {
+                    ++it;
+                }
+            }
+        }
+        LeaveCriticalSection(&mutex);
+        return removed;
     }
 
     void StoC::RemovePostCallback(uint32_t header, HookEntry* entry)

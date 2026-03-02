@@ -2,6 +2,7 @@
 
 #include <GWCA/Utilities/Debug.h>
 #include <GWCA/Utilities/Hooker.h>
+#include <GWCA/Utilities/Macros.h>
 #include <GWCA/Utilities/Scanner.h>
 #include <GWCA/GameEntities/Camera.h>
 
@@ -50,6 +51,32 @@ namespace {
     }; //Size: 0x1074
     gwdx* gwdx_ptr = nullptr;
 
+    struct GwRendererContext {
+        /* +h0000 */ uint8_t h0000[0x50];
+        /* +h0050 */ uint32_t values[3][26];
+        /* +h0188 */ uint32_t flags[3];
+        /* +h0194 */ uint32_t current_mode;
+        /* +h0198 */ uint8_t h0198[0x48];
+        /* +h01E0 */ uint32_t dirty_flags;
+    };
+    static_assert(offsetof(GwRendererContext, values) == 0x50);
+    static_assert(offsetof(GwRendererContext, flags) == 0x188);
+    static_assert(offsetof(GwRendererContext, current_mode) == 0x194);
+    static_assert(offsetof(GwRendererContext, dirty_flags) == 0x1E0);
+
+    uintptr_t GwRendererContext_addr = 0;
+    HWND gw_window_handle = nullptr;
+    bool fog_enabled = false;
+
+    GwRendererContext* GetRendererContext() {
+        return GwRendererContext_addr ? *(GwRendererContext**)GwRendererContext_addr : nullptr;
+    }
+
+    BOOL CALLBACK FindGWWindow(HWND hwnd, LPARAM) {
+        gw_window_handle = hwnd;
+        return FALSE;
+    }
+
     typedef bool (__cdecl *GwEndScene_pt)(gwdx* ctx, void* unk);
     GwEndScene_pt RetGwEndScene;
     GwEndScene_pt GwEndScene_Func;
@@ -64,8 +91,8 @@ namespace {
     GwReset_pt RetGwReset;
     GwReset_pt GwReset_Func;
 
-    std::function<void (IDirect3DDevice9*)> render_callback;
-    std::function<void (IDirect3DDevice9*)> reset_callback;
+    Render::RenderCallback render_callback = nullptr;
+    Render::RenderCallback reset_callback = nullptr;
 
     bool __cdecl OnGwEndScene(gwdx* ctx, void* unk)
     {
@@ -114,6 +141,13 @@ namespace {
         ScreenCapture_Func = (GwEndScene_pt)Scanner::Find("\x83\xC4\x10\x8B\x86\x00\x00\x00\x00\x83", "xxxxx??xxx", -0x8F);
         GwReset_Func = (GwReset_pt)Scanner::Find("\x3B\x4D\xB4\x6A\x00\x1B\xDB\xF7\xDB", "xxxxxxxxx", -0x8C);
 
+        {
+            uintptr_t address = (uintptr_t)Scanner::Find("\x8B\x35\x00\x00\x00\x00\x85\xF6\x74\x00\x8B\x4D\x08\x83\xF9\x1A", "xx????xxx?xxxxxx", +2);
+            if (Verify(address))
+                GwRendererContext_addr = *(uintptr_t*)address;
+        }
+
+        GWCA_INFO("[SCAN] GwRendererContext = %p", GwRendererContext_addr);
         GWCA_INFO("[SCAN] GwGetTransform = %p", GwGetTransform_func);
         GWCA_INFO("[SCAN] GwReset = %p", GwReset_Func);
         GWCA_INFO("[SCAN] GwEndScene = %p", GwEndScene_Func);
@@ -126,9 +160,9 @@ namespace {
         GWCA_ASSERT(ScreenCapture_Func);
 #endif
 
-        Hook::CreateHook(GwEndScene_Func, OnGwEndScene, (void**)&RetGwEndScene);
-        Hook::CreateHook(ScreenCapture_Func, OnScreenCapture, (void**)&RetScreenCapture);
-        Hook::CreateHook(GwReset_Func, OnGwReset, (void**)&RetGwReset);
+        Hook::CreateHook((void**)&GwEndScene_Func, OnGwEndScene, (void**)&RetGwEndScene);
+        Hook::CreateHook((void**)&ScreenCapture_Func, OnScreenCapture, (void**)&RetScreenCapture);
+        Hook::CreateHook((void**)&GwReset_Func, OnGwReset, (void**)&RetGwReset);
     }
 
     void EnableHooks()
@@ -217,13 +251,100 @@ namespace GW {
         return atan2(1.0f, dividend / tan(cam->GetFieldOfView() * 0.5f)) * 2.0f;
     }
 
-    void Render::SetRenderCallback(const std::function<void(IDirect3DDevice9*)>& callback)
+    void Render::SetRenderCallback(RenderCallback callback)
     {
         render_callback = callback;
     }
 
-    void Render::SetResetCallback(const std::function<void(IDirect3DDevice9*)>& callback)
+    Render::RenderCallback Render::GetRenderCallback()
+    {
+        return render_callback;
+    }
+
+    void Render::SetResetCallback(RenderCallback callback)
     {
         reset_callback = callback;
+    }
+
+    void Render::EnableHooks()
+    {
+        if (GwEndScene_Func)
+            Hook::EnableHooks(GwEndScene_Func);
+        if (ScreenCapture_Func)
+            Hook::EnableHooks(ScreenCapture_Func);
+    }
+
+    uint32_t Render::GetGraphicsRendererValue(Metric metric, uint32_t mode)
+    {
+        auto* renderer = GetRendererContext();
+        if (!renderer) return 0;
+        if ((uint32_t)metric >= (uint32_t)Metric::Count) return 0;
+        if (mode > 2) {
+            mode = renderer->current_mode;
+            if (mode > 2) return 0;
+        }
+        if (!((1u << (uint32_t)metric) & renderer->flags[mode])) return 0;
+        return renderer->values[mode][(uint32_t)metric];
+    }
+
+    bool Render::SetGraphicsRendererValue(Metric metric, uint32_t value, uint32_t mode)
+    {
+        auto* renderer = GetRendererContext();
+        if (!renderer) return false;
+        if ((uint32_t)metric >= (uint32_t)Metric::Count) return false;
+        if (metric == Metric::TextureMaxCX || metric == Metric::TextureMaxCY) return false;
+        if (mode > 2) {
+            mode = renderer->current_mode;
+            if (mode > 2) return false;
+        }
+        renderer->values[mode][(uint32_t)metric] = value;
+        renderer->flags[mode] |= (1u << (uint32_t)metric);
+        if (mode != renderer->current_mode) return true;
+        if ((uint32_t)metric <= 16) {
+            switch (metric) {
+            case Metric::Metric0:           renderer->dirty_flags |= 0x1; break;
+            case Metric::Metric1:           renderer->dirty_flags |= 0x4; break;
+            case Metric::Metric2:           renderer->dirty_flags |= 0x8; break;
+            case Metric::Metric3:           renderer->dirty_flags |= 0x10; break;
+            case Metric::FullscreenGamma:   renderer->dirty_flags |= 0x20; break;
+            case Metric::MultiSampling:     renderer->dirty_flags |= 0x100; break;
+            case Metric::PosX:              renderer->dirty_flags |= 0x400; break;
+            case Metric::PosY:              renderer->dirty_flags |= 0x800; break;
+            case Metric::RefreshRate:       renderer->dirty_flags |= 0x1000; break;
+            case Metric::ShaderQuality:     renderer->dirty_flags |= 0x2000; break;
+            case Metric::SizeX:             renderer->dirty_flags |= 0x4000; break;
+            case Metric::SizeY:             renderer->dirty_flags |= 0x8000; break;
+            case Metric::TextureFiltering:  renderer->dirty_flags |= 0x20000; break;
+            default:                        renderer->dirty_flags |= 0x82400; break;
+            }
+        }
+        return true;
+    }
+
+    uint32_t Render::GetFrameLimit()
+    {
+        // TODO: Requires UI::GetCommandLinePref and UI::GetPreference
+        return 0;
+    }
+
+    bool Render::SetFrameLimit(uint32_t value)
+    {
+        // TODO: Requires UI::SetCommandLinePref
+        (void)value;
+        return false;
+    }
+
+    HWND Render::GetWindowHandle()
+    {
+        if (!gw_window_handle) {
+            EnumWindows(FindGWWindow, 0);
+        }
+        return gw_window_handle;
+    }
+
+    bool Render::SetFog(bool enabled)
+    {
+        fog_enabled = enabled;
+        return enabled;
     }
 } // namespace GW
