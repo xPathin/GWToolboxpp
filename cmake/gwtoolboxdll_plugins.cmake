@@ -43,3 +43,4 @@ endmacro()
 
 add_tb_plugin(ExamplePlugin)
 add_tb_plugin(DaggerCombo)
+add_tb_plugin(SkillQueue)

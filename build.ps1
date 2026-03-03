@@ -2,7 +2,7 @@
 # Usage: build.ps1 [-Reconfigure] [-Target <name>...]
 param(
     [switch]$Reconfigure,
-    [string[]]$Target = @("GWToolboxdll", "GWToolbox", "DaggerCombo")
+    [string[]]$Target = @("GWToolboxdll", "GWToolbox", "DaggerCombo", "SkillQueue")
 )
 $ErrorActionPreference = "Stop"
 
