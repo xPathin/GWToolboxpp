@@ -11,6 +11,7 @@
 
 namespace {
     bool enabled = true;
+    bool auto_target_nearest = true;
     GW::HookEntry keydown_hook;
     int last_lead_slot = -1;
 
@@ -63,12 +64,14 @@ namespace {
         // Pressing a different lead key starts a fresh chain.
         if (pressed_slot != last_lead_slot) {
             last_lead_slot = pressed_slot;
-            return;
         }
 
-        // Get the target agent's dagger_status (combo state is tracked on the target)
+        // Auto-target nearest enemy if no target is selected
         const auto target_id = GW::Agents::GetTargetId();
         if (!target_id) {
+            if (auto_target_nearest) {
+                GW::UI::Keypress(GW::UI::ControlAction::ControlAction_TargetNearestEnemy);
+            }
             return;
         }
         const auto* target = static_cast<const GW::AgentLiving*>(GW::Agents::GetAgentByID(target_id));
@@ -133,11 +136,13 @@ void DaggerCombo::LoadSettings(const wchar_t* folder)
 {
     ToolboxPlugin::LoadSettings(folder);
     PLUGIN_LOAD_BOOL(enabled);
+    PLUGIN_LOAD_BOOL(auto_target_nearest);
 }
 
 void DaggerCombo::SaveSettings(const wchar_t* folder)
 {
     PLUGIN_SAVE_BOOL(enabled);
+    PLUGIN_SAVE_BOOL(auto_target_nearest);
     ToolboxPlugin::SaveSettings(folder);
 }
 
@@ -147,7 +152,10 @@ void DaggerCombo::DrawSettings()
         return;
     }
     ImGui::Checkbox("Enable 1-Key Dagger Combo", &enabled);
+    ImGui::Checkbox("Auto-target nearest enemy", &auto_target_nearest);
     ImGui::TextWrapped(
         "Press a Lead Attack skill key to automatically chain "
-        "through the next Off-Hand and Dual attacks on your skill bar.");
+        "through the next Off-Hand and Dual attacks on your skill bar.\n\n"
+        "When auto-target is enabled, pressing a Lead Attack with no "
+        "target selected will first select the nearest enemy.");
 }
