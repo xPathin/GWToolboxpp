@@ -218,7 +218,7 @@ std::vector<ToolboxPlugin*> PluginModule::GetPlugins()
 
 void PluginModule::Initialize()
 {
-    pluginsfoldername = Resources::GetPath(L"plugins");
+    pluginsfoldername = Resources::GetRootPath(L"plugins");
     ToolboxUIElement::Initialize();
     RefreshDlls();
 }

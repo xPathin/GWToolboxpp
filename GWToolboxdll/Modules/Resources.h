@@ -65,6 +65,7 @@ public:
     static std::filesystem::path GetSettingFile(const std::filesystem::path& file);
     static std::filesystem::path GetPath(const std::filesystem::path& file);
     static std::filesystem::path GetPath(const std::filesystem::path& folder, const std::filesystem::path& file);
+    static std::filesystem::path GetRootPath(const std::filesystem::path& file);
     static HRESULT ResolveShortcut(const std::filesystem::path& in_shortcut_path, std::filesystem::path& out_actual_path);
 
     static bool EnsureFolderExists(const std::filesystem::path& path);

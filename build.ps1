@@ -1,4 +1,9 @@
 # GWToolboxpp build script - path and machine agnostic
+# Usage: build.ps1 [-Reconfigure] [-Target <name>...]
+param(
+    [switch]$Reconfigure,
+    [string[]]$Target = @("GWToolboxdll", "GWToolbox", "DaggerCombo")
+)
 $ErrorActionPreference = "Stop"
 
 # Resolve repo root from script location
@@ -22,7 +27,6 @@ Enter-VsDevShell -VsInstallPath $vsPath -DevCmdArguments "-arch=x86" -SkipAutoma
 
 # Find vcpkg
 if (-not $env:VCPKG_ROOT) {
-    # Check common locations
     $candidates = @("C:\vcpkg", "$env:USERPROFILE\vcpkg", "${env:ProgramFiles}\vcpkg")
     foreach ($c in $candidates) {
         if (Test-Path "$c\vcpkg.exe") {
@@ -38,8 +42,9 @@ if (-not $env:VCPKG_ROOT -or -not (Test-Path "$env:VCPKG_ROOT\vcpkg.exe")) {
 
 Set-Location $repoRoot
 
-# Touch only git-modified files to fix Syncthing preserving old timestamps
-$dirty = git diff --name-only HEAD
+# Touch only source files (.cpp/.h) to fix Syncthing preserving old timestamps.
+# Excludes cmake/build config files so we don't force cmake to reconfigure.
+$dirty = git diff --name-only HEAD -- '*.cpp' '*.h'
 if ($dirty) {
     $dirty | ForEach-Object {
         $f = Join-Path $repoRoot $_
@@ -52,11 +57,16 @@ $short = git rev-parse --short HEAD
 $version = "$(Get-Date -UFormat '%Y%m%d')-$short"
 
 Write-Host "Building version: $version"
-Write-Host "Repo: $repoRoot"
-Write-Host "VCPKG_ROOT: $env:VCPKG_ROOT"
-Write-Host "VS: $vsPath"
+Write-Host "Targets: $($Target -join ', ')"
 
-cmake $repoRoot --preset=vcpkg-ci -DGWTOOLBOXDLL_VERSION="$version"
-cmake --build "$repoRoot\build" --target GWToolboxdll GWToolbox
+# Only run cmake configure if needed
+if ($Reconfigure -or -not (Test-Path "$repoRoot\build\build.ninja")) {
+    Write-Host "Configuring..."
+    cmake $repoRoot --preset=vcpkg-ci -DGWTOOLBOXDLL_VERSION="$version"
+} else {
+    Write-Host "Skipping configure (use -Reconfigure to force)"
+}
+
+cmake --build "$repoRoot\build" --target $Target
 
 Write-Host "Build complete. Output in $repoRoot\bin\"
