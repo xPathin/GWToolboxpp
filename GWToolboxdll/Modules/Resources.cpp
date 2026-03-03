@@ -545,6 +545,13 @@ std::filesystem::path Resources::GetPath(const std::filesystem::path& folder, co
     return GetComputerFolderPath() / folder / file;
 }
 
+std::filesystem::path Resources::GetRootPath(const std::filesystem::path& file)
+{
+    std::filesystem::path docpath;
+    ASSERT(PathGetDocumentsPath(docpath, L"GWToolboxpp"));
+    return docpath / file;
+}
+
 bool Resources::EnsureFolderExists(const std::filesystem::path& path)
 {
     return exists(path) || create_directories(path);

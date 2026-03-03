@@ -96,6 +96,60 @@ namespace {
         return true;
     }
 
+    constexpr clock_t PLUGIN_RELOAD_POLL_MS = 2000;
+    constexpr clock_t PLUGIN_RELOAD_DEBOUNCE_MS = 2000;
+
+    bool HotReloadPlugin(PluginModule::Plugin* plugin)
+    {
+        auto& p = *plugin;
+
+        // Save settings and signal terminate
+        if (!p.terminating) {
+            if (p.initialized && p.instance) {
+                p.instance->SaveSettings(pluginsfoldername.c_str());
+                p.instance->SignalTerminate();
+            }
+            p.terminating = true;
+        }
+
+        // Wait for graceful shutdown
+        if (p.instance && !p.instance->CanTerminate()) {
+            return false;
+        }
+
+        // Complete teardown
+        if (p.instance) {
+            p.instance->Terminate();
+        }
+        p.initialized = false;
+        p.terminating = false;
+        p.instance = nullptr;
+        if (p.dll) {
+            FreeLibrary(p.dll);
+            p.dll = nullptr;
+        }
+        std::erase_if(plugins_loaded, [plugin](auto pp) { return pp == plugin; });
+
+        // Swap files: current -> .old, .new -> current
+        const auto new_path = p.path.wstring() + L".new";
+        const auto old_path = p.path.wstring() + L".old";
+        DeleteFileW(old_path.c_str());
+        MoveFileW(p.path.wstring().c_str(), old_path.c_str());
+        MoveFileW(new_path.c_str(), p.path.wstring().c_str());
+
+        // Reload
+        p.pending_hot_reload = false;
+        if (LoadPlugin(plugin)) {
+            InitializePlugin(plugin);
+            Log::Flash("Plugin reloaded: %s", p.path.filename().string().c_str());
+        }
+        else {
+            Log::Error("Failed to reload plugin: %s", p.path.filename().string().c_str());
+        }
+
+        return true;
+    }
+
     void RefreshDlls()
     {
         // when we refresh, how do we map the modules that were already loaded to the ones on disk?
@@ -218,7 +272,7 @@ std::vector<ToolboxPlugin*> PluginModule::GetPlugins()
 
 void PluginModule::Initialize()
 {
-    pluginsfoldername = Resources::GetPath(L"plugins");
+    pluginsfoldername = Resources::GetRootPath(L"plugins");
     ToolboxUIElement::Initialize();
     RefreshDlls();
 }
@@ -295,11 +349,46 @@ void PluginModule::Update(const float delta)
             L"Plugins are NOT permitted by ArenaNet.", nullptr, true);
         message_displayed = true;
     }
+
+    // Poll for .new files alongside loaded plugins
+    static clock_t last_plugin_check = 0;
+    const clock_t now = clock();
+    if (now - last_plugin_check >= PLUGIN_RELOAD_POLL_MS) {
+        last_plugin_check = now;
+        for (auto* plugin : plugins_loaded) {
+            if (plugin->terminating || plugin->pending_hot_reload) continue;
+
+            const auto new_path = plugin->path.wstring() + L".new";
+            if (GetFileAttributesW(new_path.c_str()) == INVALID_FILE_ATTRIBUTES) {
+                plugin->new_file_detected_at = 0;
+                continue;
+            }
+
+            if (plugin->new_file_detected_at == 0) {
+                plugin->new_file_detected_at = now;
+                continue;
+            }
+
+            if (now - plugin->new_file_detected_at < PLUGIN_RELOAD_DEBOUNCE_MS) continue;
+
+            plugin->pending_hot_reload = true;
+            plugin->new_file_detected_at = 0;
+            Log::Flash("Hot reloading plugin: %s", plugin->path.filename().string().c_str());
+        }
+    }
+
+    // Process one hot reload per frame
+    for (auto* plugin : plugins_loaded) {
+        if (!plugin->pending_hot_reload) continue;
+        HotReloadPlugin(plugin);
+        break; // vector may have changed
+    }
+
     for (const auto plugin : plugins_loaded) {
         if (!plugin->initialized)
             continue;
         plugin->instance->Update(delta);
-        if (plugin->terminating) {
+        if (plugin->terminating && !plugin->pending_hot_reload) {
             if (UnloadPlugin(plugin)) {
                 break; // plugins_loaded vector changed, skip a frame
             }

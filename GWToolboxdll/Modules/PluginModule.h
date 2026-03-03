@@ -18,6 +18,8 @@ public:
         bool initialized = false;
         bool terminating = false;
         bool visible = false;
+        bool pending_hot_reload = false;
+        clock_t new_file_detected_at = 0;
     };
 
     static PluginModule& Instance()
