@@ -10,11 +10,24 @@
 #include <GWCA/Utilities/Hook.h>
 
 #include <cstdio>
+#include <filesystem>
 
 namespace {
     bool enabled = true;
     bool debug = true;
     GW::HookEntry keydown_hook;
+    FILE* logfile = nullptr;
+
+    void LogMsg(const char* fmt, ...)
+    {
+        if (!logfile) return;
+        va_list args;
+        va_start(args, fmt);
+        vfprintf(logfile, fmt, args);
+        va_end(args);
+        fprintf(logfile, "\n");
+        fflush(logfile);
+    }
 
     bool IsSkillReady(const GW::Skillbar* bar, uint32_t slot)
     {
@@ -47,21 +60,21 @@ namespace {
         const auto pressed_slot = static_cast<int>(key - GW::UI::ControlAction_UseSkill1);
 
         if (debug) {
-            printf("[DaggerCombo] --- Key pressed: slot %d (key=0x%X) ---", pressed_slot, key);
+            LogMsg("--- Key pressed: slot %d (key=0x%X) ---", pressed_slot, key);
         }
 
         const auto* bar = GW::SkillbarMgr::GetPlayerSkillbar();
         if (!bar || !bar->IsValid()) {
-            if (debug) printf("[DaggerCombo]   No valid skillbar");
+            if (debug) LogMsg("  No valid skillbar");
             return;
         }
 
         if (debug) {
-            printf("[DaggerCombo]   Skillbar (agent_id=%u, disabled=0x%X):", bar->agent_id, bar->disabled);
+            LogMsg("  Skillbar (agent_id=%u, disabled=0x%X):", bar->agent_id, bar->disabled);
             for (int i = 0; i < 8; i++) {
                 const auto& s = bar->skills[i];
                 const auto* sd = GW::SkillbarMgr::GetSkillConstantData(s.skill_id);
-                printf("[DaggerCombo]     [%d] skill_id=%d combo=%d recharge=%u adrenaline_a=%u ready=%d",
+                LogMsg("    [%d] skill_id=%d combo=%d recharge=%u adrenaline_a=%u ready=%d",
                     i, static_cast<int>(s.skill_id),
                     sd ? sd->combo : -1,
                     s.recharge, s.adrenaline_a,
@@ -76,7 +89,7 @@ namespace {
 
         const auto* skill_data = GW::SkillbarMgr::GetSkillConstantData(skill.skill_id);
         if (debug) {
-            printf("[DaggerCombo]   Pressed skill: id=%d, combo=%d",
+            LogMsg("  Pressed skill: id=%d, combo=%d",
                 static_cast<int>(skill.skill_id), skill_data ? skill_data->combo : -1);
         }
 
@@ -90,7 +103,7 @@ namespace {
         }
 
         if (debug) {
-            printf("[DaggerCombo]   Player: dagger_status=%d, weapon_type=%d, skill=%d",
+            LogMsg("  Player: dagger_status=%d, weapon_type=%d, skill=%d",
                 static_cast<int>(player->dagger_status),
                 static_cast<int>(player->weapon_type),
                 static_cast<int>(player->skill));
@@ -99,13 +112,13 @@ namespace {
         const uint8_t dagger_status = player->dagger_status;
 
         if (dagger_status == 0 || dagger_status == 3) {
-            if (debug) printf("[DaggerCombo]   dagger_status 0 or 3, firing lead normally");
+            if (debug) LogMsg("  dagger_status 0 or 3, firing lead normally");
             return;
         }
 
         const uint8_t needed_combo = (dagger_status == 1) ? 2 : 3;
         if (debug) {
-            printf("[DaggerCombo]   Need combo type %d, scanning slots %d-7",
+            LogMsg("  Need combo type %d, scanning slots %d-7",
                 static_cast<int>(needed_combo), pressed_slot + 1);
         }
 
@@ -118,7 +131,7 @@ namespace {
             const bool ready = IsSkillReady(bar, static_cast<uint32_t>(slot));
 
             if (debug) {
-                printf("[DaggerCombo]     Candidate slot %d: skill_id=%d, combo=%d, ready=%d",
+                LogMsg("    Candidate slot %d: skill_id=%d, combo=%d, ready=%d",
                     slot, static_cast<int>(candidate.skill_id),
                     candidate_data ? candidate_data->combo : -1, ready ? 1 : 0);
             }
@@ -130,7 +143,7 @@ namespace {
                 continue;
             }
 
-            if (debug) printf("[DaggerCombo]   >>> REDIRECTING to slot %d <<<", slot);
+            if (debug) LogMsg("  >>> REDIRECTING to slot %d <<<", slot);
 
             status->blocked = true;
             const auto target_slot = static_cast<uint32_t>(slot);
@@ -141,7 +154,7 @@ namespace {
             return;
         }
 
-        if (debug) printf("[DaggerCombo]   No valid follow-up found, firing lead normally");
+        if (debug) LogMsg("  No valid follow-up found, firing lead normally");
     }
 }
 
@@ -154,7 +167,6 @@ DLLAPI ToolboxPlugin* ToolboxPluginInstance()
 void DaggerCombo::Initialize(ImGuiContext* ctx, const ImGuiAllocFns allocator_fns, const HMODULE toolbox_dll)
 {
     ToolboxPlugin::Initialize(ctx, allocator_fns, toolbox_dll);
-    printf("[DaggerCombo] === Initialized ===");
     GW::UI::RegisterKeydownCallback(&keydown_hook, OnKeyDown);
 }
 
@@ -162,7 +174,11 @@ void DaggerCombo::SignalTerminate()
 {
     ToolboxPlugin::SignalTerminate();
     GW::UI::RemoveKeydownCallback(&keydown_hook);
-    printf("[DaggerCombo] === Terminated ===");
+    if (logfile) {
+        LogMsg("=== DaggerCombo terminated ===");
+        fclose(logfile);
+        logfile = nullptr;
+    }
 }
 
 bool DaggerCombo::CanTerminate()
@@ -174,6 +190,16 @@ void DaggerCombo::LoadSettings(const wchar_t* folder)
 {
     ToolboxPlugin::LoadSettings(folder);
     PLUGIN_LOAD_BOOL(enabled);
+
+    // Open log file next to the plugin settings
+    if (!logfile && folder) {
+        const auto log_path = std::filesystem::path(folder) / L"DaggerCombo_debug.log";
+        logfile = _wfopen(log_path.wstring().c_str(), L"w");
+        if (logfile) {
+            LogMsg("=== DaggerCombo initialized, log opened ===");
+            LogMsg("Log path: %ls", log_path.wstring().c_str());
+        }
+    }
 }
 
 void DaggerCombo::SaveSettings(const wchar_t* folder)
