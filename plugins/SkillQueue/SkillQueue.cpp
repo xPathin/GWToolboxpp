@@ -1,11 +1,15 @@
 #include "SkillQueue.h"
 
 #include <array>
+#include <cstdio>
+#include <set>
+#include <string>
 
 #include <GWCA/Constants/Constants.h>
 #include <GWCA/Constants/Skills.h>
 #include <GWCA/GameEntities/Agent.h>
 #include <GWCA/GameEntities/Skill.h>
+#include <GWCA/Context/CharContext.h>
 #include <GWCA/Managers/AgentMgr.h>
 #include <GWCA/Managers/EffectMgr.h>
 #include <GWCA/Managers/GameThreadMgr.h>
@@ -32,6 +36,40 @@ namespace {
     std::array<SlotState, 8> slots{};
     GW::Constants::SkillID prev_skill_ids[8]{};
     uint32_t last_cast_ms = 0;
+
+    // Persistent auto-cast state (survives zone changes)
+    std::set<GW::Constants::SkillID> autocast_skills;
+    std::string current_char_name;
+    bool was_loading = false;
+    std::wstring settings_folder;
+
+    std::string GetCharName()
+    {
+        const auto* ctx = GW::GetCharContext();
+        if (!ctx || !ctx->player_name[0]) return {};
+        std::string name;
+        for (int i = 0; i < 0x14 && ctx->player_name[i]; i++) {
+            name += static_cast<char>(ctx->player_name[i]);
+        }
+        return name;
+    }
+
+    std::string AutocastIniKey(const std::string& char_name)
+    {
+        return "autocast:" + char_name;
+    }
+
+    // Debug log
+    FILE* log_file = nullptr;
+    void Log(const char* fmt, ...)
+    {
+        if (!log_file) return;
+        va_list args;
+        va_start(args, fmt);
+        vfprintf(log_file, fmt, args);
+        va_end(args);
+        fflush(log_file);
+    }
 
     // Skillbar position tracking
     GW::HookEntry ui_hook;
@@ -128,7 +166,7 @@ namespace {
         return skill.GetRecharge() == 0;
     }
 
-    void ResetAllModes()
+    void ClearSlotStates()
     {
         for (auto& slot : slots) {
             slot.mode = SkillMode::Off;
@@ -136,9 +174,17 @@ namespace {
         }
     }
 
-    SkillMode CycleMode(const SkillMode current)
+    void ReapplyAutocast(const GW::Skillbar* bar)
     {
-        return current == SkillMode::Off ? SkillMode::AutoCast : SkillMode::Off;
+        ClearSlotStates();
+        for (int i = 0; i < 8; i++) {
+            if (bar->skills[i].skill_id != GW::Constants::SkillID::No_Skill
+                && autocast_skills.contains(bar->skills[i].skill_id)) {
+                slots[i].mode = SkillMode::AutoCast;
+                Log("REAPPLY MATCH slot=%d skill_id=%u\n",
+                    i, static_cast<uint32_t>(bar->skills[i].skill_id));
+            }
+        }
     }
 }
 
@@ -151,6 +197,19 @@ DLLAPI ToolboxPlugin* ToolboxPluginInstance()
 void SkillQueue::Initialize(ImGuiContext* ctx, const ImGuiAllocFns allocator_fns, const HMODULE toolbox_dll)
 {
     ToolboxPlugin::Initialize(ctx, allocator_fns, toolbox_dll);
+
+    wchar_t module_path[MAX_PATH];
+    const auto hmod = GetModuleHandleW(L"SkillQueue.dll");
+    if (hmod) {
+        GetModuleFileNameW(hmod, module_path, MAX_PATH);
+        std::wstring log_path(module_path);
+        const auto pos = log_path.rfind(L'.');
+        if (pos != std::wstring::npos) log_path = log_path.substr(0, pos);
+        log_path += L"_debug.log";
+        log_file = _wfopen(log_path.c_str(), L"w");
+    }
+    Log("=== SkillQueue debug log started ===\n");
+
     GW::UI::RegisterUIMessageCallback(&ui_hook, GW::UI::UIMessage::kUIPositionChanged, OnUIMessage, 0x8000);
     GW::UI::RegisterUIMessageCallback(&ui_hook, GW::UI::UIMessage::kPreferenceValueChanged, OnUIMessage, 0x8000);
 }
@@ -159,6 +218,10 @@ void SkillQueue::SignalTerminate()
 {
     ToolboxPlugin::SignalTerminate();
     GW::UI::RemoveUIMessageCallback(&ui_hook);
+    if (log_file) {
+        fclose(log_file);
+        log_file = nullptr;
+    }
 }
 
 bool SkillQueue::CanTerminate()
@@ -187,8 +250,21 @@ bool SkillQueue::WndProc(const UINT msg, const WPARAM, const LPARAM)
 
     for (int i = 0; i < 8; i++) {
         if (bar->skills[i].skill_id == hovered->skill_id) {
-            slots[i].mode = CycleMode(slots[i].mode);
+            if (slots[i].mode == SkillMode::Off) {
+                slots[i].mode = SkillMode::AutoCast;
+                autocast_skills.insert(bar->skills[i].skill_id);
+                Log("TOGGLE ON slot=%d skill_id=%u set_size=%zu\n",
+                    i, static_cast<uint32_t>(bar->skills[i].skill_id), autocast_skills.size());
+            } else {
+                slots[i].mode = SkillMode::Off;
+                autocast_skills.erase(bar->skills[i].skill_id);
+                Log("TOGGLE OFF slot=%d skill_id=%u set_size=%zu\n",
+                    i, static_cast<uint32_t>(bar->skills[i].skill_id), autocast_skills.size());
+            }
             slots[i].cast_pending = false;
+            if (!settings_folder.empty()) {
+                SaveSettings(settings_folder.c_str());
+            }
             return true;
         }
     }
@@ -201,8 +277,13 @@ void SkillQueue::Update(float)
         return;
     }
 
-    if (GW::Map::GetInstanceType() == GW::Constants::InstanceType::Loading) {
-        ResetAllModes();
+    const auto* player = GW::Agents::GetControlledCharacter();
+    if (!player) {
+        if (!was_loading) {
+            Log("LOADING: player null, set_size=%zu\n", autocast_skills.size());
+        }
+        was_loading = true;
+        ClearSlotStates();
         return;
     }
 
@@ -211,7 +292,48 @@ void SkillQueue::Update(float)
         return;
     }
 
-    // Detect skillbar changes and reset modes
+    // Initial character detection or zone load: load character-specific autocast set
+    if (was_loading || current_char_name.empty()) {
+        const auto char_name = GetCharName();
+        if (char_name.empty()) {
+            return; // character context not ready yet
+        }
+        was_loading = false;
+
+        // Character changed: save old character's state, load new character's state
+        if (char_name != current_char_name) {
+            if (!current_char_name.empty() && !settings_folder.empty()) {
+                SaveSettings(settings_folder.c_str());
+            }
+            current_char_name = char_name;
+            autocast_skills.clear();
+            const auto key = AutocastIniKey(current_char_name);
+            const auto* val = ini.GetValue(Name(), key.c_str(), "");
+            if (val && val[0]) {
+                std::string csv(val);
+                size_t start = 0;
+                while (start < csv.size()) {
+                    const auto end = csv.find(',', start);
+                    const auto token = csv.substr(start, end - start);
+                    if (!token.empty()) {
+                        autocast_skills.insert(static_cast<GW::Constants::SkillID>(std::stoul(token)));
+                    }
+                    if (end == std::string::npos) break;
+                    start = end + 1;
+                }
+            }
+            Log("CHAR CHANGED to=%s loaded set_size=%zu\n", current_char_name.c_str(), autocast_skills.size());
+        }
+
+        for (int i = 0; i < 8; i++) {
+            prev_skill_ids[i] = bar->skills[i].skill_id;
+        }
+        Log("REAPPLY: char=%s set_size=%zu\n", current_char_name.c_str(), autocast_skills.size());
+        ReapplyAutocast(bar);
+        return;
+    }
+
+    // Detect skillbar changes and re-resolve auto-cast slots
     bool bar_changed = false;
     for (int i = 0; i < 8; i++) {
         if (bar->skills[i].skill_id != prev_skill_ids[i]) {
@@ -220,12 +342,14 @@ void SkillQueue::Update(float)
         }
     }
     if (bar_changed) {
-        ResetAllModes();
+        ReapplyAutocast(bar);
         return;
     }
 
-    const auto* player = GW::Agents::GetControlledCharacter();
-    if (!player || player->GetIsDead() || player->GetIsKnockedDown() || player->GetIsCasting()) {
+    if (GW::Map::GetInstanceType() != GW::Constants::InstanceType::Explorable) {
+        return;
+    }
+    if (player->GetIsDead() || player->GetIsKnockedDown() || player->GetIsCasting()) {
         return;
     }
 
@@ -314,12 +438,27 @@ void SkillQueue::Draw(IDirect3DDevice9*)
 void SkillQueue::LoadSettings(const wchar_t* folder)
 {
     ToolboxPlugin::LoadSettings(folder);
+    if (folder) settings_folder = folder;
     PLUGIN_LOAD_BOOL(enabled);
+    // Autocast skills are loaded per-character in Update when we know the character name
+    Log("LOAD settings_folder set\n");
 }
 
 void SkillQueue::SaveSettings(const wchar_t* folder)
 {
     PLUGIN_SAVE_BOOL(enabled);
+
+    if (!current_char_name.empty()) {
+        std::string csv;
+        for (const auto& id : autocast_skills) {
+            if (!csv.empty()) csv += ',';
+            csv += std::to_string(static_cast<uint32_t>(id));
+        }
+        const auto key = AutocastIniKey(current_char_name);
+        ini.SetValue(Name(), key.c_str(), csv.c_str());
+        Log("SAVE char=%s set_size=%zu csv=%s\n", current_char_name.c_str(), autocast_skills.size(), csv.c_str());
+    }
+
     ToolboxPlugin::SaveSettings(folder);
 }
 
