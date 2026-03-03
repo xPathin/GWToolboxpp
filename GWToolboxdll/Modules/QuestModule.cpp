@@ -462,7 +462,6 @@ namespace {
     void BeginQuestingModeEvaluation()
     {
         if (!questing_mode_enabled) return;
-        if (auto_navigate_active) return;
         const auto pos = GetPlayerPos();
         if (!pos) return;
         const auto quest_log = GW::QuestMgr::GetQuestLog();
@@ -474,26 +473,63 @@ namespace {
             if (!quest.IsCompleted()) questing_mode_known_quest_ids.insert(static_cast<uint32_t>(quest.quest_id));
         }
 
-        // Use straight-line distance for instant selection (no async pathfinding needed)
+        // Track same-map and cross-map candidates separately so that quests
+        // actually on this map are preferred over nearby loading zones.
+        // For cross-map quests, use world map distance to the destination map
+        // instead of local distance to the loading zone.
+        const auto current_map_id = GW::Map::GetMapID();
         const auto current_map_info = GW::Map::GetCurrentMapInfo();
-        GW::Constants::QuestID best_id = GW::Constants::QuestID::None;
-        float best_dist_sq = FLT_MAX;
+
+        GW::Vec2f player_world_pos;
+        const bool have_world_pos = WorldMapWidget::GamePosToWorldMap(GW::GamePos(pos->x, pos->y), player_world_pos);
+
+        GW::Constants::QuestID best_same_map_id = GW::Constants::QuestID::None;
+        float best_same_map_dist_sq = FLT_MAX;
+        GW::Constants::QuestID best_other_map_id = GW::Constants::QuestID::None;
+        float best_other_map_dist_sq = FLT_MAX;
 
         for (auto& quest : *quest_log) {
             if (quest.quest_id == custom_quest_id) continue;
             if (quest.marker.x == INFINITY) continue;
+
+            const auto quest_map_info = GW::Map::GetMapInfo(quest.map_to);
             // Skip quests on a different continent
-            if (current_map_info) {
-                const auto quest_map_info = GW::Map::GetMapInfo(quest.map_to);
-                if (quest_map_info && quest_map_info->continent != current_map_info->continent) continue;
-            }
-            const float dist_sq = GetSquareDistance(*pos, quest.marker);
-            if (dist_sq < best_dist_sq) {
-                best_dist_sq = dist_sq;
-                best_id = quest.quest_id;
+            if (current_map_info && quest_map_info &&
+                quest_map_info->continent != current_map_info->continent) continue;
+
+            const bool is_same_map = quest.map_to == current_map_id
+                || quest.map_to == GW::Constants::MapID::None;
+
+            if (is_same_map) {
+                const float dist_sq = GetSquareDistance(*pos, quest.marker);
+                if (dist_sq < best_same_map_dist_sq) {
+                    best_same_map_dist_sq = dist_sq;
+                    best_same_map_id = quest.quest_id;
+                }
+            } else if (have_world_pos && quest_map_info) {
+                // Use world map distance to the destination map
+                const GW::Vec2f dest_world_pos = {
+                    static_cast<float>(quest_map_info->x ? quest_map_info->x : (quest_map_info->icon_start_x + quest_map_info->icon_end_x) / 2),
+                    static_cast<float>(quest_map_info->y ? quest_map_info->y : (quest_map_info->icon_start_y + quest_map_info->icon_end_y) / 2)
+                };
+                const float dist_sq = GetSquareDistance(player_world_pos, dest_world_pos);
+                if (dist_sq < best_other_map_dist_sq) {
+                    best_other_map_dist_sq = dist_sq;
+                    best_other_map_id = quest.quest_id;
+                }
+            } else {
+                // Fallback: use local loading zone distance
+                const float dist_sq = GetSquareDistance(*pos, quest.marker);
+                if (dist_sq < best_other_map_dist_sq) {
+                    best_other_map_dist_sq = dist_sq;
+                    best_other_map_id = quest.quest_id;
+                }
             }
         }
 
+        // Prefer same-map quests; only fall back to cross-map if none exist
+        const auto best_id = best_same_map_id != GW::Constants::QuestID::None
+            ? best_same_map_id : best_other_map_id;
         if (best_id != GW::Constants::QuestID::None) {
             QuestModule::EmulateQuestSelected(best_id);
             RefreshQuestPath(best_id);
