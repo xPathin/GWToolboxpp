@@ -406,18 +406,6 @@ void RerollWindow::Draw(IDirect3DDevice9*)
             RerollFailed(L"Failed to find available character from char select list");
             return;
         }
-        const auto reroll_to_player_current_map = char_select_info->map_id();
-        if (GWToolbox::ShouldDisableToolbox(reroll_to_player_current_map)) {
-            const auto charname_str = TextUtils::WStringToString(char_select_info->player_name);
-            const auto msg = std::format("{} is currently in {}.\n"
-                "This is an outpost that toolbox won't work in.\n"
-                "You can still swap to this character, but won't automatically travel.\n\n"
-                "Continue?",
-                charname_str, Resources::GetMapName(reroll_to_player_current_map)->string());
-            ImGui::ConfirmDialog(msg.c_str(), OnRerollPromptReply);
-            reroll_stage = PromptPendingReply;
-            return;
-        }
         reroll_stage = PendingLogout;
     }
     if (!visible) {
@@ -510,21 +498,12 @@ void RerollWindow::Update(float)
         RerollFailed(L"Reroll timed out");
         return;
     }
-    if (GWToolbox::ShouldDisableToolbox()) {
-        RerollSuccess();
-        return;
-    }
-
     switch (reroll_stage) {
         case PendingLogout: {
             const auto char_select_info = GW::AccountMgr::GetAvailableCharacter(reroll_to_player_name);
             if (!char_select_info) {
                 RerollFailed(L"Failed to find available character from char select list");
                 return;
-            }
-            if (GWToolbox::ShouldDisableToolbox(char_select_info->map_id())) {
-                // If toolbox isn't going to be available in the next map, make sure we don't try to do anything after reroll.
-                same_map = same_party = false;
             }
             auto packet = GW::UI::UIPacket::kLogout{.unknown = 0, .character_select = 1u};
             GW::UI::SendUIMessage(GW::UI::UIMessage::kLogout, &packet);

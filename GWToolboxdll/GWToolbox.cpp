@@ -223,7 +223,6 @@ namespace {
     };
 
     auto gwtoolbox_state = GWToolboxState::Terminated;
-    bool gwtoolbox_disabled = false;
 
     bool pending_detach_dll = false;
 
@@ -334,8 +333,7 @@ namespace {
             // Device is lost or not ready - skip all rendering
             return false;
         }
-        return !gwtoolbox_disabled
-               && !GW::GetPreGameContext()
+        return !GW::GetPreGameContext()
                && !GW::Map::GetIsInCinematic()
                && !IsIconic(GW::MemoryMgr::GetGWWindowHandle())
                && (!ToolboxSettings::hide_on_loading_screen || GW::Map::GetInstanceType() != GW::Constants::InstanceType::Loading)
@@ -685,12 +683,6 @@ const std::vector<ToolboxWidget*>& GWToolbox::GetWidgets()
 }
 
 
-bool GWToolbox::ShouldDisableToolbox(GW::Constants::MapID map_id)
-{
-    const auto m = GW::Map::GetMapInfo(map_id);
-    return m && (m->GetIsPvP() || m->GetIsGuildHall());
-}
-
 bool GWToolbox::IsInitialized() { return gwtoolbox_state == GWToolboxState::Initialised; }
 
 bool GWToolbox::ToggleModule(ToolboxModule& m, const bool enable)
@@ -905,25 +897,6 @@ void GWToolbox::SignalTerminate(bool detach_dll)
     }
 }
 
-void GWToolbox::Enable()
-{
-    if (!gwtoolbox_disabled)
-        return;
-    GW::EnableHooks();
-    gwtoolbox_disabled = false;
-}
-
-void GWToolbox::Disable()
-{
-    if (gwtoolbox_disabled)
-        return;
-    GW::DisableHooks();
-    GW::Render::EnableHooks();
-    if (OnUiRoot_UICallback_Func) GW::Hook::EnableHooks(OnUiRoot_UICallback_Func);
-    AttachRenderCallback();
-    gwtoolbox_disabled = true;
-}
-
 bool GWToolbox::CanTerminate()
 {
     return modules_terminating.empty()
@@ -969,17 +942,6 @@ void GWToolbox::Update(GW::HookStatus*)
         if (c && c->player_name) {
             Log::Flash("Hello!");
             greeted = true;
-
-            // we wants here to alert the player if he inits GWToolbox++ in a PvP area that it's disabled 
-            // check here if the player is in a PvP area
-            if (ShouldDisableToolbox()) {
-                GW::Chat::WriteChat(
-                    GW::Chat::Channel::CHANNEL_GWCA2,
-                    L"<c=#FF0000>GWToolbox++ is disabled in PvP areas. (It includes Guild Halls)</c>", GWTOOLBOX_SENDER, true);
-                GW::Chat::WriteChat(
-                    GW::Chat::Channel::CHANNEL_WARNING,
-                    L"Toolbox is disabled in PvP areas.", nullptr, true);
-            }
         }
     }
 
@@ -1004,16 +966,6 @@ void GWToolbox::Draw(IDirect3DDevice9* device)
         auto& io = ImGui::GetIO();
         io.IniFilename = imgui_inifile.bytes;
         imgui_inifile_changed = false;
-    }
-    if (gwtoolbox_disabled) {
-        if (!ShouldDisableToolbox()) {
-            Enable();
-        }
-        return;
-    }
-    if (ShouldDisableToolbox()) {
-        Disable();
-        return;
     }
     // Draw loop
     Resources::DxUpdate(device);
