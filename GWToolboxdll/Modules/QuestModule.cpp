@@ -644,7 +644,19 @@ namespace {
     {
         if (status->blocked) return;
         switch (message_id) {
-            case GW::UI::UIMessage::kQuestDetailsChanged:
+            case GW::UI::UIMessage::kQuestDetailsChanged: {
+                const auto changed_quest_id = *static_cast<GW::Constants::QuestID*>(packet);
+                RefreshQuestPath(changed_quest_id);
+                // If the active quest's marker moved to another map, re-evaluate nearest quest
+                if (questing_mode_enabled && changed_quest_id == GW::QuestMgr::GetActiveQuestId()) {
+                    const auto quest = GW::QuestMgr::GetQuest(changed_quest_id);
+                    const auto current_map = GW::Map::GetMapID();
+                    if (quest && quest->map_to != current_map && quest->map_to != GW::Constants::MapID::None) {
+                        BeginQuestingModeEvaluation();
+                    }
+                }
+                break;
+            }
             case GW::UI::UIMessage::kClientActiveQuestChanged:
             case GW::UI::UIMessage::kQuestAdded:
                 RefreshQuestPath(*static_cast<GW::Constants::QuestID*>(packet));
