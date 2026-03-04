@@ -964,14 +964,14 @@ namespace {
     constexpr std::array profession_names = {L"", L"warrior", L"ranger", L"monk", L"necromancer", L"mesmer", L"elementalist", L"assassin", L"ritualist", L"paragon", L"dervish"};
 
     // Returns matching profession index (1-10), or 0 if no match
-    static GW::Constants::ProfessionByte FindProfessionMatch(const std::wstring& search)
+    static size_t FindProfessionMatch(const std::wstring& search)
     {
         for (size_t i = 1; i < profession_names.size(); i++) {
             if (wcsstr(profession_names.at(i), search.c_str())) {
-                return (GW::Constants::ProfessionByte)i;
+                return i;
             }
         }
-        return GW::Constants::ProfessionByte::None;
+        return 0;
     }
 
     void CHAT_CMD_FUNC(CmdAddHenchman)
@@ -981,9 +981,10 @@ namespace {
         const std::wstring search = TextUtils::ToLower(GetRemainingArgsWstr(message, 1));
 
         const auto profession = FindProfessionMatch(search);
-        if (profession != GW::Constants::ProfessionByte::None) {
+        if (profession) {
             for (auto& agent_id : w->henchmen_agent_ids) {
-                if (GW::Agents::GetAgentPrimary(agent_id) == profession) {
+                const auto agent = (GW::AgentLiving*)GW::Agents::GetAgentByID(agent_id);
+                if (agent && agent->GetIsLivingType() && agent->primary == profession) {
                     GW::GameThread::Enqueue([agent_id]() {
                         GW::PartyMgr::AddHenchman(agent_id);
                     });
@@ -994,7 +995,7 @@ namespace {
         auto agent_names = new std::map<uint32_t, std::wstring>();
         for (auto& agent_id : w->henchmen_agent_ids) {
             (*agent_names)[agent_id] = L"";
-            GW::Agents::AsyncGetAgentName(agent_id, (*agent_names)[agent_id]);
+            GW::Agents::AsyncGetAgentName(GW::Agents::GetAgentByID(agent_id), (*agent_names)[agent_id]);
         }
         AddPartyMemberByName(search.c_str(), agent_names, [](uint32_t found) {
             GW::PartyMgr::AddHenchman(found);
@@ -1008,9 +1009,9 @@ namespace {
         const std::wstring search = TextUtils::ToLower(GetRemainingArgsWstr(message, 1));
 
         const auto profession = FindProfessionMatch(search);
-        if (profession != GW::Constants::ProfessionByte::None) {
+        if (profession) {
             for (auto& hero : w->hero_info) {
-                if (hero.primary == (GW::Constants::Profession)profession) {
+                if (hero.primary == profession) {
                     GW::GameThread::Enqueue([hero_id = hero.hero_id]() {
                         GW::PartyMgr::AddHero(hero_id);
                     });
