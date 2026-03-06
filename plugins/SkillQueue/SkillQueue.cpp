@@ -27,6 +27,7 @@ namespace {
     struct SlotState {
         SkillMode mode = SkillMode::Off;
         bool cast_pending = false;
+        uint32_t cast_pending_since = 0;
     };
 
     bool enabled = true;
@@ -366,12 +367,16 @@ void SkillQueue::Update(float)
 
         const bool ready = IsSkillReady(bar, static_cast<uint32_t>(i));
 
-        // Clear pending once the game confirms the skill is no longer ready (recharging/disabled)
+        // Clear pending once the game confirms the skill is no longer ready (recharging/disabled),
+        // or after a timeout (cast may have failed due to OOM or other reasons)
         if (slot.cast_pending) {
             if (!ready) {
                 slot.cast_pending = false;
+            } else if (now - slot.cast_pending_since > 1000) {
+                slot.cast_pending = false;
+            } else {
+                continue;
             }
-            continue;
         }
 
         if (!ready) {
@@ -394,6 +399,7 @@ void SkillQueue::Update(float)
         const auto action = static_cast<GW::UI::ControlAction>(
             static_cast<uint32_t>(GW::UI::ControlAction::ControlAction_UseSkill1) + i);
         slot.cast_pending = true;
+        slot.cast_pending_since = now;
         GW::GameThread::Enqueue([action] {
             GW::UI::Keypress(action);
         });
