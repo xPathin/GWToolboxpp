@@ -42,12 +42,13 @@ namespace {
     bool questing_mode_evaluation_queued = false;
     clock_t questing_mode_evaluation_deferred_at = 0;
     constexpr clock_t QUESTING_MODE_EVAL_DEFER_MS = 3000;
-    std::set<uint32_t> questing_mode_known_quest_ids;
-    clock_t questing_mode_last_change_check = 0;
-    constexpr clock_t QUESTING_MODE_CHANGE_CHECK_MS = 1000;
+    clock_t questing_mode_last_eval = 0;
+    constexpr clock_t QUESTING_MODE_EVAL_INTERVAL_MS = 1000;
+    GW::Constants::QuestID questing_mode_selected_quest = GW::Constants::QuestID::None;
 
     // Auto-navigate
     bool auto_navigate_active = false;
+    bool auto_navigate_paused_for_eval = false;
     clock_t auto_navigate_last_move_time = 0;
     clock_t auto_navigate_started = 0;
     constexpr clock_t AUTO_NAV_MOVE_INTERVAL_MS = 500;
@@ -230,7 +231,12 @@ namespace {
                 return false;
             }
             constexpr float recalculate_when_moved_further_than = 100.f * 100.f;
-            if (GetSquareDistance(from, calculated_from) > recalculate_when_moved_further_than) {
+            // Don't recalculate while on a non-ground plane (e.g. bridge).
+            // The pathfinder doesn't maintain plane continuity, so recalculating
+            // from a bridge position produces a path that drops to ground.
+            if (from.zplane != 0 && calculated_from.zplane == 0) {
+                // Skip recalculation, keep using the original path
+            } else if (GetSquareDistance(from, calculated_from) > recalculate_when_moved_further_than) {
                 Recalculate(from);
                 return false;
             }
@@ -240,12 +246,24 @@ namespace {
             if (!waypoint_len) return false;
 
             const auto from_end_waypoint = GetSquareDistance(from, waypoints.back());
-            // Find next waypoint
+            // Find next waypoint, preferring same zplane to avoid snapping
+            // to terrain under a bridge (or vice versa).
+            const uint32_t player_zplane = from.zplane;
             current_waypoint = waypoint_len - 1;
             for (size_t i = 1; i < waypoint_len; i++) {
+                if (waypoints[i].zplane != player_zplane) continue;
                 if (GetSquareDistance(from, waypoints[i]) < from_end_waypoint) {
                     current_waypoint = i;
                     break;
+                }
+            }
+            // Fallback if no same-plane waypoint found
+            if (current_waypoint == waypoint_len - 1) {
+                for (size_t i = 1; i < waypoint_len; i++) {
+                    if (GetSquareDistance(from, waypoints[i]) < from_end_waypoint) {
+                        current_waypoint = i;
+                        break;
+                    }
                 }
             }
             if (original_waypoint != current_waypoint) {
@@ -337,12 +355,22 @@ namespace {
                 std::ranges::reverse(cqp->waypoints);
             }
             const auto from_end_waypoint = GetSquareDistance(cqp->calculated_from, cqp->waypoints.back());
-            // Find next waypoint
+            const uint32_t player_zplane = cqp->calculated_from.zplane;
+            // Find next waypoint, preferring same zplane
             cqp->current_waypoint = waypoint_len - 1;
             for (size_t i = 1; i < waypoint_len; i++) {
+                if (cqp->waypoints[i].zplane != player_zplane) continue;
                 if (GetSquareDistance(cqp->calculated_from, cqp->waypoints[i]) < from_end_waypoint) {
                     cqp->current_waypoint = i;
                     break;
+                }
+            }
+            if (cqp->current_waypoint == waypoint_len - 1) {
+                for (size_t i = 1; i < waypoint_len; i++) {
+                    if (GetSquareDistance(cqp->calculated_from, cqp->waypoints[i]) < from_end_waypoint) {
+                        cqp->current_waypoint = i;
+                        break;
+                    }
                 }
             }
         }
@@ -395,10 +423,16 @@ namespace {
     {
         if (waypoints.empty()) return player_pos;
 
-        // Find closest segment and project player onto it
+        // Find closest segment on the same zplane as the player. This prevents
+        // latching onto segments on terrain under a bridge (or vice versa).
+        // Falls back to any segment if no same-plane match is found.
+        const uint32_t player_zplane = player_pos.zplane;
         size_t best_seg = 0;
         float best_dist_sq = FLT_MAX;
         float best_t = 0.f;
+        size_t fallback_seg = 0;
+        float fallback_dist_sq = FLT_MAX;
+        float fallback_t = 0.f;
 
         for (size_t i = 0; i + 1 < waypoints.size(); i++) {
             const float sx = waypoints[i + 1].x - waypoints[i].x;
@@ -415,11 +449,24 @@ namespace {
             const float dx = player_pos.x - px;
             const float dy = player_pos.y - py;
             const float d = dx * dx + dy * dy;
-            if (d < best_dist_sq) {
+
+            const bool same_plane = waypoints[i].zplane == player_zplane
+                || waypoints[i + 1].zplane == player_zplane;
+            if (same_plane && d < best_dist_sq) {
                 best_dist_sq = d;
                 best_seg = i;
                 best_t = t;
             }
+            if (d < fallback_dist_sq) {
+                fallback_dist_sq = d;
+                fallback_seg = i;
+                fallback_t = t;
+            }
+        }
+
+        if (best_dist_sq == FLT_MAX) {
+            best_seg = fallback_seg;
+            best_t = fallback_t;
         }
 
         // Walk forward from projection point by `distance`
@@ -435,6 +482,10 @@ namespace {
         remaining -= left_on_seg;
 
         for (size_t i = best_seg + 1; i + 1 < waypoints.size(); i++) {
+            // Stop at plane transitions to avoid walking off bridges
+            if (waypoints[i].zplane != player_zplane && waypoints[i + 1].zplane != player_zplane) {
+                return waypoints[i];
+            }
             const float dx = waypoints[i + 1].x - waypoints[i].x;
             const float dy = waypoints[i + 1].y - waypoints[i].y;
             const float len = sqrtf(dx * dx + dy * dy);
@@ -459,19 +510,13 @@ namespace {
         if (cqp) cqp->DrawMinimapLines();
     }
 
-    void BeginQuestingModeEvaluation()
+    void BeginQuestingModeEvaluation(bool force = false)
     {
         if (!questing_mode_enabled) return;
         const auto pos = GetPlayerPos();
         if (!pos) return;
         const auto quest_log = GW::QuestMgr::GetQuestLog();
         if (!quest_log) return;
-
-        // Update known quest IDs snapshot (non-completed only, so completions trigger change)
-        questing_mode_known_quest_ids.clear();
-        for (auto& quest : *quest_log) {
-            if (!quest.IsCompleted()) questing_mode_known_quest_ids.insert(static_cast<uint32_t>(quest.quest_id));
-        }
 
         // Track same-map and cross-map candidates separately so that quests
         // actually on this map are preferred over nearby loading zones.
@@ -527,10 +572,25 @@ namespace {
             }
         }
 
+        // Unless forced (map change, hotkey), stick with the current active quest
+        // as long as it was selected by questing mode, is still on this map, and
+        // still in the quest log. If the user manually changed the quest, don't override.
+        const auto active_id = GW::QuestMgr::GetActiveQuestId();
+        if (!force && active_id != GW::Constants::QuestID::None) {
+            if (active_id != questing_mode_selected_quest) return; // user manually selected, respect it
+            const auto active_quest = GW::QuestMgr::GetQuest(active_id);
+            if (active_quest && active_quest->marker.x != INFINITY) {
+                const bool active_on_same_map = active_quest->map_to == current_map_id
+                    || active_quest->map_to == GW::Constants::MapID::None;
+                if (active_on_same_map) return; // keep current quest
+            }
+        }
+
         // Prefer same-map quests; only fall back to cross-map if none exist
         const auto best_id = best_same_map_id != GW::Constants::QuestID::None
             ? best_same_map_id : best_other_map_id;
-        if (best_id != GW::Constants::QuestID::None) {
+        if (best_id != GW::Constants::QuestID::None && best_id != active_id) {
+            questing_mode_selected_quest = best_id;
             QuestModule::EmulateQuestSelected(best_id);
             RefreshQuestPath(best_id);
         }
@@ -644,19 +704,9 @@ namespace {
     {
         if (status->blocked) return;
         switch (message_id) {
-            case GW::UI::UIMessage::kQuestDetailsChanged: {
-                const auto changed_quest_id = *static_cast<GW::Constants::QuestID*>(packet);
-                RefreshQuestPath(changed_quest_id);
-                // If the active quest's marker moved to another map, re-evaluate nearest quest
-                if (questing_mode_enabled && changed_quest_id == GW::QuestMgr::GetActiveQuestId()) {
-                    const auto quest = GW::QuestMgr::GetQuest(changed_quest_id);
-                    const auto current_map = GW::Map::GetMapID();
-                    if (quest && quest->map_to != current_map && quest->map_to != GW::Constants::MapID::None) {
-                        BeginQuestingModeEvaluation();
-                    }
-                }
+            case GW::UI::UIMessage::kQuestDetailsChanged:
+                RefreshQuestPath(*static_cast<GW::Constants::QuestID*>(packet));
                 break;
-            }
             case GW::UI::UIMessage::kClientActiveQuestChanged:
             case GW::UI::UIMessage::kQuestAdded:
                 RefreshQuestPath(*static_cast<GW::Constants::QuestID*>(packet));
@@ -684,6 +734,9 @@ namespace {
         if (auto_navigate_active) {
             auto_navigate_started = TIMER_INIT();
             auto_navigate_last_move_time = 0;
+            if (questing_mode_enabled) {
+                auto_navigate_paused_for_eval = true;
+            }
         }
     }
 
@@ -1015,6 +1068,14 @@ bool QuestModule::WndProc(UINT Message, WPARAM wParam, LPARAM)
                 case VK_LEFT:
                 case VK_RIGHT:
                 case VK_SPACE:
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
                     StopAutoNavigate("manual action");
                     break;
             }
@@ -1083,7 +1144,7 @@ check_paths:
     }
 
     // Auto-navigate: follow waypoints to active quest marker
-    if (auto_navigate_active) {
+    if (auto_navigate_active && !auto_navigate_paused_for_eval) {
         const auto active_id = GW::QuestMgr::GetActiveQuestId();
         auto* cqp = GetCalculatedQuestPath(active_id, false);
         if (!cqp || cqp->waypoints.empty()) {
@@ -1106,9 +1167,16 @@ check_paths:
                 auto_navigate_last_move_time = TIMER_INIT();
             }
 
-            // Check if arrived at destination
+            // Check if arrived at destination; if the quest marker is on another
+            // map, keep moving so the player walks through the portal.
             const float dist_sq = GetSquareDistance(*pos, cqp->waypoints.back());
-            if (dist_sq < AUTO_NAV_ARRIVAL_DIST_SQ) StopAutoNavigate("arrived at destination");
+            if (dist_sq < AUTO_NAV_ARRIVAL_DIST_SQ) {
+                const auto active_quest = GW::QuestMgr::GetQuest(active_id);
+                const bool target_is_other_map = active_quest
+                    && active_quest->map_to != GW::Constants::MapID::None
+                    && active_quest->map_to != GW::Map::GetMapID();
+                if (!target_is_other_map) StopAutoNavigate("arrived at destination");
+            }
         }
     }
 
@@ -1116,26 +1184,23 @@ check_paths:
     if (questing_mode_evaluation_queued) {
         questing_mode_evaluation_queued = false;
         questing_mode_evaluation_deferred_at = 0;
-        BeginQuestingModeEvaluation();
+        BeginQuestingModeEvaluation(true);
+        if (auto_navigate_paused_for_eval) {
+            auto_navigate_paused_for_eval = false;
+            auto_navigate_started = TIMER_INIT();
+        }
     }
     else if (questing_mode_evaluation_deferred_at && TIMER_DIFF(questing_mode_evaluation_deferred_at) > QUESTING_MODE_EVAL_DEFER_MS) {
         questing_mode_evaluation_deferred_at = 0;
-        BeginQuestingModeEvaluation();
-    }
-    else if (questing_mode_enabled && TIMER_DIFF(questing_mode_last_change_check) > QUESTING_MODE_CHANGE_CHECK_MS) {
-        questing_mode_last_change_check = TIMER_INIT();
-        // Detect quest log changes by comparing current IDs with known set
-        const auto quest_log = GW::QuestMgr::GetQuestLog();
-        if (quest_log) {
-            std::set<uint32_t> current_ids;
-            for (auto& quest : *quest_log) {
-                if (!quest.IsCompleted()) current_ids.insert(static_cast<uint32_t>(quest.quest_id));
-            }
-            if (current_ids != questing_mode_known_quest_ids) {
-                questing_mode_known_quest_ids = current_ids;
-                BeginQuestingModeEvaluation();
-            }
+        BeginQuestingModeEvaluation(true);
+        if (auto_navigate_paused_for_eval) {
+            auto_navigate_paused_for_eval = false;
+            auto_navigate_started = TIMER_INIT();
         }
+    }
+    else if (questing_mode_enabled && TIMER_DIFF(questing_mode_last_eval) > QUESTING_MODE_EVAL_INTERVAL_MS) {
+        questing_mode_last_eval = TIMER_INIT();
+        BeginQuestingModeEvaluation();
     }
 }
 
