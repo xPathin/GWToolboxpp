@@ -339,6 +339,15 @@ void DaggerCombo::Update(float)
             casting_from_update = false;
         });
         last_cast_ms = now;
+    } else {
+        // No skill available (including lead); fall back to normal attack
+        const auto* t = GW::Agents::GetAgentByID(target_id);
+        if (t) {
+            GW::GameThread::Enqueue([t] {
+                GW::Agents::InteractAgent(t);
+            });
+        }
+        last_cast_ms = now;
     }
 }
 
