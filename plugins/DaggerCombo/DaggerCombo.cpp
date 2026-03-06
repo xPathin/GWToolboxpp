@@ -44,7 +44,7 @@ namespace {
     int cast_pending_slot = -1;
     uint32_t cast_pending_ms = 0;
 
-    bool IsSkillReady(const GW::Skillbar* bar, uint32_t slot)
+    bool IsSkillReady(const GW::Skillbar* bar, uint32_t slot, float current_energy = -1.f)
     {
         const auto& skill = bar->skills[slot];
         if (skill.skill_id == GW::Constants::SkillID::No_Skill) {
@@ -57,13 +57,18 @@ namespace {
         if (!data) {
             return false;
         }
+        if (current_energy >= 0.f && data->GetEnergyCost() > 0) {
+            if (current_energy < static_cast<float>(data->GetEnergyCost())) {
+                return false;
+            }
+        }
         if (data->adrenaline > 0) {
             return skill.adrenaline_a >= data->adrenaline;
         }
         return skill.GetRecharge() == 0;
     }
 
-    int FindComboFollowUp(const GW::Skillbar* bar, int after_slot, uint8_t needed_combo)
+    int FindComboFollowUp(const GW::Skillbar* bar, int after_slot, uint8_t needed_combo, float current_energy = -1.f)
     {
         for (int slot = after_slot + 1; slot < 8; slot++) {
             const auto& candidate = bar->skills[slot];
@@ -74,7 +79,7 @@ namespace {
             if (!data || data->combo != needed_combo) {
                 continue;
             }
-            if (!IsSkillReady(bar, static_cast<uint32_t>(slot))) {
+            if (!IsSkillReady(bar, static_cast<uint32_t>(slot), current_energy)) {
                 continue;
             }
             return slot;
@@ -311,18 +316,19 @@ void DaggerCombo::Update(float)
     // Determine which skill to cast based on dagger combo state
     const auto* target = static_cast<const GW::AgentLiving*>(GW::Agents::GetAgentByID(target_id));
     const uint8_t dagger_status = target->dagger_status;
+    const float current_energy = player->energy * static_cast<float>(player->max_energy);
 
     int slot_to_cast = -1;
 
     if (dagger_status == 0 || dagger_status == 3) {
-        if (IsSkillReady(bar, static_cast<uint32_t>(lead_slot))) {
+        if (IsSkillReady(bar, static_cast<uint32_t>(lead_slot), current_energy)) {
             slot_to_cast = lead_slot;
         }
     } else {
         const uint8_t needed_combo = (dagger_status == 1) ? 2 : 3;
-        slot_to_cast = FindComboFollowUp(bar, lead_slot, needed_combo);
+        slot_to_cast = FindComboFollowUp(bar, lead_slot, needed_combo, current_energy);
         // Fall back to lead if no follow-up is ready (restarts the chain)
-        if (slot_to_cast < 0 && IsSkillReady(bar, static_cast<uint32_t>(lead_slot))) {
+        if (slot_to_cast < 0 && IsSkillReady(bar, static_cast<uint32_t>(lead_slot), current_energy)) {
             slot_to_cast = lead_slot;
         }
     }

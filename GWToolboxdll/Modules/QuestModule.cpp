@@ -656,6 +656,9 @@ namespace {
                 if (quest->quest_id == custom_quest_id) {
                     quest->log_state |= 1; // Avoid asking for description about this quest
                 }
+                if (questing_mode_enabled) {
+                    questing_mode_evaluation_queued = true;
+                }
                 if (quest->quest_id != player_chosen_quest_id) {
                     // Quest assigned without user interaction
                     if (keep_current_quest_when_new_quest_added) {
