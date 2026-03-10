@@ -253,10 +253,12 @@ namespace {
             const auto from_end_waypoint = GetSquareDistance(from, waypoints.back());
             // Find next waypoint, preferring same zplane to avoid snapping
             // to terrain under a bridge (or vice versa).
+            // Only filter by zplane when on a bridge (zplane != 0); on the
+            // ground, bridges overhead can tag waypoints with their zplane.
             const uint32_t player_zplane = from.zplane;
             current_waypoint = waypoint_len - 1;
             for (size_t i = 1; i < waypoint_len; i++) {
-                if (waypoints[i].zplane != player_zplane) continue;
+                if (player_zplane != 0 && waypoints[i].zplane != player_zplane) continue;
                 if (GetSquareDistance(from, waypoints[i]) < from_end_waypoint) {
                     current_waypoint = i;
                     break;
@@ -361,10 +363,10 @@ namespace {
             }
             const auto from_end_waypoint = GetSquareDistance(cqp->calculated_from, cqp->waypoints.back());
             const uint32_t player_zplane = cqp->calculated_from.zplane;
-            // Find next waypoint, preferring same zplane
+            // Find next waypoint, preferring same zplane (only filter on bridges)
             cqp->current_waypoint = waypoint_len - 1;
             for (size_t i = 1; i < waypoint_len; i++) {
-                if (cqp->waypoints[i].zplane != player_zplane) continue;
+                if (player_zplane != 0 && cqp->waypoints[i].zplane != player_zplane) continue;
                 if (GetSquareDistance(cqp->calculated_from, cqp->waypoints[i]) < from_end_waypoint) {
                     cqp->current_waypoint = i;
                     break;
@@ -456,9 +458,10 @@ namespace {
     {
         if (waypoints.empty()) return player_pos;
 
-        // Find closest segment on the same zplane as the player. This prevents
-        // latching onto segments on terrain under a bridge (or vice versa).
-        // Falls back to any segment if no same-plane match is found.
+        // Find closest segment on the same zplane as the player. When on a
+        // bridge this prevents latching onto ground segments below. On the
+        // ground (zplane 0) we skip the preference because bridges overhead
+        // can tag waypoints with their zplane.
         const uint32_t player_zplane = player_pos.zplane;
         size_t best_seg = 0;
         float best_dist_sq = FLT_MAX;
@@ -483,7 +486,8 @@ namespace {
             const float dy = player_pos.y - py;
             const float d = dx * dx + dy * dy;
 
-            const bool same_plane = waypoints[i].zplane == player_zplane
+            const bool same_plane = player_zplane == 0
+                || waypoints[i].zplane == player_zplane
                 || waypoints[i + 1].zplane == player_zplane;
             if (same_plane && d < best_dist_sq) {
                 best_dist_sq = d;
@@ -516,7 +520,8 @@ namespace {
 
         for (size_t i = best_seg + 1; i + 1 < waypoints.size(); i++) {
             // Stop at plane transitions to avoid walking off bridges
-            if (waypoints[i].zplane != player_zplane && waypoints[i + 1].zplane != player_zplane) {
+            // (only relevant when player is on a bridge, not on the ground)
+            if (player_zplane != 0 && waypoints[i].zplane != player_zplane && waypoints[i + 1].zplane != player_zplane) {
                 return waypoints[i];
             }
             // Stop at sharp corners to avoid cutting through walls
