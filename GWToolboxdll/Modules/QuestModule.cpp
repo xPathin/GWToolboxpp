@@ -45,6 +45,7 @@ namespace {
     clock_t questing_mode_last_eval = 0;
     constexpr clock_t QUESTING_MODE_EVAL_INTERVAL_MS = 1000;
     GW::Constants::QuestID questing_mode_selected_quest = GW::Constants::QuestID::None;
+    std::set<GW::Constants::QuestID> questing_mode_tracked_quests;
 
     // Auto-navigate
     bool auto_navigate_active = false;
@@ -415,6 +416,34 @@ namespace {
         }
     }
 
+    // --- Quest log change detection ---
+
+    void RebuildTrackedQuests()
+    {
+        questing_mode_tracked_quests.clear();
+        const auto quest_log = GW::QuestMgr::GetQuestLog();
+        if (!quest_log) return;
+        for (const auto& quest : *quest_log) {
+            questing_mode_tracked_quests.insert(quest.quest_id);
+        }
+    }
+
+    bool CheckForQuestRemovals()
+    {
+        const auto quest_log = GW::QuestMgr::GetQuestLog();
+        if (!quest_log) return false;
+        std::set<GW::Constants::QuestID> current;
+        for (const auto& quest : *quest_log) {
+            current.insert(quest.quest_id);
+        }
+        bool removed = false;
+        for (const auto& id : questing_mode_tracked_quests) {
+            if (!current.contains(id)) { removed = true; break; }
+        }
+        questing_mode_tracked_quests = std::move(current);
+        return removed;
+    }
+
     // --- Auto-navigate helpers ---
 
     // Find a point on the path `distance` units ahead of the player's closest position.
@@ -653,6 +682,7 @@ namespace {
             case GW::UI::UIMessage::kQuestAdded: {
                 const auto quest = GW::QuestMgr::GetQuest(*(GW::Constants::QuestID*)wparam);
                 if (!quest) break;
+                questing_mode_tracked_quests.insert(quest->quest_id);
                 if (quest->quest_id == custom_quest_id) {
                     quest->log_state |= 1; // Avoid asking for description about this quest
                 }
@@ -707,9 +737,18 @@ namespace {
     {
         if (status->blocked) return;
         switch (message_id) {
-            case GW::UI::UIMessage::kQuestDetailsChanged:
-                RefreshQuestPath(*static_cast<GW::Constants::QuestID*>(packet));
-                break;
+            case GW::UI::UIMessage::kQuestDetailsChanged: {
+                const auto quest_id = *static_cast<GW::Constants::QuestID*>(packet);
+                RefreshQuestPath(quest_id);
+                if (questing_mode_enabled && quest_id == GW::QuestMgr::GetActiveQuestId()) {
+                    const auto quest = GW::QuestMgr::GetQuest(quest_id);
+                    const auto current_map = GW::Map::GetMapID();
+                    if (quest && quest->map_to != current_map
+                        && quest->map_to != GW::Constants::MapID::None) {
+                        questing_mode_evaluation_queued = true;
+                    }
+                }
+            } break;
             case GW::UI::UIMessage::kClientActiveQuestChanged:
             case GW::UI::UIMessage::kQuestAdded:
                 RefreshQuestPath(*static_cast<GW::Constants::QuestID*>(packet));
@@ -734,6 +773,7 @@ namespace {
             if (quest_id_before_map_load == custom_quest_marker.quest_id) GW::QuestMgr::SetActiveQuestId(quest_id_before_map_load);
         }
         RefreshAllQuestPaths();
+        RebuildTrackedQuests();
         if (auto_navigate_active) {
             auto_navigate_started = TIMER_INIT();
             auto_navigate_last_move_time = 0;
@@ -967,7 +1007,7 @@ void QuestModule::Initialize()
 
     constexpr GW::UI::UIMessage ui_messages[] = {GW::UI::UIMessage::kQuestDetailsChanged, GW::UI::UIMessage::kQuestAdded,      GW::UI::UIMessage::kClientActiveQuestChanged, GW::UI::UIMessage::kServerActiveQuestChanged,
                                                  GW::UI::UIMessage::kMapLoaded,           GW::UI::UIMessage::kOnScreenMessage, GW::UI::UIMessage::kSendSetActiveQuest,       GW::UI::UIMessage::kSendAbandonQuest,
-                                                 GW::UI::UIMessage::kStartMapLoad,        GW::UI::UIMessage::kQuestRemoved};
+                                                 GW::UI::UIMessage::kStartMapLoad};
     for (const auto ui_message : ui_messages) {
         // Post callbacks, non blocking
         GW::UI::RegisterUIMessageCallback(&pre_ui_message_entry, ui_message, OnPreUIMessage, -0x4000);
@@ -1183,27 +1223,32 @@ check_paths:
         }
     }
 
-    // Run queued evaluation (instant for hotkey toggle, deferred for map load, or quest log change)
+    // Questing mode evaluation
+    bool force_eval = false;
     if (questing_mode_evaluation_queued) {
         questing_mode_evaluation_queued = false;
         questing_mode_evaluation_deferred_at = 0;
-        BeginQuestingModeEvaluation(true);
-        if (auto_navigate_paused_for_eval) {
-            auto_navigate_paused_for_eval = false;
-            auto_navigate_started = TIMER_INIT();
-        }
+        force_eval = true;
     }
     else if (questing_mode_evaluation_deferred_at && TIMER_DIFF(questing_mode_evaluation_deferred_at) > QUESTING_MODE_EVAL_DEFER_MS) {
         questing_mode_evaluation_deferred_at = 0;
+        force_eval = true;
+    }
+    else if (questing_mode_enabled && TIMER_DIFF(questing_mode_last_eval) > QUESTING_MODE_EVAL_INTERVAL_MS) {
+        questing_mode_last_eval = TIMER_INIT();
+        if (CheckForQuestRemovals()) {
+            force_eval = true;
+        } else {
+            BeginQuestingModeEvaluation();
+        }
+    }
+
+    if (force_eval) {
         BeginQuestingModeEvaluation(true);
         if (auto_navigate_paused_for_eval) {
             auto_navigate_paused_for_eval = false;
             auto_navigate_started = TIMER_INIT();
         }
-    }
-    else if (questing_mode_enabled && TIMER_DIFF(questing_mode_last_eval) > QUESTING_MODE_EVAL_INTERVAL_MS) {
-        questing_mode_last_eval = TIMER_INIT();
-        BeginQuestingModeEvaluation();
     }
 }
 
