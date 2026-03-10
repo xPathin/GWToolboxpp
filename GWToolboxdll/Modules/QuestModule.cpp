@@ -56,6 +56,10 @@ namespace {
     constexpr clock_t AUTO_NAV_GRACE_PERIOD_MS = 5000;
     constexpr float AUTO_NAV_LOOK_AHEAD = 250.f;
     constexpr float AUTO_NAV_ARRIVAL_DIST_SQ = 200.f * 200.f;
+    GW::GamePos auto_navigate_last_pos = {};
+    clock_t auto_navigate_last_progress_time = 0;
+    constexpr clock_t AUTO_NAV_STUCK_TIMEOUT_MS = 4000;
+    constexpr float AUTO_NAV_STUCK_DIST_SQ = 30.f * 30.f;
     // Configurable hotkeys (modifier flags: 1=Ctrl, 2=Shift, 4=Alt)
     DWORD questing_mode_hotkey_modifiers = 1;
     DWORD questing_mode_hotkey_key = 'Q';
@@ -515,6 +519,21 @@ namespace {
             if (waypoints[i].zplane != player_zplane && waypoints[i + 1].zplane != player_zplane) {
                 return waypoints[i];
             }
+            // Stop at sharp corners to avoid cutting through walls
+            if (i + 2 < waypoints.size()) {
+                const float seg1x = waypoints[i + 1].x - waypoints[i].x;
+                const float seg1y = waypoints[i + 1].y - waypoints[i].y;
+                const float seg2x = waypoints[i + 2].x - waypoints[i + 1].x;
+                const float seg2y = waypoints[i + 2].y - waypoints[i + 1].y;
+                const float len1_sq = seg1x * seg1x + seg1y * seg1y;
+                const float len2_sq = seg2x * seg2x + seg2y * seg2y;
+                if (len1_sq > 0.01f && len2_sq > 0.01f) {
+                    const float dot = (seg1x * seg2x + seg1y * seg2y) / sqrtf(len1_sq * len2_sq);
+                    if (dot < 0.5f) {
+                        return waypoints[i + 1];
+                    }
+                }
+            }
             const float dx = waypoints[i + 1].x - waypoints[i].x;
             const float dy = waypoints[i + 1].y - waypoints[i].y;
             const float len = sqrtf(dx * dx + dy * dy);
@@ -541,11 +560,12 @@ namespace {
 
     void BeginQuestingModeEvaluation(bool force = false)
     {
+        Log::Log("[QuestMode] BeginQuestingModeEvaluation(force=%d)\n", force);
         if (!questing_mode_enabled) return;
         const auto pos = GetPlayerPos();
-        if (!pos) return;
+        if (!pos) { Log::Log("[QuestMode]   no player pos\n"); return; }
         const auto quest_log = GW::QuestMgr::GetQuestLog();
-        if (!quest_log) return;
+        if (!quest_log) { Log::Log("[QuestMode]   no quest log\n"); return; }
 
         // Track same-map and cross-map candidates separately so that quests
         // actually on this map are preferred over nearby loading zones.
@@ -605,13 +625,21 @@ namespace {
         // as long as it was selected by questing mode, is still on this map, and
         // still in the quest log. If the user manually changed the quest, don't override.
         const auto active_id = GW::QuestMgr::GetActiveQuestId();
+        Log::Log("[QuestMode]   active_id=%d, selected=%d, best_same=%d, best_other=%d\n",
+            (int)active_id, (int)questing_mode_selected_quest, (int)best_same_map_id, (int)best_other_map_id);
         if (!force && active_id != GW::Constants::QuestID::None) {
-            if (active_id != questing_mode_selected_quest) return; // user manually selected, respect it
+            if (active_id != questing_mode_selected_quest) {
+                Log::Log("[QuestMode]   user manually selected, respecting\n");
+                return;
+            }
             const auto active_quest = GW::QuestMgr::GetQuest(active_id);
             if (active_quest && active_quest->marker.x != INFINITY) {
                 const bool active_on_same_map = active_quest->map_to == current_map_id
                     || active_quest->map_to == GW::Constants::MapID::None;
-                if (active_on_same_map) return; // keep current quest
+                if (active_on_same_map) {
+                    Log::Log("[QuestMode]   keeping current quest (same map)\n");
+                    return;
+                }
             }
         }
 
@@ -619,9 +647,12 @@ namespace {
         const auto best_id = best_same_map_id != GW::Constants::QuestID::None
             ? best_same_map_id : best_other_map_id;
         if (best_id != GW::Constants::QuestID::None && best_id != active_id) {
+            Log::Log("[QuestMode]   selecting quest %d\n", (int)best_id);
             questing_mode_selected_quest = best_id;
             QuestModule::EmulateQuestSelected(best_id);
             RefreshQuestPath(best_id);
+        } else {
+            Log::Log("[QuestMode]   no change (best=%d, active=%d)\n", (int)best_id, (int)active_id);
         }
     }
 
@@ -774,9 +805,14 @@ namespace {
         }
         RefreshAllQuestPaths();
         RebuildTrackedQuests();
+        if (questing_mode_enabled) {
+            questing_mode_evaluation_deferred_at = TIMER_INIT();
+            Log::Log("[QuestMode] OnMapLoaded: set deferred eval timer\n");
+        }
         if (auto_navigate_active) {
             auto_navigate_started = TIMER_INIT();
             auto_navigate_last_move_time = 0;
+            auto_navigate_last_progress_time = TIMER_INIT();
             if (questing_mode_enabled) {
                 auto_navigate_paused_for_eval = true;
             }
@@ -1088,6 +1124,9 @@ bool QuestModule::WndProc(UINT Message, WPARAM wParam, LPARAM)
             if (auto_navigate_active) {
                 auto_navigate_started = TIMER_INIT();
                 auto_navigate_last_move_time = 0;
+                auto_navigate_last_progress_time = TIMER_INIT();
+                const auto p = GetPlayerPos();
+                if (p) auto_navigate_last_pos = *p;
             }
             Log::Flash("Auto-navigate %s", auto_navigate_active ? "enabled" : "disabled");
             // Redraw minimap lines to update color
@@ -1167,7 +1206,10 @@ void QuestModule::Update(float)
                 GW::QuestMgr::RequestQuestInfoId(quest.quest_id, true);
             }
             GW::QuestMgr::SetActiveQuestId(active_quest);
-            if (questing_mode_enabled) questing_mode_evaluation_deferred_at = TIMER_INIT();
+            if (questing_mode_enabled) {
+                questing_mode_evaluation_deferred_at = TIMER_INIT();
+                Log::Log("[QuestMode] FetchMissingQuestInfo callback: set deferred eval timer\n");
+            }
         });
     }
 
@@ -1203,11 +1245,22 @@ check_paths:
             // Path available (possibly recalculating, but old waypoints are usable)
             auto_navigate_started = TIMER_INIT();
 
-            const auto target = GetLookAheadTarget(cqp->waypoints, *pos, AUTO_NAV_LOOK_AHEAD);
+            auto target = GetLookAheadTarget(cqp->waypoints, *pos, AUTO_NAV_LOOK_AHEAD);
 
             if (!auto_navigate_last_move_time || TIMER_DIFF(auto_navigate_last_move_time) > AUTO_NAV_MOVE_INTERVAL_MS) {
-                GW::Agents::Move(target);
+                // Let the game auto-detect the plane; passing A* layer indices causes disconnects
+                GW::Agents::Move(target.x, target.y, 0);
                 auto_navigate_last_move_time = TIMER_INIT();
+            }
+
+            // Stuck detection: stop if player hasn't moved significantly
+            const float moved_sq = GetSquareDistance(*pos, auto_navigate_last_pos);
+            if (moved_sq > AUTO_NAV_STUCK_DIST_SQ) {
+                auto_navigate_last_pos = *pos;
+                auto_navigate_last_progress_time = TIMER_INIT();
+            }
+            else if (auto_navigate_last_progress_time && TIMER_DIFF(auto_navigate_last_progress_time) > AUTO_NAV_STUCK_TIMEOUT_MS) {
+                StopAutoNavigate("stuck - no progress");
             }
 
             // Check if arrived at destination; if the quest marker is on another
@@ -1227,11 +1280,12 @@ check_paths:
     bool force_eval = false;
     if (questing_mode_evaluation_queued) {
         questing_mode_evaluation_queued = false;
-        questing_mode_evaluation_deferred_at = 0;
+        Log::Log("[QuestMode] PATH 1: queued eval triggered\n");
         force_eval = true;
     }
     else if (questing_mode_evaluation_deferred_at && TIMER_DIFF(questing_mode_evaluation_deferred_at) > QUESTING_MODE_EVAL_DEFER_MS) {
         questing_mode_evaluation_deferred_at = 0;
+        Log::Log("[QuestMode] PATH 2: deferred eval triggered\n");
         force_eval = true;
     }
     else if (questing_mode_enabled && TIMER_DIFF(questing_mode_last_eval) > QUESTING_MODE_EVAL_INTERVAL_MS) {
@@ -1248,6 +1302,7 @@ check_paths:
         if (auto_navigate_paused_for_eval) {
             auto_navigate_paused_for_eval = false;
             auto_navigate_started = TIMER_INIT();
+            auto_navigate_last_progress_time = TIMER_INIT();
         }
     }
 }
