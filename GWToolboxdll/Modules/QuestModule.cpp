@@ -57,9 +57,16 @@ namespace {
     constexpr float AUTO_NAV_ARRIVAL_DIST_SQ = 200.f * 200.f;
     GW::GamePos auto_navigate_last_pos = {};
     clock_t auto_navigate_last_progress_time = 0;
-    constexpr clock_t AUTO_NAV_STUCK_TIMEOUT_MS = 8000;
+    constexpr clock_t AUTO_NAV_STUCK_TIMEOUT_MS = 3000;
     constexpr float AUTO_NAV_STUCK_DIST_SQ = 30.f * 30.f;
     constexpr float AUTO_NAV_LOOK_AHEAD = 300.f;
+    constexpr float AUTO_NAV_UNSTUCK_DIST = 100.f;
+    constexpr int AUTO_NAV_UNSTUCK_MAX_ATTEMPTS = 4;
+    int auto_navigate_unstuck_attempts = 0;
+    clock_t auto_navigate_unstuck_time = 0;
+    constexpr clock_t AUTO_NAV_UNSTUCK_MOVE_MS = 1000;
+    GW::GamePos auto_navigate_bridge_exit = {};
+    constexpr float AUTO_NAV_BRIDGE_EXIT_CLEAR_SQ = 150.f * 150.f;
     // Configurable hotkeys (modifier flags: 1=Ctrl, 2=Shift, 4=Alt)
     DWORD questing_mode_hotkey_modifiers = 1;
     DWORD questing_mode_hotkey_key = 'Q';
@@ -654,6 +661,9 @@ namespace {
     {
         if (!auto_navigate_active) return;
         auto_navigate_active = false;
+        auto_navigate_unstuck_attempts = 0;
+        auto_navigate_unstuck_time = 0;
+        auto_navigate_bridge_exit = {};
         Log::Warning("Auto-navigate stopped: %s", reason);
         // Redraw minimap lines to revert color
         const auto active_id = GW::QuestMgr::GetActiveQuestId();
@@ -1354,44 +1364,76 @@ check_paths:
             const size_t min_seg = cqp->current_waypoint > 0 ? cqp->current_waypoint - 1 : 0;
             auto target = GetLookAheadTarget(cqp->waypoints, *pos, AUTO_NAV_LOOK_AHEAD, min_seg);
 
+            // Clear sticky bridge exit once we're close enough
+            if (auto_navigate_bridge_exit.x != 0.f || auto_navigate_bridge_exit.y != 0.f) {
+                if (GetSquareDistance(*pos, auto_navigate_bridge_exit) < AUTO_NAV_BRIDGE_EXIT_CLEAR_SQ) {
+                    auto_navigate_bridge_exit = {};
+                }
+            }
+
             if (!auto_navigate_last_move_time || TIMER_DIFF(auto_navigate_last_move_time) > AUTO_NAV_MOVE_INTERVAL_MS) {
-                if (pos->zplane != 0) {
-                    // On a bridge: Move() with any zplane disconnects or
-                    // routes backward. Scan ahead to find the first ground
-                    // waypoint past the bridge and move directly there.
-                    GW::GamePos bridge_exit = {};
+                if (pos->zplane != 0 && auto_navigate_bridge_exit.x == 0.f && auto_navigate_bridge_exit.y == 0.f) {
+                    // On a bridge without a cached exit: scan ahead to find
+                    // the first ground waypoint past the bridge.
                     bool found_bridge = false;
                     for (size_t i = min_seg; i < cqp->waypoints.size(); i++) {
                         if (cqp->waypoints[i].zplane != 0) {
                             found_bridge = true;
                         }
                         else if (found_bridge) {
-                            bridge_exit = cqp->waypoints[i];
+                            auto_navigate_bridge_exit = cqp->waypoints[i];
                             break;
                         }
                     }
-                    if (bridge_exit.x != 0.f || bridge_exit.y != 0.f) {
-                        GW::Agents::Move(bridge_exit.x, bridge_exit.y, 0);
-                    } else {
-                        // No ground past bridge (ramp or elevated destination),
-                        // normal Move works since ramps connect to ground.
-                        GW::Agents::Move(target.x, target.y, 0);
-                    }
-                    auto_navigate_last_move_time = TIMER_INIT();
+                }
+
+                if (auto_navigate_bridge_exit.x != 0.f || auto_navigate_bridge_exit.y != 0.f) {
+                    // Sticky: keep moving to bridge exit until close
+                    GW::Agents::Move(auto_navigate_bridge_exit.x, auto_navigate_bridge_exit.y, 0);
+                } else if (pos->zplane != 0) {
+                    // No ground past bridge (ramp or elevated destination),
+                    // normal Move works since ramps connect to ground.
+                    GW::Agents::Move(target.x, target.y, 0);
                 } else {
                     GW::Agents::Move(target.x, target.y, 0);
-                    auto_navigate_last_move_time = TIMER_INIT();
                 }
+                auto_navigate_last_move_time = TIMER_INIT();
             }
 
-            // Stuck detection: stop if player hasn't moved significantly
+            // Stuck detection and unstuck attempts
             const float moved_sq = GetSquareDistance(*pos, auto_navigate_last_pos);
             if (moved_sq > AUTO_NAV_STUCK_DIST_SQ) {
                 auto_navigate_last_pos = *pos;
                 auto_navigate_last_progress_time = TIMER_INIT();
+                if (auto_navigate_unstuck_attempts > 0) {
+                    // Unstuck worked, reset
+                    auto_navigate_unstuck_attempts = 0;
+                    auto_navigate_unstuck_time = 0;
+                }
             }
             else if (auto_navigate_last_progress_time && TIMER_DIFF(auto_navigate_last_progress_time) > AUTO_NAV_STUCK_TIMEOUT_MS) {
-                StopAutoNavigate("stuck - no progress");
+                if (auto_navigate_unstuck_attempts >= AUTO_NAV_UNSTUCK_MAX_ATTEMPTS) {
+                    StopAutoNavigate("stuck - no progress");
+                }
+                else if (!auto_navigate_unstuck_time || TIMER_DIFF(auto_navigate_unstuck_time) > AUTO_NAV_UNSTUCK_MOVE_MS) {
+                    // Move perpendicular to path direction to slide off obstacle.
+                    // Alternate left/right each attempt.
+                    const float dx = target.x - pos->x;
+                    const float dy = target.y - pos->y;
+                    const float len = sqrtf(dx * dx + dy * dy);
+                    if (len > 1.f) {
+                        const float nx = dx / len;
+                        const float ny = dy / len;
+                        const float sign = (auto_navigate_unstuck_attempts % 2 == 0) ? 1.f : -1.f;
+                        // Perpendicular: rotate 90 degrees
+                        const float px = -ny * sign;
+                        const float py = nx * sign;
+                        GW::Agents::Move(pos->x + px * AUTO_NAV_UNSTUCK_DIST, pos->y + py * AUTO_NAV_UNSTUCK_DIST, 0);
+                        auto_navigate_last_move_time = TIMER_INIT();
+                    }
+                    auto_navigate_unstuck_attempts++;
+                    auto_navigate_unstuck_time = TIMER_INIT();
+                }
             }
 
             // Check if arrived at destination; if the quest marker is on another
