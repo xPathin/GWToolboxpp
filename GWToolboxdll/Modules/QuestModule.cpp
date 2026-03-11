@@ -52,14 +52,14 @@ namespace {
     bool auto_navigate_paused_for_eval = false;
     clock_t auto_navigate_last_move_time = 0;
     clock_t auto_navigate_started = 0;
-    constexpr clock_t AUTO_NAV_MOVE_INTERVAL_MS = 500;
+    constexpr clock_t AUTO_NAV_MOVE_INTERVAL_MS = 250;
     constexpr clock_t AUTO_NAV_GRACE_PERIOD_MS = 5000;
-    constexpr float AUTO_NAV_LOOK_AHEAD = 250.f;
     constexpr float AUTO_NAV_ARRIVAL_DIST_SQ = 200.f * 200.f;
     GW::GamePos auto_navigate_last_pos = {};
     clock_t auto_navigate_last_progress_time = 0;
-    constexpr clock_t AUTO_NAV_STUCK_TIMEOUT_MS = 4000;
+    constexpr clock_t AUTO_NAV_STUCK_TIMEOUT_MS = 8000;
     constexpr float AUTO_NAV_STUCK_DIST_SQ = 30.f * 30.f;
+    constexpr float AUTO_NAV_LOOK_AHEAD = 200.f;
     // Configurable hotkeys (modifier flags: 1=Ctrl, 2=Shift, 4=Alt)
     DWORD questing_mode_hotkey_modifiers = 1;
     DWORD questing_mode_hotkey_key = 'Q';
@@ -250,29 +250,43 @@ namespace {
             const auto waypoint_len = waypoints.size();
             if (!waypoint_len) return false;
 
-            const auto from_end_waypoint = GetSquareDistance(from, waypoints.back());
-            // Find next waypoint, preferring same zplane to avoid snapping
-            // to terrain under a bridge (or vice versa).
-            // Only filter by zplane when on a bridge (zplane != 0); on the
-            // ground, bridges overhead can tag waypoints with their zplane.
+            // Find closest segment using perpendicular projection.
+            // Only search current segment and forward to prevent backward jumps.
             const uint32_t player_zplane = from.zplane;
-            current_waypoint = waypoint_len - 1;
-            for (size_t i = 1; i < waypoint_len; i++) {
-                if (player_zplane != 0 && waypoints[i].zplane != player_zplane) continue;
-                if (GetSquareDistance(from, waypoints[i]) < from_end_waypoint) {
-                    current_waypoint = i;
-                    break;
+            const size_t search_start = current_waypoint > 0 ? current_waypoint - 1 : 0;
+            size_t best_seg = search_start;
+            float best_dist_sq = FLT_MAX;
+            size_t fallback_seg = search_start;
+            float fallback_dist_sq = FLT_MAX;
+            for (size_t i = search_start; i + 1 < waypoint_len; i++) {
+                const float sx = waypoints[i + 1].x - waypoints[i].x;
+                const float sy = waypoints[i + 1].y - waypoints[i].y;
+                const float seg_len_sq = sx * sx + sy * sy;
+                float t = 0.f;
+                if (seg_len_sq > 0.01f) {
+                    t = ((from.x - waypoints[i].x) * sx + (from.y - waypoints[i].y) * sy) / seg_len_sq;
+                    if (t < 0.f) t = 0.f;
+                    if (t > 1.f) t = 1.f;
+                }
+                const float px = waypoints[i].x + t * sx;
+                const float py = waypoints[i].y + t * sy;
+                const float dx = from.x - px;
+                const float dy = from.y - py;
+                const float d = dx * dx + dy * dy;
+                const bool same_plane = player_zplane == 0
+                    || waypoints[i].zplane == player_zplane
+                    || waypoints[i + 1].zplane == player_zplane;
+                if (same_plane && d < best_dist_sq) {
+                    best_dist_sq = d;
+                    best_seg = i;
+                }
+                if (d < fallback_dist_sq) {
+                    fallback_dist_sq = d;
+                    fallback_seg = i;
                 }
             }
-            // Fallback if no same-plane waypoint found
-            if (current_waypoint == waypoint_len - 1) {
-                for (size_t i = 1; i < waypoint_len; i++) {
-                    if (GetSquareDistance(from, waypoints[i]) < from_end_waypoint) {
-                        current_waypoint = i;
-                        break;
-                    }
-                }
-            }
+            if (best_dist_sq == FLT_MAX) best_seg = fallback_seg;
+            current_waypoint = static_cast<uint32_t>(best_seg + 1);
             if (original_waypoint != current_waypoint) {
                 calculated_from = from;
                 UpdateUI();
@@ -347,6 +361,173 @@ namespace {
         return GetSquareDistance(static_cast<GW::Vec2f>(a), static_cast<GW::Vec2f>(b));
     }
 
+    // Insert quadratic Bezier arc points at sharp corners to smooth the path.
+    void SmoothCorners(std::vector<GW::GamePos>& waypoints)
+    {
+        if (waypoints.size() < 3) return;
+        std::vector<GW::GamePos> smoothed;
+        smoothed.reserve(waypoints.size() * 2);
+        smoothed.push_back(waypoints[0]);
+
+        for (size_t i = 1; i + 1 < waypoints.size(); i++) {
+            const auto& prev = waypoints[i - 1];
+            const auto& curr = waypoints[i];
+            const auto& next = waypoints[i + 1];
+
+            // Don't smooth across zplane transitions
+            if (curr.zplane != prev.zplane || curr.zplane != next.zplane) {
+                smoothed.push_back(curr);
+                continue;
+            }
+
+            const float in_dx = curr.x - prev.x;
+            const float in_dy = curr.y - prev.y;
+            const float out_dx = next.x - curr.x;
+            const float out_dy = next.y - curr.y;
+            const float in_len = sqrtf(in_dx * in_dx + in_dy * in_dy);
+            const float out_len = sqrtf(out_dx * out_dx + out_dy * out_dy);
+
+            if (in_len < 1.f || out_len < 1.f) {
+                smoothed.push_back(curr);
+                continue;
+            }
+
+            const float dot = (in_dx * out_dx + in_dy * out_dy) / (in_len * out_len);
+
+            // Only smooth turns > ~25 degrees (dot < 0.9)
+            if (dot > 0.9f) {
+                smoothed.push_back(curr);
+                continue;
+            }
+
+            // Arc radius: fraction of shorter adjacent segment, capped
+            constexpr float ARC_FRACTION = 0.3f;
+            constexpr float MAX_ARC_RADIUS = 100.f;
+            const float radius = std::min(MAX_ARC_RADIUS, ARC_FRACTION * std::min(in_len, out_len));
+
+            // Arc start/end: pull back from the corner along incoming/outgoing
+            const float start_x = curr.x - (in_dx / in_len) * radius;
+            const float start_y = curr.y - (in_dy / in_len) * radius;
+            const float end_x = curr.x + (out_dx / out_len) * radius;
+            const float end_y = curr.y + (out_dy / out_len) * radius;
+
+            smoothed.push_back(GW::GamePos(start_x, start_y, curr.zplane));
+
+            // Quadratic Bezier with corner as control point
+            const int arc_points = dot < 0.f ? 3 : 2;
+            for (int j = 1; j <= arc_points; j++) {
+                const float t = static_cast<float>(j) / (arc_points + 1);
+                const float ax = start_x + t * (curr.x - start_x);
+                const float ay = start_y + t * (curr.y - start_y);
+                const float bx = curr.x + t * (end_x - curr.x);
+                const float by = curr.y + t * (end_y - curr.y);
+                smoothed.push_back(GW::GamePos(ax + t * (bx - ax), ay + t * (by - ay), curr.zplane));
+            }
+
+            smoothed.push_back(GW::GamePos(end_x, end_y, curr.zplane));
+        }
+
+        smoothed.push_back(waypoints.back());
+        waypoints = std::move(smoothed);
+    }
+
+    // Walk forward along the path from the player's closest point by look_ahead units.
+    // Returns the target position for navigation.
+    GW::GamePos GetLookAheadTarget(const std::vector<GW::GamePos>& waypoints,
+                                    const GW::GamePos& player_pos, float look_ahead,
+                                    size_t min_segment = 0)
+    {
+        if (waypoints.size() < 2) return waypoints.empty() ? player_pos : waypoints[0];
+
+        const uint32_t player_zplane = player_pos.zplane;
+
+        // 1. Find closest point on the path via segment projection
+        // Only search from min_segment forward to prevent backward jumps.
+        size_t best_seg = min_segment;
+        float best_t = 0.f;
+        float best_dist_sq = FLT_MAX;
+        size_t fallback_seg = min_segment;
+        float fallback_t = 0.f;
+        float fallback_dist_sq = FLT_MAX;
+
+        for (size_t i = min_segment; i + 1 < waypoints.size(); i++) {
+            const float sx = waypoints[i + 1].x - waypoints[i].x;
+            const float sy = waypoints[i + 1].y - waypoints[i].y;
+            const float seg_len_sq = sx * sx + sy * sy;
+            float t = 0.f;
+            if (seg_len_sq > 0.01f) {
+                t = ((player_pos.x - waypoints[i].x) * sx + (player_pos.y - waypoints[i].y) * sy) / seg_len_sq;
+                if (t < 0.f) t = 0.f;
+                if (t > 1.f) t = 1.f;
+            }
+            const float px = waypoints[i].x + t * sx;
+            const float py = waypoints[i].y + t * sy;
+            const float dx = player_pos.x - px;
+            const float dy = player_pos.y - py;
+            const float d = dx * dx + dy * dy;
+
+            const bool same_plane = player_zplane == 0
+                || waypoints[i].zplane == player_zplane
+                || waypoints[i + 1].zplane == player_zplane;
+            if (same_plane && d < best_dist_sq) {
+                best_dist_sq = d;
+                best_seg = i;
+                best_t = t;
+            }
+            if (d < fallback_dist_sq) {
+                fallback_dist_sq = d;
+                fallback_seg = i;
+                fallback_t = t;
+            }
+        }
+        if (best_dist_sq == FLT_MAX) {
+            best_seg = fallback_seg;
+            best_t = fallback_t;
+        }
+
+        // 2. Walk forward from the projection point by look_ahead distance
+        const float sx = waypoints[best_seg + 1].x - waypoints[best_seg].x;
+        const float sy = waypoints[best_seg + 1].y - waypoints[best_seg].y;
+        const float seg_len = sqrtf(sx * sx + sy * sy);
+        float remaining = look_ahead - (1.f - best_t) * seg_len;
+
+        if (remaining <= 0.f) {
+            // Target is on the current segment
+            const float target_t = best_t + look_ahead / std::max(seg_len, 0.01f);
+            return GW::GamePos(
+                waypoints[best_seg].x + target_t * sx,
+                waypoints[best_seg].y + target_t * sy,
+                waypoints[best_seg].zplane
+            );
+        }
+
+        // Walk through subsequent segments
+        for (size_t i = best_seg + 1; i + 1 < waypoints.size(); i++) {
+            // Stop at zplane transitions when on a bridge
+            if (player_zplane != 0
+                && waypoints[i].zplane != player_zplane
+                && waypoints[i + 1].zplane != player_zplane) {
+                return waypoints[i];
+            }
+
+            const float dx = waypoints[i + 1].x - waypoints[i].x;
+            const float dy = waypoints[i + 1].y - waypoints[i].y;
+            const float len = sqrtf(dx * dx + dy * dy);
+
+            if (remaining <= len) {
+                const float t = remaining / std::max(len, 0.01f);
+                return GW::GamePos(
+                    waypoints[i].x + t * dx,
+                    waypoints[i].y + t * dy,
+                    waypoints[i].zplane
+                );
+            }
+            remaining -= len;
+        }
+
+        return waypoints.back();
+    }
+
     // Called by PathfindingWindow when a path has been calculated. Should be on the main loop.
     void OnQuestPathRecalculated(std::vector<GW::GamePos>& waypoints, void* args)
     {
@@ -361,25 +542,42 @@ namespace {
                 // Waypoint array is in descending distance, flip it
                 std::ranges::reverse(cqp->waypoints);
             }
-            const auto from_end_waypoint = GetSquareDistance(cqp->calculated_from, cqp->waypoints.back());
+            SmoothCorners(cqp->waypoints);
+            // Find closest segment using perpendicular projection
             const uint32_t player_zplane = cqp->calculated_from.zplane;
-            // Find next waypoint, preferring same zplane (only filter on bridges)
-            cqp->current_waypoint = waypoint_len - 1;
-            for (size_t i = 1; i < waypoint_len; i++) {
-                if (player_zplane != 0 && cqp->waypoints[i].zplane != player_zplane) continue;
-                if (GetSquareDistance(cqp->calculated_from, cqp->waypoints[i]) < from_end_waypoint) {
-                    cqp->current_waypoint = i;
-                    break;
+            size_t best_seg = 0;
+            float best_dist_sq = FLT_MAX;
+            size_t fallback_seg = 0;
+            float fallback_dist_sq = FLT_MAX;
+            for (size_t i = 0; i + 1 < waypoint_len; i++) {
+                const float sx = cqp->waypoints[i + 1].x - cqp->waypoints[i].x;
+                const float sy = cqp->waypoints[i + 1].y - cqp->waypoints[i].y;
+                const float seg_len_sq = sx * sx + sy * sy;
+                float t = 0.f;
+                if (seg_len_sq > 0.01f) {
+                    t = ((cqp->calculated_from.x - cqp->waypoints[i].x) * sx + (cqp->calculated_from.y - cqp->waypoints[i].y) * sy) / seg_len_sq;
+                    if (t < 0.f) t = 0.f;
+                    if (t > 1.f) t = 1.f;
+                }
+                const float px = cqp->waypoints[i].x + t * sx;
+                const float py = cqp->waypoints[i].y + t * sy;
+                const float dx = cqp->calculated_from.x - px;
+                const float dy = cqp->calculated_from.y - py;
+                const float d = dx * dx + dy * dy;
+                const bool same_plane = player_zplane == 0
+                    || cqp->waypoints[i].zplane == player_zplane
+                    || cqp->waypoints[i + 1].zplane == player_zplane;
+                if (same_plane && d < best_dist_sq) {
+                    best_dist_sq = d;
+                    best_seg = i;
+                }
+                if (d < fallback_dist_sq) {
+                    fallback_dist_sq = d;
+                    fallback_seg = i;
                 }
             }
-            if (cqp->current_waypoint == waypoint_len - 1) {
-                for (size_t i = 1; i < waypoint_len; i++) {
-                    if (GetSquareDistance(cqp->calculated_from, cqp->waypoints[i]) < from_end_waypoint) {
-                        cqp->current_waypoint = i;
-                        break;
-                    }
-                }
-            }
+            if (best_dist_sq == FLT_MAX) best_seg = fallback_seg;
+            cqp->current_waypoint = static_cast<uint32_t>(best_seg + 1);
         }
         cqp->calculated_at = TIMER_INIT();
         cqp->calculating = 0;
@@ -451,106 +649,6 @@ namespace {
     }
 
     // --- Auto-navigate helpers ---
-
-    // Find a point on the path `distance` units ahead of the player's closest position.
-    // Used for smooth look-ahead navigation.
-    GW::GamePos GetLookAheadTarget(const std::vector<GW::GamePos>& waypoints, const GW::GamePos& player_pos, float distance)
-    {
-        if (waypoints.empty()) return player_pos;
-
-        // Find closest segment on the same zplane as the player. When on a
-        // bridge this prevents latching onto ground segments below. On the
-        // ground (zplane 0) we skip the preference because bridges overhead
-        // can tag waypoints with their zplane.
-        const uint32_t player_zplane = player_pos.zplane;
-        size_t best_seg = 0;
-        float best_dist_sq = FLT_MAX;
-        float best_t = 0.f;
-        size_t fallback_seg = 0;
-        float fallback_dist_sq = FLT_MAX;
-        float fallback_t = 0.f;
-
-        for (size_t i = 0; i + 1 < waypoints.size(); i++) {
-            const float sx = waypoints[i + 1].x - waypoints[i].x;
-            const float sy = waypoints[i + 1].y - waypoints[i].y;
-            const float seg_len_sq = sx * sx + sy * sy;
-            float t = 0.f;
-            if (seg_len_sq > 0.01f) {
-                t = ((player_pos.x - waypoints[i].x) * sx + (player_pos.y - waypoints[i].y) * sy) / seg_len_sq;
-                if (t < 0.f) t = 0.f;
-                if (t > 1.f) t = 1.f;
-            }
-            const float px = waypoints[i].x + t * sx;
-            const float py = waypoints[i].y + t * sy;
-            const float dx = player_pos.x - px;
-            const float dy = player_pos.y - py;
-            const float d = dx * dx + dy * dy;
-
-            const bool same_plane = player_zplane == 0
-                || waypoints[i].zplane == player_zplane
-                || waypoints[i + 1].zplane == player_zplane;
-            if (same_plane && d < best_dist_sq) {
-                best_dist_sq = d;
-                best_seg = i;
-                best_t = t;
-            }
-            if (d < fallback_dist_sq) {
-                fallback_dist_sq = d;
-                fallback_seg = i;
-                fallback_t = t;
-            }
-        }
-
-        if (best_dist_sq == FLT_MAX) {
-            best_seg = fallback_seg;
-            best_t = fallback_t;
-        }
-
-        // Walk forward from projection point by `distance`
-        const float sx = waypoints[best_seg + 1].x - waypoints[best_seg].x;
-        const float sy = waypoints[best_seg + 1].y - waypoints[best_seg].y;
-        const float seg_len = sqrtf(sx * sx + sy * sy);
-        float remaining = distance;
-        const float left_on_seg = (1.f - best_t) * seg_len;
-        if (remaining <= left_on_seg && seg_len > 0.01f) {
-            const float frac = best_t + (remaining / seg_len);
-            return GW::GamePos(waypoints[best_seg].x + frac * sx, waypoints[best_seg].y + frac * sy);
-        }
-        remaining -= left_on_seg;
-
-        for (size_t i = best_seg + 1; i + 1 < waypoints.size(); i++) {
-            // Stop at plane transitions to avoid walking off bridges
-            // (only relevant when player is on a bridge, not on the ground)
-            if (player_zplane != 0 && waypoints[i].zplane != player_zplane && waypoints[i + 1].zplane != player_zplane) {
-                return waypoints[i];
-            }
-            // Stop at sharp corners to avoid cutting through walls
-            if (i + 2 < waypoints.size()) {
-                const float seg1x = waypoints[i + 1].x - waypoints[i].x;
-                const float seg1y = waypoints[i + 1].y - waypoints[i].y;
-                const float seg2x = waypoints[i + 2].x - waypoints[i + 1].x;
-                const float seg2y = waypoints[i + 2].y - waypoints[i + 1].y;
-                const float len1_sq = seg1x * seg1x + seg1y * seg1y;
-                const float len2_sq = seg2x * seg2x + seg2y * seg2y;
-                if (len1_sq > 0.01f && len2_sq > 0.01f) {
-                    const float dot = (seg1x * seg2x + seg1y * seg2y) / sqrtf(len1_sq * len2_sq);
-                    if (dot < 0.5f) {
-                        return waypoints[i + 1];
-                    }
-                }
-            }
-            const float dx = waypoints[i + 1].x - waypoints[i].x;
-            const float dy = waypoints[i + 1].y - waypoints[i].y;
-            const float len = sqrtf(dx * dx + dy * dy);
-            if (len > 0.01f && remaining <= len) {
-                const float frac = remaining / len;
-                return GW::GamePos(waypoints[i].x + frac * dx, waypoints[i].y + frac * dy);
-            }
-            remaining -= len;
-        }
-
-        return waypoints.back();
-    }
 
     void StopAutoNavigate(const char* reason)
     {
@@ -1250,7 +1348,11 @@ check_paths:
             // Path available (possibly recalculating, but old waypoints are usable)
             auto_navigate_started = TIMER_INIT();
 
-            auto target = GetLookAheadTarget(cqp->waypoints, *pos, AUTO_NAV_LOOK_AHEAD);
+            // Look-ahead targeting: find a point AUTO_NAV_LOOK_AHEAD units
+            // ahead along the path from the player's closest position.
+            // This naturally rounds corners instead of running into walls.
+            const size_t min_seg = cqp->current_waypoint > 0 ? cqp->current_waypoint - 1 : 0;
+            auto target = GetLookAheadTarget(cqp->waypoints, *pos, AUTO_NAV_LOOK_AHEAD, min_seg);
 
             if (!auto_navigate_last_move_time || TIMER_DIFF(auto_navigate_last_move_time) > AUTO_NAV_MOVE_INTERVAL_MS) {
                 // Let the game auto-detect the plane; passing A* layer indices causes disconnects
