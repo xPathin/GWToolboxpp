@@ -59,7 +59,7 @@ namespace {
     clock_t auto_navigate_last_progress_time = 0;
     constexpr clock_t AUTO_NAV_STUCK_TIMEOUT_MS = 8000;
     constexpr float AUTO_NAV_STUCK_DIST_SQ = 30.f * 30.f;
-    constexpr float AUTO_NAV_LOOK_AHEAD = 200.f;
+    constexpr float AUTO_NAV_LOOK_AHEAD = 300.f;
     // Configurable hotkeys (modifier flags: 1=Ctrl, 2=Shift, 4=Alt)
     DWORD questing_mode_hotkey_modifiers = 1;
     DWORD questing_mode_hotkey_key = 'Q';
@@ -1355,9 +1355,30 @@ check_paths:
             auto target = GetLookAheadTarget(cqp->waypoints, *pos, AUTO_NAV_LOOK_AHEAD, min_seg);
 
             if (!auto_navigate_last_move_time || TIMER_DIFF(auto_navigate_last_move_time) > AUTO_NAV_MOVE_INTERVAL_MS) {
-                // Let the game auto-detect the plane; passing A* layer indices causes disconnects
-                GW::Agents::Move(target.x, target.y, 0);
-                auto_navigate_last_move_time = TIMER_INIT();
+                if (pos->zplane != 0) {
+                    // On a bridge: Move() with any zplane disconnects or
+                    // routes backward. Scan ahead to find the first ground
+                    // waypoint past the bridge and move directly there.
+                    GW::GamePos bridge_exit = {};
+                    bool found_bridge = false;
+                    for (size_t i = min_seg; i < cqp->waypoints.size(); i++) {
+                        if (cqp->waypoints[i].zplane != 0) {
+                            found_bridge = true;
+                        }
+                        else if (found_bridge) {
+                            bridge_exit = cqp->waypoints[i];
+                            break;
+                        }
+                    }
+                    if (bridge_exit.x != 0.f || bridge_exit.y != 0.f) {
+                        GW::Agents::Move(bridge_exit.x, bridge_exit.y, 0);
+                        auto_navigate_last_move_time = TIMER_INIT();
+                    }
+                    // else: no ground found past bridge, don't move
+                } else {
+                    GW::Agents::Move(target.x, target.y, 0);
+                    auto_navigate_last_move_time = TIMER_INIT();
+                }
             }
 
             // Stuck detection: stop if player hasn't moved significantly
