@@ -1372,9 +1372,12 @@ check_paths:
                     }
                     if (bridge_exit.x != 0.f || bridge_exit.y != 0.f) {
                         GW::Agents::Move(bridge_exit.x, bridge_exit.y, 0);
-                        auto_navigate_last_move_time = TIMER_INIT();
+                    } else {
+                        // No ground past bridge (ramp or elevated destination),
+                        // normal Move works since ramps connect to ground.
+                        GW::Agents::Move(target.x, target.y, 0);
                     }
-                    // else: no ground found past bridge, don't move
+                    auto_navigate_last_move_time = TIMER_INIT();
                 } else {
                     GW::Agents::Move(target.x, target.y, 0);
                     auto_navigate_last_move_time = TIMER_INIT();
