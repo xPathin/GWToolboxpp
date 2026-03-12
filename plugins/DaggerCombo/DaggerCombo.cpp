@@ -4,6 +4,7 @@
 #include <GWCA/GameEntities/Agent.h>
 #include <GWCA/GameEntities/Skill.h>
 #include <GWCA/Managers/AgentMgr.h>
+#include <GWCA/Managers/ItemMgr.h>
 #include <GWCA/Managers/GameThreadMgr.h>
 #include <GWCA/Managers/MapMgr.h>
 #include <GWCA/Managers/SkillbarMgr.h>
@@ -14,6 +15,7 @@ namespace {
     bool enabled = true;
     bool auto_target_nearest = true;
     bool hold_to_combo = true;
+    bool auto_loot = true;
 
     GW::HookEntry keydown_hook;
     GW::HookEntry msg_hooks[3];
@@ -87,6 +89,12 @@ namespace {
         return -1;
     }
 
+    // Auto-loot state
+    uint32_t looting_agent_id = 0;
+    uint32_t loot_attempt_ms = 0;
+    constexpr uint32_t LOOT_TIMEOUT_MS = 5000;
+    constexpr float LOOT_RANGE = GW::Constants::Range::Earshot;
+
     uint32_t combo_deactivated_ms = 0;
     constexpr uint32_t MSG_BLOCK_GRACE_MS = 1000;
 
@@ -97,6 +105,30 @@ namespace {
         return (GW::Map::GetInstanceTime() - combo_deactivated_ms) < MSG_BLOCK_GRACE_MS;
     }
 
+    const GW::AgentItem* FindNearestLootableItem(const GW::AgentLiving* player)
+    {
+        const auto* agents = GW::Agents::GetAgentArray();
+        if (!agents) return nullptr;
+
+        const GW::AgentItem* nearest = nullptr;
+        float nearest_dist = LOOT_RANGE;
+
+        for (auto* agent : *agents) {
+            if (!agent || !agent->GetIsItemType()) continue;
+            const auto* item_agent = agent->GetAsAgentItem();
+            if (!item_agent) continue;
+            if (item_agent->owner != 0 && item_agent->owner != player->agent_id) continue;
+            if (!GW::Items::GetItemById(item_agent->item_id)) continue;
+
+            const float dist = GetDistance(player->pos, agent->pos);
+            if (dist < nearest_dist) {
+                nearest_dist = dist;
+                nearest = item_agent;
+            }
+        }
+        return nearest;
+    }
+
     void DeactivateCombo()
     {
         combo_deactivated_ms = GW::Map::GetInstanceTime();
@@ -105,6 +137,8 @@ namespace {
         tracked_vk = 0;
         cast_pending = false;
         cast_pending_slot = -1;
+        looting_agent_id = 0;
+        loot_attempt_ms = 0;
     }
 
     void AutoTargetNearest()
@@ -300,6 +334,52 @@ void DaggerCombo::Update(float)
         return;
     }
 
+    // Auto-loot: pick up nearby items before engaging new targets
+    if (auto_loot) {
+        // Currently trying to pick something up?
+        if (looting_agent_id) {
+            const auto* loot_agent = GW::Agents::GetAgentByID(looting_agent_id);
+            if (!loot_agent || !loot_agent->GetIsItemType()) {
+                // Item gone (picked up or despawned)
+                looting_agent_id = 0;
+                loot_attempt_ms = 0;
+            } else if (now - loot_attempt_ms > LOOT_TIMEOUT_MS) {
+                // Timeout, give up on this item
+                looting_agent_id = 0;
+                loot_attempt_ms = 0;
+            } else {
+                return; // Still walking to / picking up item
+            }
+        }
+
+        // Only loot when not fighting a living target
+        const auto target_id_check = GW::Agents::GetTargetId();
+        bool has_living_target = false;
+        if (target_id_check) {
+            const auto* t = GW::Agents::GetAgentByID(target_id_check);
+            if (t && t->GetIsLivingType()) {
+                const auto* living = t->GetAsAgentLiving();
+                has_living_target = living && living->GetIsAlive();
+            }
+        }
+
+        if (!has_living_target) {
+            const auto* loot = FindNearestLootableItem(player);
+            if (loot) {
+                looting_agent_id = loot->agent_id;
+                loot_attempt_ms = now;
+                const auto item_id = loot->item_id;
+                GW::GameThread::Enqueue([item_id] {
+                    const auto* item = GW::Items::GetItemById(item_id);
+                    if (item) {
+                        GW::Items::PickUpItem(item);
+                    }
+                });
+                return;
+            }
+        }
+    }
+
     // Check target; retarget if dead or missing
     const auto target_id = GW::Agents::GetTargetId();
     if (target_id) {
@@ -363,6 +443,7 @@ void DaggerCombo::LoadSettings(const wchar_t* folder)
     PLUGIN_LOAD_BOOL(enabled);
     PLUGIN_LOAD_BOOL(auto_target_nearest);
     PLUGIN_LOAD_BOOL(hold_to_combo);
+    PLUGIN_LOAD_BOOL(auto_loot);
 }
 
 void DaggerCombo::SaveSettings(const wchar_t* folder)
@@ -370,6 +451,7 @@ void DaggerCombo::SaveSettings(const wchar_t* folder)
     PLUGIN_SAVE_BOOL(enabled);
     PLUGIN_SAVE_BOOL(auto_target_nearest);
     PLUGIN_SAVE_BOOL(hold_to_combo);
+    PLUGIN_SAVE_BOOL(auto_loot);
     ToolboxPlugin::SaveSettings(folder);
 }
 
@@ -381,11 +463,15 @@ void DaggerCombo::DrawSettings()
     ImGui::Checkbox("Enable 1-Key Dagger Combo", &enabled);
     ImGui::Checkbox("Auto-target nearest enemy", &auto_target_nearest);
     ImGui::Checkbox("Hold to auto-chain combo", &hold_to_combo);
+    ImGui::Checkbox("Auto-loot items before engaging", &auto_loot);
     ImGui::TextWrapped(
         "Press a Lead Attack skill key to automatically chain "
         "through the next Off-Hand and Dual attacks on your skill bar.\n\n"
         "When auto-target is enabled, pressing a Lead Attack with no "
         "target selected will first select the nearest enemy.\n\n"
         "When hold-to-chain is enabled, holding the Lead Attack key "
-        "continuously chains the combo and retargets on kill.");
+        "continuously chains the combo and retargets on kill.\n\n"
+        "When auto-loot is enabled, nearby items are picked up "
+        "before engaging the next enemy. Items that drop during "
+        "combat are looted after the current target dies.");
 }
