@@ -788,7 +788,7 @@ namespace {
         if (best_id != GW::Constants::QuestID::None && best_id != active_id) {
             Log::Log("[QuestMode]   selecting quest %d\n", (int)best_id);
             questing_mode_selected_quest = best_id;
-            QuestModule::EmulateQuestSelected(best_id);
+            QuestModule::SetActiveQuestId(best_id);
             RefreshQuestPath(best_id);
         } else {
             Log::Log("[QuestMode]   no change (best=%d, active=%d)\n", (int)best_id, (int)active_id);
