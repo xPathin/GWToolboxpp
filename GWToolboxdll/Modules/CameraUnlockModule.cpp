@@ -146,7 +146,7 @@ void CameraUnlockModule::LoadSettings(ToolboxIni* ini) {
     LOAD_BOOL(forward_fix_z);
     LOAD_FLOAT(cam_speed);
     LOAD_FLOAT(cam_max_distance);
-    std::clamp(cam_max_distance, 25.f, 5000.f);
+    cam_max_distance = std::clamp(cam_max_distance, 25.f, 5000.f);
     GW::CameraMgr::SetMaxDist(cam_max_distance);
 }
 
@@ -155,7 +155,7 @@ void CameraUnlockModule::SaveSettings(ToolboxIni* ini)
     ToolboxModule::SaveSettings(ini);
     SAVE_BOOL(forward_fix_z);
     SAVE_FLOAT(cam_speed);
-    LOAD_FLOAT(cam_max_distance);
+    SAVE_FLOAT(cam_max_distance);
 }
 void CameraUnlockModule::DrawSettingsInternal()
 {
@@ -166,7 +166,7 @@ void CameraUnlockModule::DrawSettingsInternal()
     ImGui::InputFloat("Camera speed", &cam_speed);
     ImGui::Unindent();
     if (ImGui::InputFloat("Camera max distance", &cam_max_distance)) {
-        std::clamp(cam_max_distance, 25.f, 5000.f);
+        cam_max_distance = std::clamp(cam_max_distance, 25.f, 5000.f);
         GW::CameraMgr::SetMaxDist(cam_max_distance);
     }  
 }
