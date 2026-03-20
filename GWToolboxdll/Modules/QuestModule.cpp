@@ -61,12 +61,20 @@ namespace {
     constexpr float AUTO_NAV_STUCK_DIST_SQ = 30.f * 30.f;
     constexpr float AUTO_NAV_LOOK_AHEAD = 300.f;
     constexpr float AUTO_NAV_UNSTUCK_DIST = 100.f;
-    constexpr int AUTO_NAV_UNSTUCK_MAX_ATTEMPTS = 4;
+    constexpr int AUTO_NAV_UNSTUCK_MAX_ATTEMPTS = 8;
     int auto_navigate_unstuck_attempts = 0;
+    int auto_navigate_recalc_count = 0;
+    constexpr int AUTO_NAV_MAX_RECALCS = 2;
     clock_t auto_navigate_unstuck_time = 0;
     constexpr clock_t AUTO_NAV_UNSTUCK_MOVE_MS = 1000;
-    GW::GamePos auto_navigate_bridge_exit = {};
-    constexpr float AUTO_NAV_BRIDGE_EXIT_CLEAR_SQ = 150.f * 150.f;
+
+    // Party spread: pause when furthest party member is too far behind
+    bool auto_navigate_party_spread_paused = false;
+    constexpr float AUTO_NAV_PARTY_SPREAD_PAUSE_SQ = 1500.f * 1500.f;  // pause threshold
+    constexpr float AUTO_NAV_PARTY_SPREAD_RESUME_SQ = 900.f * 900.f;   // resume threshold (hysteresis)
+
+    // Combat pause for auto-navigate (controlled externally by plugins)
+    bool auto_navigate_combat_paused = false;
     // Configurable hotkeys (modifier flags: 1=Ctrl, 2=Shift, 4=Alt)
     DWORD questing_mode_hotkey_modifiers = 1;
     DWORD questing_mode_hotkey_key = 'Q';
@@ -91,6 +99,7 @@ namespace {
     GW::Constants::QuestID custom_quest_id = static_cast<GW::Constants::QuestID>(0x0000fdd);
     GW::Quest custom_quest_marker;
     GW::Vec2f custom_quest_marker_world_pos;
+    GW::Continent custom_quest_marker_continent = GW::Continent::Kryta;
     GW::Constants::QuestID player_chosen_quest_id = GW::Constants::QuestID::None;
     bool setting_custom_quest_marker = false;
 
@@ -510,13 +519,6 @@ namespace {
 
         // Walk through subsequent segments
         for (size_t i = best_seg + 1; i + 1 < waypoints.size(); i++) {
-            // Stop at zplane transitions when on a bridge
-            if (player_zplane != 0
-                && waypoints[i].zplane != player_zplane
-                && waypoints[i + 1].zplane != player_zplane) {
-                return waypoints[i];
-            }
-
             const float dx = waypoints[i + 1].x - waypoints[i].x;
             const float dy = waypoints[i + 1].y - waypoints[i].y;
             const float len = sqrtf(dx * dx + dy * dy);
@@ -594,7 +596,9 @@ namespace {
     void RefreshQuestPath(GW::Constants::QuestID quest_id)
     {
         GW::GameThread::Enqueue([quest_id] {
-            if (!IsActiveQuestPath(quest_id)) {
+            // Always allow the custom quest marker path (it may become
+            // active after this check due to UI message ordering).
+            if (quest_id != custom_quest_id && !IsActiveQuestPath(quest_id)) {
                 ClearCalculatedPath(quest_id);
                 return;
             }
@@ -603,7 +607,17 @@ namespace {
             if (!pos) return;
             const auto cqp = GetCalculatedQuestPath(quest_id);
             if (!cqp) return;
-            cqp->original_quest_marker = quest->marker;
+            auto marker = quest->marker;
+            // The custom quest marker stores INFINITY in quest->marker even
+            // on the same map. Convert the world map position to game coords.
+            if (quest_id == custom_quest_id && marker.x == INFINITY
+                && custom_quest_marker_world_pos.x != 0.f) {
+                GW::GamePos game_pos;
+                if (WorldMapWidget::WorldMapToGamePos(custom_quest_marker_world_pos, game_pos)) {
+                    marker = game_pos;
+                }
+            }
+            cqp->original_quest_marker = marker;
             cqp->Recalculate(*pos);
         });
     }
@@ -662,8 +676,10 @@ namespace {
         if (!auto_navigate_active) return;
         auto_navigate_active = false;
         auto_navigate_unstuck_attempts = 0;
+        auto_navigate_recalc_count = 0;
         auto_navigate_unstuck_time = 0;
-        auto_navigate_bridge_exit = {};
+        auto_navigate_combat_paused = false;
+        auto_navigate_party_spread_paused = false;
         Log::Warning("Auto-navigate stopped: %s", reason);
         // Redraw minimap lines to revert color
         const auto active_id = GW::QuestMgr::GetActiveQuestId();
@@ -913,8 +929,11 @@ namespace {
         QuestModule::FetchMissingQuestInfo();
         ClearCalculatedQuestPaths();
         if (custom_quest_marker.quest_id != (GW::Constants::QuestID)0) {
-            QuestModule::SetCustomQuestMarker(custom_quest_marker_world_pos, player_chosen_quest_id == custom_quest_marker.quest_id);
-            if (quest_id_before_map_load == custom_quest_marker.quest_id) GW::QuestMgr::SetActiveQuestId(quest_id_before_map_load);
+            const auto map_info = GW::Map::GetMapInfo();
+            if (map_info && map_info->continent == custom_quest_marker_continent) {
+                QuestModule::SetCustomQuestMarker(custom_quest_marker_world_pos, player_chosen_quest_id == custom_quest_marker.quest_id);
+                if (quest_id_before_map_load == custom_quest_marker.quest_id) GW::QuestMgr::SetActiveQuestId(quest_id_before_map_load);
+            }
         }
         RefreshAllQuestPaths();
         RebuildTrackedQuests();
@@ -926,6 +945,8 @@ namespace {
             auto_navigate_started = TIMER_INIT();
             auto_navigate_last_move_time = 0;
             auto_navigate_last_progress_time = TIMER_INIT();
+            auto_navigate_combat_paused = false;
+            auto_navigate_party_spread_paused = false;
             if (questing_mode_enabled) {
                 auto_navigate_paused_for_eval = true;
             }
@@ -948,6 +969,10 @@ void QuestModule::SetCustomQuestMarker(const GW::Vec2f& world_pos, bool set_acti
     Instance().Initialize();
     if (!GW::Agents::GetControlledCharacter()) return; // Map not ready
     custom_quest_marker_world_pos = world_pos;
+    const auto current_map_info = GW::Map::GetMapInfo();
+    if (current_map_info && world_pos.x != 0.f) {
+        custom_quest_marker_continent = current_map_info->continent;
+    }
     if (GW::QuestMgr::GetQuest(custom_quest_id)) {
         struct QuestRemovePacket : GW::Packet::StoC::PacketBase {
             GW::Constants::QuestID quest_id = custom_quest_id;
@@ -1104,6 +1129,9 @@ void QuestModule::LoadSettings(ToolboxIni* ini)
     LOAD_FLOAT(custom_quest_marker_world_pos_x);
     LOAD_FLOAT(custom_quest_marker_world_pos_y);
     LOAD_BOOL(double_click_to_travel_to_quest);
+    uint32_t custom_quest_marker_continent_val = 0;
+    LOAD_UINT(custom_quest_marker_continent_val);
+    custom_quest_marker_continent = static_cast<GW::Continent>(custom_quest_marker_continent_val);
     custom_quest_marker_world_pos = {custom_quest_marker_world_pos_x, custom_quest_marker_world_pos_y};
     GW::GameThread::Enqueue([] {
         SetCustomQuestMarker(custom_quest_marker_world_pos);
@@ -1130,6 +1158,8 @@ void QuestModule::SaveSettings(ToolboxIni* ini)
     float custom_quest_marker_world_pos_y = custom_quest_marker_world_pos.y;
     SAVE_FLOAT(custom_quest_marker_world_pos_x);
     SAVE_FLOAT(custom_quest_marker_world_pos_y);
+    uint32_t custom_quest_marker_continent_val = static_cast<uint32_t>(custom_quest_marker_continent);
+    SAVE_UINT(custom_quest_marker_continent_val);
     SAVE_BOOL(double_click_to_travel_to_quest);
     SAVE_BOOL(keep_current_quest_when_new_quest_added);
     SAVE_BOOL(questing_mode_enabled);
@@ -1330,7 +1360,7 @@ void QuestModule::Update(float)
     const size_t size = calculated_quest_paths.size();
 check_paths:
     for (const auto& [quest_id, calculated_quest_path] : calculated_quest_paths) {
-        if (!IsActiveQuestPath(quest_id)) {
+        if (quest_id != custom_quest_id && !IsActiveQuestPath(quest_id)) {
             ClearCalculatedPath(quest_id);
             ASSERT(size != calculated_quest_paths.size());
             goto check_paths;
@@ -1341,13 +1371,38 @@ check_paths:
         }
     }
 
+    // Party spread check: pause if the furthest party member is too far behind
+    if (auto_navigate_active && !auto_navigate_combat_paused) {
+        float max_dist_sq = 0.f;
+        const auto party_ids = GW::PartyMgr::GetPartyAgentIds();
+        for (const auto agent_id : party_ids) {
+            if (agent_id == GW::Agents::GetControlledCharacterId()) continue;
+            const auto* agent = GW::Agents::GetAgentByID(agent_id);
+            if (!agent || !agent->GetIsLivingType()) continue;
+            const auto* living = agent->GetAsAgentLiving();
+            if (!living || !living->GetIsAlive()) continue;
+            const float d = GetSquareDistance(*pos, agent->pos);
+            if (d > max_dist_sq) max_dist_sq = d;
+        }
+        const float threshold = auto_navigate_party_spread_paused
+            ? AUTO_NAV_PARTY_SPREAD_RESUME_SQ : AUTO_NAV_PARTY_SPREAD_PAUSE_SQ;
+        auto_navigate_party_spread_paused = max_dist_sq > threshold;
+    }
+
     // Auto-navigate: follow waypoints to active quest marker
-    if (auto_navigate_active && !auto_navigate_paused_for_eval) {
+    if (auto_navigate_active && !auto_navigate_paused_for_eval && !auto_navigate_combat_paused && !auto_navigate_party_spread_paused) {
         const auto active_id = GW::QuestMgr::GetActiveQuestId();
         auto* cqp = GetCalculatedQuestPath(active_id, false);
         if (!cqp || cqp->waypoints.empty()) {
-            // Path genuinely not available; trigger calculation if needed
+            // Path not yet available; keep requesting until grace period expires.
+            // Reset the grace timer each time we trigger a new calculation so
+            // post-map-load delays (quest data not yet received) don't kill nav.
             if (!cqp) {
+                RefreshQuestPath(active_id);
+                auto_navigate_started = TIMER_INIT();
+            } else if (!cqp->IsCalculating()) {
+                // Has a path object but empty waypoints and not currently calculating;
+                // re-trigger calculation (quest marker may have updated).
                 RefreshQuestPath(active_id);
             }
             if (TIMER_DIFF(auto_navigate_started) > AUTO_NAV_GRACE_PERIOD_MS) {
@@ -1360,64 +1415,50 @@ check_paths:
 
             // Look-ahead targeting: find a point AUTO_NAV_LOOK_AHEAD units
             // ahead along the path from the player's closest position.
-            // This naturally rounds corners instead of running into walls.
             const size_t min_seg = cqp->current_waypoint > 0 ? cqp->current_waypoint - 1 : 0;
             auto target = GetLookAheadTarget(cqp->waypoints, *pos, AUTO_NAV_LOOK_AHEAD, min_seg);
 
-            // Clear sticky bridge exit once we're close enough
-            if (auto_navigate_bridge_exit.x != 0.f || auto_navigate_bridge_exit.y != 0.f) {
-                if (GetSquareDistance(*pos, auto_navigate_bridge_exit) < AUTO_NAV_BRIDGE_EXIT_CLEAR_SQ) {
-                    auto_navigate_bridge_exit = {};
+            // Only navigate to zplane 0 waypoints. The game handles walking
+            // across bridges/ramps naturally when given a ground destination.
+            if (target.zplane != 0) {
+                // Find the next ground-level waypoint past the elevated section.
+                for (size_t i = min_seg; i < cqp->waypoints.size(); i++) {
+                    if (cqp->waypoints[i].zplane == 0
+                        && GetSquareDistance(*pos, cqp->waypoints[i]) > AUTO_NAV_STUCK_DIST_SQ) {
+                        target = cqp->waypoints[i];
+                        break;
+                    }
                 }
             }
 
             if (!auto_navigate_last_move_time || TIMER_DIFF(auto_navigate_last_move_time) > AUTO_NAV_MOVE_INTERVAL_MS) {
-                if (pos->zplane != 0 && auto_navigate_bridge_exit.x == 0.f && auto_navigate_bridge_exit.y == 0.f) {
-                    // On a bridge without a cached exit: scan ahead to find
-                    // the first ground waypoint past the bridge.
-                    bool found_bridge = false;
-                    for (size_t i = min_seg; i < cqp->waypoints.size(); i++) {
-                        if (cqp->waypoints[i].zplane != 0) {
-                            found_bridge = true;
-                        }
-                        else if (found_bridge) {
-                            auto_navigate_bridge_exit = cqp->waypoints[i];
-                            break;
-                        }
-                    }
-                }
-
-                if (auto_navigate_bridge_exit.x != 0.f || auto_navigate_bridge_exit.y != 0.f) {
-                    // Sticky: keep moving to bridge exit until close
-                    GW::Agents::Move(auto_navigate_bridge_exit.x, auto_navigate_bridge_exit.y, 0);
-                } else if (pos->zplane != 0) {
-                    // No ground past bridge (ramp or elevated destination),
-                    // normal Move works since ramps connect to ground.
-                    GW::Agents::Move(target.x, target.y, 0);
-                } else {
-                    GW::Agents::Move(target.x, target.y, 0);
-                }
+                GW::Agents::Move(target.x, target.y, 0);
                 auto_navigate_last_move_time = TIMER_INIT();
             }
 
-            // Stuck detection and unstuck attempts
+            // Stuck detection
             const float moved_sq = GetSquareDistance(*pos, auto_navigate_last_pos);
             if (moved_sq > AUTO_NAV_STUCK_DIST_SQ) {
                 auto_navigate_last_pos = *pos;
                 auto_navigate_last_progress_time = TIMER_INIT();
                 if (auto_navigate_unstuck_attempts > 0) {
-                    // Unstuck worked, reset
                     auto_navigate_unstuck_attempts = 0;
+                    auto_navigate_recalc_count = 0;
                     auto_navigate_unstuck_time = 0;
                 }
             }
             else if (auto_navigate_last_progress_time && TIMER_DIFF(auto_navigate_last_progress_time) > AUTO_NAV_STUCK_TIMEOUT_MS) {
-                if (auto_navigate_unstuck_attempts >= AUTO_NAV_UNSTUCK_MAX_ATTEMPTS) {
+                // Stuck: first try recalculating the path, then perpendicular moves.
+                if (auto_navigate_recalc_count < AUTO_NAV_MAX_RECALCS) {
+                    auto_navigate_recalc_count++;
+                    auto_navigate_last_progress_time = TIMER_INIT();
+                    RefreshQuestPath(active_id);
+                }
+                else if (auto_navigate_unstuck_attempts >= AUTO_NAV_UNSTUCK_MAX_ATTEMPTS) {
                     StopAutoNavigate("stuck - no progress");
                 }
                 else if (!auto_navigate_unstuck_time || TIMER_DIFF(auto_navigate_unstuck_time) > AUTO_NAV_UNSTUCK_MOVE_MS) {
                     // Move perpendicular to path direction to slide off obstacle.
-                    // Alternate left/right each attempt.
                     const float dx = target.x - pos->x;
                     const float dy = target.y - pos->y;
                     const float len = sqrtf(dx * dx + dy * dy);
@@ -1425,12 +1466,11 @@ check_paths:
                         const float nx = dx / len;
                         const float ny = dy / len;
                         const float sign = (auto_navigate_unstuck_attempts % 2 == 0) ? 1.f : -1.f;
-                        // Perpendicular: rotate 90 degrees
                         const float px = -ny * sign;
                         const float py = nx * sign;
                         GW::Agents::Move(pos->x + px * AUTO_NAV_UNSTUCK_DIST, pos->y + py * AUTO_NAV_UNSTUCK_DIST, 0);
-                        auto_navigate_last_move_time = TIMER_INIT();
                     }
+                    auto_navigate_last_move_time = TIMER_INIT();
                     auto_navigate_unstuck_attempts++;
                     auto_navigate_unstuck_time = TIMER_INIT();
                 }
@@ -1502,4 +1542,21 @@ QuestObjective::QuestObjective(const GW::Constants::QuestID quest_id, const wcha
 QuestObjective::~QuestObjective()
 {
     if (objective_enc) objective_enc->Release();
+}
+
+// Exported for plugins (e.g. DaggerCombo) to pause/resume auto-navigate
+extern "C" __declspec(dllexport) void PauseAutoNavigate()
+{
+    auto_navigate_combat_paused = true;
+}
+
+extern "C" __declspec(dllexport) void ResumeAutoNavigate()
+{
+    if (!auto_navigate_combat_paused) return;
+    auto_navigate_combat_paused = false;
+    auto_navigate_started = TIMER_INIT();
+    auto_navigate_last_progress_time = TIMER_INIT();
+    auto_navigate_unstuck_attempts = 0;
+    auto_navigate_recalc_count = 0;
+    auto_navigate_unstuck_time = 0;
 }

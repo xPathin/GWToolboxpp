@@ -3,9 +3,11 @@
 #include <GWCA/Constants/Constants.h>
 #include <GWCA/GameEntities/Agent.h>
 #include <GWCA/GameEntities/Skill.h>
+#include <GWCA/GameEntities/Party.h>
 #include <GWCA/Managers/AgentMgr.h>
 #include <GWCA/Managers/ItemMgr.h>
 #include <GWCA/Managers/GameThreadMgr.h>
+#include <GWCA/Managers/PartyMgr.h>
 #include <GWCA/Managers/MapMgr.h>
 #include <GWCA/Managers/SkillbarMgr.h>
 #include <GWCA/Managers/UIMgr.h>
@@ -16,6 +18,15 @@ namespace {
     bool auto_target_nearest = true;
     bool hold_to_combo = true;
     bool auto_loot = true;
+    bool auto_engage = false;
+
+    // Auto-engage state
+    bool auto_engage_active = false;
+
+    // Nav control (resolved from GWToolboxdll at init)
+    using NavFn = void(*)();
+    NavFn PauseAutoNavigate = nullptr;
+    NavFn ResumeAutoNavigate = nullptr;
 
     GW::HookEntry keydown_hook;
     GW::HookEntry msg_hooks[3];
@@ -95,6 +106,9 @@ namespace {
     constexpr uint32_t LOOT_TIMEOUT_MS = 5000;
     constexpr float LOOT_RANGE = GW::Constants::Range::Earshot;
 
+    // Auto-engage: preemptive enemy detection range (default Spellcast = 1248)
+    float auto_engage_range = GW::Constants::Range::Spellcast;
+
     uint32_t combo_deactivated_ms = 0;
     constexpr uint32_t MSG_BLOCK_GRACE_MS = 1000;
 
@@ -129,6 +143,32 @@ namespace {
         return nearest;
     }
 
+    bool HasNearbyEnemies(const GW::AgentLiving* player, float range)
+    {
+        const auto* agents = GW::Agents::GetAgentArray();
+        if (!agents) return false;
+
+        for (auto* agent : *agents) {
+            if (!agent || !agent->GetIsLivingType()) continue;
+            const auto* living = agent->GetAsAgentLiving();
+            if (!living || !living->GetIsAlive()) continue;
+            if (living->allegiance != GW::Constants::Allegiance::Enemy) continue;
+            if (GetDistance(player->pos, agent->pos) <= range) return true;
+        }
+        return false;
+    }
+
+    int FindLeadAttackSlot(const GW::Skillbar* bar)
+    {
+        for (int slot = 0; slot < 8; slot++) {
+            const auto& skill = bar->skills[slot];
+            if (skill.skill_id == GW::Constants::SkillID::No_Skill) continue;
+            const auto* data = GW::SkillbarMgr::GetSkillConstantData(skill.skill_id);
+            if (data && data->combo == 1) return slot;
+        }
+        return -1;
+    }
+
     void DeactivateCombo()
     {
         combo_deactivated_ms = GW::Map::GetInstanceTime();
@@ -139,6 +179,8 @@ namespace {
         cast_pending_slot = -1;
         looting_agent_id = 0;
         loot_attempt_ms = 0;
+        if (auto_engage_active && ResumeAutoNavigate) ResumeAutoNavigate();
+        auto_engage_active = false;
     }
 
     void AutoTargetNearest()
@@ -234,6 +276,9 @@ void DaggerCombo::Initialize(ImGuiContext* ctx, const ImGuiAllocFns allocator_fn
 {
     ToolboxPlugin::Initialize(ctx, allocator_fns, toolbox_dll);
 
+    PauseAutoNavigate = reinterpret_cast<NavFn>(GetProcAddress(toolbox_dll, "PauseAutoNavigate"));
+    ResumeAutoNavigate = reinterpret_cast<NavFn>(GetProcAddress(toolbox_dll, "ResumeAutoNavigate"));
+
     GW::UI::RegisterKeydownCallback(&keydown_hook, OnKeyDown);
     // Block skill spam messages during hold-to-combo
     constexpr uint32_t chat_msgs[] = {
@@ -262,6 +307,7 @@ void DaggerCombo::Initialize(ImGuiContext* ctx, const ImGuiAllocFns allocator_fn
 void DaggerCombo::SignalTerminate()
 {
     ToolboxPlugin::SignalTerminate();
+    if (auto_engage_active && ResumeAutoNavigate) ResumeAutoNavigate();
     GW::UI::RemoveKeydownCallback(&keydown_hook);
     for (auto& hook : msg_hooks)
         GW::UI::RemoveUIMessageCallback(&hook, static_cast<GW::UI::UIMessage>(0));
@@ -282,15 +328,36 @@ bool DaggerCombo::WndProc(const UINT msg, const WPARAM wParam, const LPARAM)
 
 void DaggerCombo::Update(float)
 {
-    if (!enabled || !hold_to_combo || !combo_active) {
-        return;
+    if (!enabled) return;
+
+    // Auto-engage: activate combo when enemies or lootable items are nearby
+    if (auto_engage && !combo_active) {
+        const auto* player_check = GW::Agents::GetControlledCharacter();
+        const auto* bar = GW::SkillbarMgr::GetPlayerSkillbar();
+        if (player_check && bar && bar->IsValid() &&
+            (HasNearbyEnemies(player_check, auto_engage_range) ||
+             (auto_loot && FindNearestLootableItem(player_check)))) {
+            const int slot = FindLeadAttackSlot(bar);
+            if (slot >= 0) {
+                lead_slot = slot;
+                tracked_vk = 0;
+                combo_active = true;
+                auto_engage_active = true;
+                last_cast_ms = 0;
+                if (PauseAutoNavigate) PauseAutoNavigate();
+            }
+        }
     }
+
+    if (!combo_active) return;
+    if (!hold_to_combo && !auto_engage_active) return;
+
     if (lead_slot < 0 || lead_slot >= 8) {
         DeactivateCombo();
         return;
     }
 
-    // Check if the physical key is still held
+    // Check if the physical key is still held (hold-to-combo mode)
     if (tracked_vk && !(GetAsyncKeyState(static_cast<int>(tracked_vk)) & 0x8000)) {
         DeactivateCombo();
         return;
@@ -308,6 +375,28 @@ void DaggerCombo::Update(float)
     }
     if (player->GetIsCasting() || player->GetIsKnockedDown()) {
         return;
+    }
+
+    // Auto-engage deactivation: stop when no nearby enemies, party out of combat, and no work remains
+    if (auto_engage_active && !HasNearbyEnemies(player, auto_engage_range)) {
+        bool has_work = looting_agent_id != 0;
+        if (!has_work) {
+            const auto tid = GW::Agents::GetTargetId();
+            if (tid) {
+                const auto* t = GW::Agents::GetAgentByID(tid);
+                if (t && t->GetIsLivingType()) {
+                    const auto* living = t->GetAsAgentLiving();
+                    has_work = living && living->GetIsAlive();
+                }
+            }
+        }
+        if (!has_work && auto_loot) {
+            has_work = FindNearestLootableItem(player) != nullptr;
+        }
+        if (!has_work) {
+            DeactivateCombo();
+            return;
+        }
     }
 
     const auto* bar = GW::SkillbarMgr::GetPlayerSkillbar();
@@ -444,6 +533,8 @@ void DaggerCombo::LoadSettings(const wchar_t* folder)
     PLUGIN_LOAD_BOOL(auto_target_nearest);
     PLUGIN_LOAD_BOOL(hold_to_combo);
     PLUGIN_LOAD_BOOL(auto_loot);
+    PLUGIN_LOAD_BOOL(auto_engage);
+    PLUGIN_LOAD_FLOAT(auto_engage_range);
 }
 
 void DaggerCombo::SaveSettings(const wchar_t* folder)
@@ -452,6 +543,8 @@ void DaggerCombo::SaveSettings(const wchar_t* folder)
     PLUGIN_SAVE_BOOL(auto_target_nearest);
     PLUGIN_SAVE_BOOL(hold_to_combo);
     PLUGIN_SAVE_BOOL(auto_loot);
+    PLUGIN_SAVE_BOOL(auto_engage);
+    PLUGIN_SAVE_FLOAT(auto_engage_range);
     ToolboxPlugin::SaveSettings(folder);
 }
 
@@ -464,6 +557,14 @@ void DaggerCombo::DrawSettings()
     ImGui::Checkbox("Auto-target nearest enemy", &auto_target_nearest);
     ImGui::Checkbox("Hold to auto-chain combo", &hold_to_combo);
     ImGui::Checkbox("Auto-loot items before engaging", &auto_loot);
+    ImGui::Checkbox("Auto-engage when party enters combat", &auto_engage);
+    if (auto_engage) {
+        ImGui::SliderFloat("Auto-engage range", &auto_engage_range, 500.0f, 10000.0f, "%.0f");
+        ImGui::SameLine();
+        if (ImGui::SmallButton("Reset")) {
+            auto_engage_range = GW::Constants::Range::Spellcast;
+        }
+    }
     ImGui::TextWrapped(
         "Press a Lead Attack skill key to automatically chain "
         "through the next Off-Hand and Dual attacks on your skill bar.\n\n"
@@ -473,5 +574,8 @@ void DaggerCombo::DrawSettings()
         "continuously chains the combo and retargets on kill.\n\n"
         "When auto-loot is enabled, nearby items are picked up "
         "before engaging the next enemy. Items that drop during "
-        "combat are looted after the current target dies.");
+        "combat are looted after the current target dies.\n\n"
+        "When auto-engage is enabled, the combo activates automatically "
+        "when any party member enters combat. Works with auto-navigate "
+        "for hands-free questing.");
 }
